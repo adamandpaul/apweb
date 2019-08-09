@@ -10,15 +10,21 @@ repositories. When modifing code in this folder please take care to:
 
 - Keep package specific changes out of this folder.
 
-Adding Repo a Project
-=====================
+Adding/Updating Repo a Project
+==============================
 
 This repository can be added as a subtree using the subtree git plugin
 with the following command::
 
     git subtree add --squash --prefix buildout/common git@bitbucket.org:adamandpaul/buildout-recipies-pub.git master
 
+Updating a subtree can be done with this command::
+
+    git subtree pull --squash --prefix buildout/common git@bitbucket.org:adamandpaul/buildout-recipies-pub.git master
+
 Pushing changes back to the origin repo of this folder
 ======================================================
 
-    git subtree push --squash --prefix buildout/common git@bitbucket.org:adamandpaul/buildout-recipies-pub.git master
+Pushing changes back to the upstream repo::
+
+    git subtree push --prefix buildout/common git@bitbucket.org:adamandpaul/buildout-recipies-pub.git master

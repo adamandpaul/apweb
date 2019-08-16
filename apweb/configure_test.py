@@ -25,5 +25,6 @@ class TestIncludemeDevelop(TestCase):
         r = c.registry
 
         self.assertIs(r["is_develop"], True)
+        c.include.assert_any_call(".rendering")
         c.include.assert_any_call(".frontend")
         c.include.assert_any_call(".docs")

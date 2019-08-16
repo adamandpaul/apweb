@@ -20,6 +20,8 @@ setup(
     install_requires=[
         'setuptools',
         'pyramid',
+        'pyramid_exclog',
+        'pyramid_mailer',
     ],
     entry_points="""
         [console_scripts]

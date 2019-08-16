@@ -8,7 +8,15 @@ Configuration keys
 ==================
 
 ``is_develop``
+
     Indicates that the application is to be run in development mode.
 
 ``frontend_static_location``
+
     The compiled frontend files which will be served under ``/++frontend++``
+
+``docs_static_location``
+
+    The compiled project documentation HTML files which will be served under
+    ``/++docs++``.  When in non develop mode the user requires the permission
+    ``project-docs`` on the site root to be able to view.

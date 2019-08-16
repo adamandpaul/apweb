@@ -5,9 +5,13 @@ from unittest import TestCase
 from unittest.mock import MagicMock
 
 
-class TestIncludeme(TestCase):
+class TestIncludemeDevelop(TestCase):
     def setUp(self):
-        self.settings = {"is_develop": "yes", "frontend_static_location": "/foo/bar"}
+        self.settings = {
+            "is_develop": "yes",
+            "frontend_static_location": "/foo/bar",
+            "docs_static_location": "/path/docs",
+        }
         self.config = MagicMock()
         self.config.get_settings.return_value = self.settings
         self.config.registry = (
@@ -21,4 +25,5 @@ class TestIncludeme(TestCase):
         r = c.registry
 
         self.assertIs(r["is_develop"], True)
-        c.add_static_view.assert_called_with("++frontend++", "/foo/bar")
+        c.add_static_view.assert_any_call("++frontend++", "/foo/bar", cache_max_age=5)
+        c.add_static_view.assert_any_call("++docs++", "/path/docs", cache_max_age=5)

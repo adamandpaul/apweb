@@ -15,4 +15,13 @@ def includeme(config):
     registry["is_develop"] = yesish(settings["is_develop"]) or False
 
     # Add static route
-    config.add_static_view("++frontend++", settings["frontend_static_location"])
+    if registry["is_develop"]:
+        config.add_static_view(
+            "++frontend++", settings["frontend_static_location"], cache_max_age=5
+        )
+    else:
+        config.add_static_view(
+            "++frontend++", settings["frontend_static_location"], cache_max_age=600
+        )
+
+    config.include(".docs")

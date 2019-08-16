@@ -12,7 +12,7 @@ def includeme(config):
     """
     settings = config.get_settings()
     registry = config.registry
-    registry["is_develop"] = yesish(settings["is_develop"])
+    registry["is_develop"] = yesish(settings["is_develop"]) or False
 
     # Add static route
     config.add_static_view("++frontend++", settings["frontend_static_location"])

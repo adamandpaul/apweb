@@ -28,3 +28,4 @@ class TestIncludemeDevelop(TestCase):
         c.include.assert_any_call(".rendering")
         c.include.assert_any_call(".frontend")
         c.include.assert_any_call(".docs")
+        c.set_root_factory.assert_called_with(configure.root_factory)

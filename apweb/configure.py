@@ -3,6 +3,11 @@
 from .utils import yesish
 
 
+def root_factory(request):
+    """Return a new root"""
+    return request.site
+
+
 def includeme(config):
     """Pyramid configuration hook for apweb package
 
@@ -15,3 +20,6 @@ def includeme(config):
     config.include(".rendering")
     config.include(".frontend")
     config.include(".docs")
+
+    # set the root factory to be the same as the site
+    config.set_root_factory(root_factory)

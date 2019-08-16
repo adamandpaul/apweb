@@ -8,11 +8,7 @@ from unittest.mock import patch
 
 class TestIncludemeDevelop(TestCase):
     def setUp(self):
-        self.settings = {
-            "is_develop": "yes",
-            "frontend_static_location": "/foo/bar",
-            "docs_static_location": "/path/docs",
-        }
+        self.settings = {"docs_static_location": "/path/docs"}
         self.config = MagicMock()
         self.config.get_settings.return_value = self.settings
         self.config.registry = {"is_develop": True}
@@ -29,11 +25,7 @@ class TestIncludemeDevelop(TestCase):
 
 class TestIncludemeProd(TestCase):
     def setUp(self):
-        self.settings = {
-            "is_develop": "yes",
-            "frontend_static_location": "/foo/bar",
-            "docs_static_location": "/path/docs",
-        }
+        self.settings = {"docs_static_location": "/path/docs"}
         self.config = MagicMock()
         self.config.get_settings.return_value = self.settings
         self.config.registry = {"is_develop": False}

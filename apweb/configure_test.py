@@ -25,5 +25,5 @@ class TestIncludemeDevelop(TestCase):
         r = c.registry
 
         self.assertIs(r["is_develop"], True)
-        c.add_static_view.assert_any_call("++frontend++", "/foo/bar", cache_max_age=5)
-        c.add_static_view.assert_any_call("++docs++", "/path/docs", cache_max_age=5)
+        c.include.assert_any_call(".frontend")
+        c.include.assert_any_call(".docs")

@@ -11,4 +11,4 @@ def includeme(config):
     settings = config.get_settings()
 
     # Add static route
-    config.add_static_view('++frontend++', settings['frontend_static_location'])
+    config.add_static_view("++frontend++", settings["frontend_static_location"])

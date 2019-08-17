@@ -20,7 +20,7 @@ class TestDatabaseConfiguration(TestCase):
 
     @patch("sqlalchemy.orm.configure_mappers")
     def test_run_orm_configure_mappers(self, configure_mappers):
-        database.run_orm_configure_mappers()
+        database.run_orm_configure_mappers(None)
         configure_mappers.assert_called_with()
 
     @patch("sqlalchemy.engine_from_config")

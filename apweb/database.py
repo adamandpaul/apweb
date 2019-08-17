@@ -22,7 +22,7 @@ def db_session_from_request(request):
     return db_session
 
 
-def run_orm_configure_mappers():
+def run_orm_configure_mappers(event):
     """Ensure all the configure mappers are loaded"""
     sqlalchemy.orm.configure_mappers()
 

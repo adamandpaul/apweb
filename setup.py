@@ -22,6 +22,8 @@ setup(
         'pyramid',
         'pyramid_exclog',
         'pyramid_mailer',
+        'sqlalchemy',
+        'zope.sqlalchemy',
     ],
     entry_points="""
         [console_scripts]

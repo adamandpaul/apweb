@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 
+from datetime import date
+from datetime import datetime
 from pyramid.renderers import get_renderer
+from uuid import UUID
 
 import os
 import pkg_resources
 import pyramid.events
+import pyramid.renderers
 import pyramid.security
+
+
+# Template layers
 
 
 class TemplateLoader(object):
@@ -55,6 +62,9 @@ def configure_template_layers(config):
         config.add_subscriber(inject_tools, pyramid.events.BeforeRender)
 
 
+# JSON Renderer
+
+
 def json_datetime_adapter(obj, request):
     """Adapt datetime to JSON"""
     return obj.isoformat()
@@ -64,5 +74,16 @@ def json_uuid_adapter(obj, request):
     return str(obj)
 
 
+def configure_json_renderer(config):
+
+    # Add the JSON adapter for datetime
+    json_renderer = pyramid.renderers.JSON()
+    json_renderer.add_adapter(datetime, json_datetime_adapter)
+    json_renderer.add_adapter(date, json_datetime_adapter)
+    json_renderer.add_adapter(UUID, json_uuid_adapter)
+    config.add_renderer("json", json_renderer)
+
+
 def includeme(config):
     configure_template_layers(config)
+    configure_json_renderer(config)

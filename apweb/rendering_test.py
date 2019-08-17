@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import rendering
+from datetime import date
 from datetime import datetime
 from unittest import TestCase
 from unittest.mock import call
@@ -66,10 +67,12 @@ class TestConfigureTemplateLayers(TestCase):
 
 class TestRenderingConfig(TestCase):
     @patch("apweb.rendering.configure_template_layers")
-    def test_includeme(self, c1):
+    @patch("apweb.rendering.configure_json_renderer")
+    def test_includeme(self, c1, c2):
         config = MagicMock()
         rendering.includeme(config)
         c1.assert_called_with(config)
+        c2.assert_called_with(config)
 
 
 class TestJSONAdapters(TestCase):
@@ -82,3 +85,15 @@ class TestJSONAdapters(TestCase):
         uuid1 = UUID("1804f59c-fdcd-11e8-8602-9cb6d0dde65d")
         result = rendering.json_uuid_adapter(uuid1, None)
         self.assertEqual(result, "1804f59c-fdcd-11e8-8602-9cb6d0dde65d")
+
+    @patch("pyramid.renderers.JSON")
+    def test_configure_json_renderer(self, JSON):  # noqa: N803
+        config = MagicMock()
+        rendering.configure_json_renderer(config)
+        json_renderer = JSON.return_value
+        json_renderer.add_adapter.assert_any_call(UUID, rendering.json_uuid_adapter)
+        json_renderer.add_adapter.assert_any_call(date, rendering.json_datetime_adapter)
+        json_renderer.add_adapter.assert_any_call(
+            datetime, rendering.json_datetime_adapter
+        )
+        config.add_renderer.assert_called_with("json", json_renderer)

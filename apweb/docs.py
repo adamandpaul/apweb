@@ -1,6 +1,12 @@
 # -*- coding:utf-8 -*-
 
 
+import logging
+
+
+logger = logging.getLogger("apweb.docs")
+
+
 toolbar_html_template = """\
 <link rel="stylesheet" type="text/css" href="%(css_path)s">
 <style>
@@ -49,6 +55,9 @@ def includeme(config):
 
     docs_static_location = settings.get("docs_static_location", None)
     if docs_static_location:
+        logger.info(
+            f'Serving {settings["docs_static_location"]} documentation folder from /++docs++/'
+        )
         if registry["is_develop"]:
             config.add_static_view("++docs++", docs_static_location, cache_max_age=5)
         else:

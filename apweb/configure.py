@@ -2,7 +2,11 @@
 
 from .utils import yesish
 
+import logging
 import pyramid_mailer
+
+
+logger = logging.getLogger("apweb.configure")
 
 
 def root_factory(request):
@@ -15,6 +19,8 @@ def includeme(config):
 
     Brings all the configuration to gether in a single include
     """
+    logger.debug("Configuring apweb...")
+
     settings = config.get_settings()
     registry = config.registry
 
@@ -23,6 +29,8 @@ def includeme(config):
 
     # apweb level configure
     registry["is_develop"] = yesish(settings["is_develop"]) or False
+    if registry["is_develop"]:
+        logger.info("Running application in develop mode")
     config.set_root_factory(root_factory)
 
     # configure dependent packages
@@ -33,6 +41,7 @@ def includeme(config):
         # Development specific configuration
         mailer = pyramid_mailer.mailer.DummyMailer()
         pyramid_mailer._set_mailer(config, mailer)
+        config.include("pyramid_debugtoolbar")
 
     else:
         # Production specific configuration

@@ -53,3 +53,12 @@ def includeme(config):
         config.add_directive("register_template_layer", register_template_layer)
         config.add_subscriber(inject_templates, pyramid.events.BeforeRender)
         config.add_subscriber(inject_tools, pyramid.events.BeforeRender)
+
+
+def json_datetime_adapter(obj, request):
+    """Adapt datetime to JSON"""
+    return obj.isoformat()
+
+
+def json_uuid_adapter(obj, request):
+    return str(obj)

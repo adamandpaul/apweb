@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from . import rendering
+from datetime import datetime
 from unittest import TestCase
 from unittest.mock import call
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from uuid import UUID
 
 import pyramid.testing
 
@@ -60,3 +62,15 @@ class TestRenderingConfig(TestCase):
         self.assertEqual(
             config.registry["templates"], {"alt_error": "egg:foo_templates/error.pt"}
         )
+
+
+class TestJSONAdapters(TestCase):
+    def test_json_datetime_adapter(self):
+        time1 = datetime(2010, 11, 3, 7, 10)
+        result = rendering.json_datetime_adapter(time1, None)
+        self.assertEqual(result, "2010-11-03T07:10:00")
+
+    def test_json_uuid_adapter(self):
+        uuid1 = UUID("1804f59c-fdcd-11e8-8602-9cb6d0dde65d")
+        result = rendering.json_uuid_adapter(uuid1, None)
+        self.assertEqual(result, "1804f59c-fdcd-11e8-8602-9cb6d0dde65d")

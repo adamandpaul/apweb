@@ -20,14 +20,16 @@ class TestIncludemeDevelop(TestCase):
         )  # this is a simplification, the reigstry is more then a dictionary
         self.registry = self.config.registry
 
-    @patch('apweb.configure.pyramid_mailer')
+    @patch("apweb.configure.pyramid_mailer")
     def test_includeme(self, pyramid_mailer):
         configure.includeme(self.config)
         c = self.config
         r = c.registry
 
         # Extra settings
-        c.add_settings.assert_any_call({'tm.manager_hook': 'pyramid_tm.explicit_manager'})
+        c.add_settings.assert_any_call(
+            {"tm.manager_hook": "pyramid_tm.explicit_manager"}
+        )
 
         # apweb level configure
         self.assertIs(r["is_develop"], True)

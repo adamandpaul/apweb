@@ -34,12 +34,12 @@ class TestRendering(TestCase):
         self.assertIsInstance(renderer_globals["templates"], rendering.TemplateLoader)
 
 
-class TestRenderingConfig(TestCase):
-    def test_includeme(self):
+class TestConfigureTemplateLayers(TestCase):
+    def test_configure_template_layers(self):
         config = MagicMock()
         config.register_template_layer = None
         config.registry = {}
-        rendering.includeme(config)
+        rendering.configure_template_layers(config)
         self.assertEqual(config.registry["templates"], {})
         config.add_directive.assert_called_with(
             "register_template_layer", rendering.register_template_layer
@@ -62,6 +62,14 @@ class TestRenderingConfig(TestCase):
         self.assertEqual(
             config.registry["templates"], {"alt_error": "egg:foo_templates/error.pt"}
         )
+
+
+class TestRenderingConfig(TestCase):
+    @patch("apweb.rendering.configure_template_layers")
+    def test_includeme(self, c1):
+        config = MagicMock()
+        rendering.includeme(config)
+        c1.assert_called_with(config)
 
 
 class TestJSONAdapters(TestCase):

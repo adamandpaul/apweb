@@ -47,7 +47,7 @@ def inject_tools(render_globals):
     render_globals["has_permission"] = pyramid.security.has_permission
 
 
-def includeme(config):
+def configure_template_layers(config):
     if getattr(config, "register_template_layer", None) is None:
         config.registry["templates"] = {}
         config.add_directive("register_template_layer", register_template_layer)
@@ -62,3 +62,7 @@ def json_datetime_adapter(obj, request):
 
 def json_uuid_adapter(obj, request):
     return str(obj)
+
+
+def includeme(config):
+    configure_template_layers(config)

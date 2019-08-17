@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from .utils import yesish
+from pyramid.authorization import ACLAuthorizationPolicy
 
 import logging
 import pyramid_mailer
@@ -27,11 +28,16 @@ def includeme(config):
     # Extra settings
     config.add_settings({"tm.manager_hook": "pyramid_tm.explicit_manager"})
 
-    # apweb level configure
+    # is_develop
     registry["is_develop"] = yesish(settings["is_develop"]) or False
     if registry["is_develop"]:
         logger.info("Running application in develop mode")
+
+    # root factory
     config.set_root_factory(root_factory)
+
+    # Authorization Policy
+    config.set_authorization_policy(ACLAuthorizationPolicy())
 
     # configure dependent packages
     config.include("pyramid_exclog")

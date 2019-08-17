@@ -70,3 +70,5 @@ Provides
   Session exposed as ``request.db_session``
 
 - Setup of ``pyramid_mailer`` from ``mail.*`` config vars.
+
+- Sets Authorization policy to ``ACLAuthorizationPolicy()``

@@ -20,8 +20,9 @@ class TestIncludemeDevelop(TestCase):
         )  # this is a simplification, the reigstry is more then a dictionary
         self.registry = self.config.registry
 
+    @patch("apweb.configure.ACLAuthorizationPolicy")
     @patch("apweb.configure.pyramid_mailer")
-    def test_includeme(self, pyramid_mailer):
+    def test_includeme(self, pyramid_mailer, ACLAuthorizationPolicy):  # noqa: N803
         configure.includeme(self.config)
         c = self.config
         r = c.registry
@@ -31,9 +32,16 @@ class TestIncludemeDevelop(TestCase):
             {"tm.manager_hook": "pyramid_tm.explicit_manager"}
         )
 
-        # apweb level configure
+        # is_develop
         self.assertIs(r["is_develop"], True)
+
+        # root factory
         c.set_root_factory.assert_called_with(configure.root_factory)
+
+        # authorization policy
+        c.set_authorization_policy.assert_called_with(
+            ACLAuthorizationPolicy.return_value
+        )
 
         # other packages
         c.include.assert_any_call("pyramid_exclog")

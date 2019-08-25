@@ -96,6 +96,20 @@ application can override the default below by using
     ``role:{role_name}``
 
 
+Other Configuration
+===================
+
+``config.register_template_layer(resource_spec_dir, prefix)``
+    This causes a search of the directory defined by ``resource_spec_dir``
+    for templates which are added to the ``registry['templates']`` dictionary.
+    E.g.::
+
+        registry['templates'][f'{prefix}{file}'] = 'path/to/template/file.pt`
+
+    This allows subsiquent calls of ``register_template_layer`` to override
+    previously defined templates.
+
+
 Provides
 ========
 

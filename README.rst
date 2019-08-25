@@ -45,6 +45,16 @@ Configuration Settings
 ``jwt_refresh_ttl`` (default: 60 * 60 * 24 * 365 (one year))
     Timelimit on refresh tokens
 
+``authtkt_secret`` (default: Random)
+    The secret used for authtkt. If not set a randomly generated
+    secret is used. This will be unworkable for production systems.
+
+``authtkt_timeout`` (default: 1200 (20 minutes)
+    The authtkt timeout.
+
+``authtkt_reissue_time`` (default: ``authtkt_timeout`` / 10)
+    The reissue time for a new ticket to be issued.
+
 Configuration in Application
 ============================
 
@@ -97,3 +107,12 @@ Provides
 
 - Sets up default pyramid csrf options except to exclude csrf when JSON Web
   Tokens authentication is expected.
+
+- A JSON Web Token Authentication Policy
+
+- A multi authentication policy which selects ``AuthTktAuthenticationPolicy``
+  or a JWT Authentication policy based on the result of
+  ``request.auth_policy_name_for_request`` The default
+  ``auth_policy_name_for_request`` select JWT auth policy for requests for
+  domains which start with ``api.`` or are IP addresses. Otherwise the AuthTkt
+  policy is selected.

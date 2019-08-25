@@ -4,7 +4,7 @@ AP Web (apweb)
 
 Package to keep all the best resuable parts of our Pyramid applications.
 
-Configuration Settings
+Settings Configuration
 ======================
 
 ``is_develop`` (default: False)
@@ -55,20 +55,41 @@ Configuration Settings
 ``authtkt_reissue_time`` (default: ``authtkt_timeout`` / 10)
     The reissue time for a new ticket to be issued.
 
-Configuration in Application
-============================
+Request Configuration
+=====================
 
-Application must configure a property on the request which returns a ``site``.
-This will be added as the default root factory. e.g.::
+Following are a set of configurations which are expected to appear on the request.
 
-    def site_factory(request):
-        Site()
+``request.site``
+    An object which is the site. This is used as the default root factory.
+    This allows a "site" concept to exists, particularly when diferent
+    plugins that traverson using different root factories mean that accessing
+    an application meaningful root becomes tricky to access.
 
-    config.add_request_method(site_factory, 'site', reify=True)
+``request.user`` (default: None)
+    A database sourced user object, sourced using the ``request.unauthenticated_userid``
+    value.
 
-To include this package in a project. Use::
+    If ``request.user`` is not None, then the Authentication Policy defined in apweb will:
 
-    config.include('apweb')
+    - Return extend effective principals with: [Authenticated, ``f'user:{userid}'``]
+
+    - Return the ``userid`` for ``request.authenticated_userid``
+
+   If ``request.user`` is None, then the Authentication Policy defined in apweb will:
+
+    - Not extend effective principals with: [Authenticated, ``f'user:{userid}'``]
+
+    - Return the None for ``request.authenticated_userid``
+
+``request.groups`` (default: ``[]``)
+    A list of groups that are added to the effective principals in the format
+    ``group:{group_name}``
+
+``request.roles`` (default: ``[]``)
+    A list of roles that are added to the effective principals in the format
+    ``role:{role_name}``
+
 
 Provides
 ========
@@ -116,3 +137,14 @@ Provides
   ``auth_policy_name_for_request`` select JWT auth policy for requests for
   domains which start with ``api.`` or are IP addresses. Otherwise the AuthTkt
   policy is selected.
+
+- A namespaced effective principals. E.g.:
+
+  - ``user:userid``
+
+  - ``group:group-name``
+
+  - ``role:role-name``
+
+  The authentication policy doesn't include the non namespaced effective
+  principal of the userid. Incase someone regisers a username as ``role:admin``

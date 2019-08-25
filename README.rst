@@ -4,28 +4,28 @@ AP Web (apweb)
 
 Package to keep all the best resuable parts of our Pyramid applications.
 
-Expected Configuration Settings
-===============================
+Configuration Settings
+======================
 
-``is_develop``
+``is_develop`` (default: False)
 
     Indicates that the application is to be run in development mode.
 
-``frontend_static_location``
+``frontend_static_location`` (required)
 
     The compiled frontend files which will be served under ``/++frontend++``
 
-``docs_static_location``
+``docs_static_location`` (default: None)
 
     The compiled project documentation HTML files which will be served under
     ``/++docs++``.  When in non develop mode the user requires the permission
     ``project-docs`` on the site root to be able to view.
 
-``mail.*``
+``mail.*`` (default: defined by Pyramid Mailer)
 
     Mail configuration for Pyramid Mailer
 
-``sqlalchemy.*``
+``sqlalchemy.*`` (default: defined by sqlalchemy ``engine_from_config``)
 
     SQLAlchemy configuration
 

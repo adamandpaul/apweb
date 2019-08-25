@@ -1,43 +1,11 @@
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 
-from . import authentication
-
-from datetime import date
 from datetime import timedelta
-from pyramid_nacl_session import EncryptedCookieSessionFactory
 from unittest.mock import MagicMock
-from unittest.mock import Mock
 from unittest.mock import patch
-from uuid import UUID
 
-import pyramid.events
-import pyramid.httpexceptions
-import pyramid.testing
+import apweb.authentication.jwt as apweb_jwt
 import unittest
-
-
-class TestJWTAuthenticationPolicy(unittest.TestCase):
-
-    def test_unauthenticated_userid(self):
-        policy = authentication.JWTAuthenticationPolicy()
-        request = MagicMock()
-        request.jwt_claims = {"sub": "foo", "aud": ["access"]}
-        userid = policy.unauthenticated_userid_from_jwt_token(request)
-        self.assertEqual(userid, "foo")
-
-    def test_unauthenticated_userid_from_jwt_token_without_jwt(self):
-        policy = authentication.JWTAuthenticationPolicy()
-        request = MagicMock()
-        request.jwt_claims = None
-        userid = policy.unauthenticated_userid_from_jwt_token(request)
-        self.assertIsNone(userid)
-
-    def test_unauthenticated_userid_from_jwt_token_without_access(self):
-        policy = authentication.JWTAuthenticationPolicy()
-        request = MagicMock()
-        request.jwt_claims = {"sub": "foo", "aud": ["refresh"]}
-        userid = policy.unauthenticated_userid_from_jwt_token(request)
-        self.assertIsNone(userid)
 
 
 class TestJWT(unittest.TestCase):
@@ -51,7 +19,7 @@ class TestJWT(unittest.TestCase):
         request.registry["jwt_leeway"] = timedelta(seconds=10)
         request.authorization = ("Bearer", "mytoken")
 
-        claims = authentication.get_jwt_claims(request)
+        claims = apweb_jwt.get_jwt_claims(request)
         self.assertEqual(claims, jwt_decode.return_value)
 
         jwt_decode.assert_called_with(
@@ -72,7 +40,7 @@ class TestJWT(unittest.TestCase):
         request.registry["jwt_leeway"] = timedelta(seconds=10)
         request.authorization = ("Bearer", "mytoken")
 
-        claims = authentication.get_jwt_claims(request)
+        claims = apweb_jwt.get_jwt_claims(request)
         self.assertIsNone(claims)
 
     @patch("jwt.encode")
@@ -82,7 +50,7 @@ class TestJWT(unittest.TestCase):
         request.registry["jwt_private_key"] = "priv key"
         request.registry["jwt_algorithm"] = "myalgo"
         request.registry["jwt_leeway"] = timedelta(seconds=10)
-        token = authentication.generate_jwt(request, sub="user1")
+        token = apweb_jwt.generate_jwt(request, sub="user1")
         expected_token = jwt_encode.return_value.decode()
         self.assertEqual(token, expected_token)
         jwt_encode.assert_called_with(

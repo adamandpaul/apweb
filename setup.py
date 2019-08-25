@@ -23,7 +23,6 @@ setup(
         'pyramid',
         'pyramid_exclog',
         'pyramid_mailer',
-        'pyramid_nacl_session',
 
         'sqlalchemy',
         'zope.sqlalchemy',

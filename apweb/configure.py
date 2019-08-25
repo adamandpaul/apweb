@@ -59,3 +59,7 @@ def includeme(config):
     config.include(".rendering")
     config.include(".frontend")
     config.include(".docs")
+
+    # Because we provide default request methods - commit to allow the
+    # consuming application to overried
+    config.commit()

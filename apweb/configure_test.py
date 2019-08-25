@@ -57,6 +57,7 @@ class TestIncludemeDevelop(TestCase):
         c.include.assert_any_call(".rendering")
         c.include.assert_any_call(".frontend")
         c.include.assert_any_call(".docs")
+        c.include.assert_any_call(".view")
 
         # Make commit to config
         c.commit.assert_called_with()

@@ -15,6 +15,15 @@ def root_factory(request):
     return request.site
 
 
+class DefaultSiteFactory(object):
+    """Default Site"""
+
+
+def site_factory(request):
+    """Return a default site factory"""
+    return DefaultSiteFactory()
+
+
 def includeme(config):
     """Pyramid configuration hook for apweb package
 
@@ -32,6 +41,9 @@ def includeme(config):
     registry["is_develop"] = yesish(settings["is_develop"]) or False
     if registry["is_develop"]:
         logger.info("Running application in develop mode")
+
+    # site factory
+    config.add_request_method(site_factory, "site", reify=True)
 
     # root factory
     config.set_root_factory(root_factory)

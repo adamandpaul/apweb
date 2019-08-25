@@ -65,7 +65,7 @@ application can override the default below by using
 ``config.add_request_method``
 
 
-``request.site``
+``request.site`` (default: ``apweb.configure.DefaultSite``)
     An object which is the site. This is used as the default root factory.
     This allows a "site" concept to exists, particularly when diferent
     plugins that traverson using different root factories mean that accessing

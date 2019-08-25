@@ -35,6 +35,9 @@ class TestIncludemeDevelop(TestCase):
         # is_develop
         self.assertIs(r["is_develop"], True)
 
+        # default site factory
+        c.add_request_method(configure.site_factory, "site", reify=True)
+
         # root factory
         c.set_root_factory.assert_called_with(configure.root_factory)
 

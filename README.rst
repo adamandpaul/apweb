@@ -58,7 +58,12 @@ Settings Configuration
 Request Configuration
 =====================
 
-Following are a set of configurations which are expected to appear on the request.
+Following are a set of configurations which are expected to appear on the
+request. Some default configurations are provided - at the end of
+``config.include('apweb')`` the ``config.commit()`` is called in order that an
+application can override the default below by using
+``config.add_request_method``
+
 
 ``request.site``
     An object which is the site. This is used as the default root factory.

@@ -4,30 +4,56 @@ AP Web (apweb)
 
 Package to keep all the best resuable parts of our Pyramid applications.
 
-Expected Configuration Settings
-===============================
+Configuration Settings
+======================
 
-``is_develop``
-
+``is_develop`` (default: False)
     Indicates that the application is to be run in development mode.
 
-``frontend_static_location``
-
+``frontend_static_location`` (required)
     The compiled frontend files which will be served under ``/++frontend++``
 
-``docs_static_location``
-
+``docs_static_location`` (default: None)
     The compiled project documentation HTML files which will be served under
     ``/++docs++``.  When in non develop mode the user requires the permission
     ``project-docs`` on the site root to be able to view.
 
-``mail.*``
-
+``mail.*`` (default: defined by Pyramid Mailer)
     Mail configuration for Pyramid Mailer
 
-``sqlalchemy.*``
-
+``sqlalchemy.*`` (default: defined by sqlalchemy ``engine_from_config``)
     SQLAlchemy configuration
+
+``jwt_private_key`` (default: None)
+    THe JSON Web Token private key
+
+``jwt_public_key`` (default: None)
+    The JSON Web Token public key
+
+``jwt_algorithm`` (default: None)
+    The JWT algorithm used.
+
+    ``generate_jwt`` and ``jwt_claims`` will raise an assertion error if this
+    is left as None
+
+``jwt_leeway`` (default: 10)
+    token leeway
+
+``jwt_access_ttl`` (default: 60 * 60 * 24 (one day))
+    Timelimit on access tokens
+
+``jwt_refresh_ttl`` (default: 60 * 60 * 24 * 365 (one year))
+    Timelimit on refresh tokens
+
+``authtkt_secret`` (default: Random)
+    The secret used for authtkt. If not set a randomly generated
+    secret is used. This will be unworkable for production systems.
+
+``authtkt_timeout`` (default: 1200 (20 minutes)
+    The authtkt timeout.
+
+``authtkt_reissue_time`` (default: ``authtkt_timeout`` / 10)
+    The reissue time for a new ticket to be issued.
 
 Configuration in Application
 ============================
@@ -72,3 +98,21 @@ Provides
 - Setup of ``pyramid_mailer`` from ``mail.*`` config vars.
 
 - Sets Authorization policy to ``ACLAuthorizationPolicy()``
+
+- JSON Web Token (jwt) methods on request object:
+
+  - ``request.jwt_claims`` returns the current validated JWT
+
+  - ``request.generate_jwt`` creates and returns a signed JWT
+
+- Sets up default pyramid csrf options except to exclude csrf when JSON Web
+  Tokens authentication is expected.
+
+- A JSON Web Token Authentication Policy
+
+- A multi authentication policy which selects ``AuthTktAuthenticationPolicy``
+  or a JWT Authentication policy based on the result of
+  ``request.auth_policy_name_for_request`` The default
+  ``auth_policy_name_for_request`` select JWT auth policy for requests for
+  domains which start with ``api.`` or are IP addresses. Otherwise the AuthTkt
+  policy is selected.

@@ -19,11 +19,15 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+
         'pyramid',
         'pyramid_exclog',
         'pyramid_mailer',
+
         'sqlalchemy',
         'zope.sqlalchemy',
+
+        'pyjwt',
     ],
     entry_points="""
         [console_scripts]

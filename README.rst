@@ -81,7 +81,7 @@ application can override the default below by using
 
     - Return the ``userid`` for ``request.authenticated_userid``
 
-   If ``request.user`` is None, then the Authentication Policy defined in apweb will:
+    If ``request.user`` is None, then the Authentication Policy defined in apweb will:
 
     - Not extend effective principals with: [Authenticated, ``f'user:{userid}'``]
 

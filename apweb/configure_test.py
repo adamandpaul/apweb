@@ -53,6 +53,8 @@ class TestIncludemeDevelop(TestCase):
         pyramid_mailer._set_mailer.assert_called_with(c, mailer)
 
         # Internal configuration
+        c.include.assert_any_call(".login")
+        c.include.assert_any_call(".authentication")
         c.include.assert_any_call(".database")
         c.include.assert_any_call(".rendering")
         c.include.assert_any_call(".frontend")

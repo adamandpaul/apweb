@@ -1,11 +1,14 @@
 # -*- coding:utf-8 -*-
 
+from ..login import ILoginProvider
 from datetime import timedelta
+from zope.interface import implementer
 
 import jwt
 
 
-# JSON Web Token
+class JWTNotConfiguredError(Exception):
+    """Raised when an atempt to use JWT with it being configured"""
 
 
 def get_jwt_claims(request):
@@ -86,6 +89,19 @@ def configure_jwt(config):
     config.add_request_method(generate_jwt, "generate_jwt")
 
 
+@implementer(ILoginProvider)
+class RefreshTokenLoginProvider(object):
+    """Provide to the login view ability to use a refresh token"""
+
+    def userid_for_login_request(self, request):
+        claims = request.jwt_claims
+        if claims is None:
+            return None
+        if "refresh" not in claims.get("aud", []):
+            return None
+        return claims.get("sub", None)
+
+
 def includeme(config):
     settings = config.get_settings()
     registry = config.registry
@@ -104,3 +120,6 @@ def includeme(config):
     )
     config.add_request_method(get_jwt_claims, "jwt_claims", reify=True)
     config.add_request_method(generate_jwt, "generate_jwt")
+
+    # add login provider for refresh tokens
+    config.register_login_provider(RefreshTokenLoginProvider())

@@ -8,6 +8,26 @@ import apweb.authentication.jwt as apweb_jwt
 import unittest
 
 
+class TestRefreshTokenLoginProvider(unittest.TestCase):
+    def setUp(self):
+        self.provider = apweb_jwt.RefreshTokenLoginProvider()
+
+    def test_userid_for_login_request_no_claim(self):
+        request = MagicMock()
+        request.jwt_claims = None
+        self.assertIsNone(self.provider.userid_for_login_request(request))
+
+    def test_userid_for_login_request_access_token(self):
+        request = MagicMock()
+        request.jwt_claims = {"sub": "foo", "aud": ["access"]}
+        self.assertIsNone(self.provider.userid_for_login_request(request))
+
+    def test_userid_for_login_request(self):
+        request = MagicMock()
+        request.jwt_claims = {"sub": "foo", "aud": ["refresh"]}
+        self.assertEqual(self.provider.userid_for_login_request(request), "foo")
+
+
 class TestJWT(unittest.TestCase):
     @patch("jwt.decode")
     def test_get_jwt_claims(self, jwt_decode):
@@ -55,4 +75,55 @@ class TestJWT(unittest.TestCase):
         self.assertEqual(token, expected_token)
         jwt_encode.assert_called_with(
             {"sub": "user1"}, key="priv key", algorithm="myalgo"
+        )
+
+    @patch("apweb.authentication.jwt.RefreshTokenLoginProvider")
+    def test_includeme_no_config(self, RefreshTokenLoginProvider):  # noqa: N803
+        config = MagicMock()
+        config.get_settings.return_value = {}
+        config.registry = {}
+        apweb_jwt.includeme(config)
+        self.assertEqual(
+            config.registry,
+            {
+                "jwt_private_key": None,
+                "jwt_public_key": None,
+                "jwt_algorithm": None,
+                "jwt_leeway": timedelta(seconds=10),
+                "jwt_access_ttl": timedelta(seconds=60 * 60 * 24),
+                "jwt_refresh_ttl": timedelta(seconds=60 * 60 * 24 * 365),
+            },
+        )
+        config.add_request_method.assert_any_call(
+            apweb_jwt.get_jwt_claims, "jwt_claims", reify=True
+        )
+        config.add_request_method.assert_any_call(
+            apweb_jwt.generate_jwt, "generate_jwt"
+        )
+        config.register_login_provider.assert_called_with(
+            RefreshTokenLoginProvider.return_value
+        )
+
+    def test_includeme(self):
+        config = MagicMock()
+        config.get_settings.return_value = {
+            "jwt_private_key": "privkey",
+            "jwt_public_key": "pubkey",
+            "jwt_algorithm": "rsa",
+            "jwt_leeway": "20",
+            "jwt_access_ttl": "30",
+            "jwt_refresh_ttl": "40",
+        }
+        config.registry = {}
+        apweb_jwt.includeme(config)
+        self.assertEqual(
+            config.registry,
+            {
+                "jwt_private_key": "privkey",
+                "jwt_public_key": "pubkey",
+                "jwt_algorithm": "rsa",
+                "jwt_leeway": timedelta(seconds=20),
+                "jwt_access_ttl": timedelta(seconds=30),
+                "jwt_refresh_ttl": timedelta(seconds=40),
+            },
         )

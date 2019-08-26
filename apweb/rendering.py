@@ -74,6 +74,15 @@ def json_uuid_adapter(obj, request):
     return str(obj)
 
 
+class JSendRenderer(object):
+    def __init__(self, info):
+        pass
+
+    def __call__(self, value, system):
+        value = {"status": "success", "data": value}
+        return pyramid.renderers.render("json", value, system.get("request", None))
+
+
 def configure_json_renderer(config):
 
     # Add the JSON adapter for datetime
@@ -82,6 +91,7 @@ def configure_json_renderer(config):
     json_renderer.add_adapter(date, json_datetime_adapter)
     json_renderer.add_adapter(UUID, json_uuid_adapter)
     config.add_renderer("json", json_renderer)
+    config.add_renderer("jsend", JSendRenderer)
 
 
 def includeme(config):

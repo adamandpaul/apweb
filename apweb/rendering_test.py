@@ -75,7 +75,7 @@ class TestRenderingConfig(TestCase):
         c2.assert_called_with(config)
 
 
-class TestJSONAdapters(TestCase):
+class TestJSON(TestCase):
     def test_json_datetime_adapter(self):
         time1 = datetime(2010, 11, 3, 7, 10)
         result = rendering.json_datetime_adapter(time1, None)
@@ -85,6 +85,13 @@ class TestJSONAdapters(TestCase):
         uuid1 = UUID("1804f59c-fdcd-11e8-8602-9cb6d0dde65d")
         result = rendering.json_uuid_adapter(uuid1, None)
         self.assertEqual(result, "1804f59c-fdcd-11e8-8602-9cb6d0dde65d")
+
+    @patch("pyramid.renderers.render")
+    def test_jsend_renderer(self, render):
+        renderer = rendering.JSendRenderer({})
+        result = renderer({"foo"}, {"request": "req"})
+        self.assertEqual(result, render.return_value)
+        render.assert_called_with("json", {"status": "success", "data": {"foo"}}, "req")
 
     @patch("pyramid.renderers.JSON")
     def test_configure_json_renderer(self, JSON):  # noqa: N803
@@ -96,4 +103,5 @@ class TestJSONAdapters(TestCase):
         json_renderer.add_adapter.assert_any_call(
             datetime, rendering.json_datetime_adapter
         )
-        config.add_renderer.assert_called_with("json", json_renderer)
+        config.add_renderer.assert_any_call("json", json_renderer)
+        config.add_renderer.assert_any_call("jsend", rendering.JSendRenderer)

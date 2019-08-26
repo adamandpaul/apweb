@@ -109,11 +109,20 @@ Other Configuration
     This allows subsiquent calls of ``register_template_layer`` to override
     previously defined templates.
 
+``config.register_login_provider(provider)``
+
+    Register a utility (an instance of a class that implements
+    ``apweb.login.ILoginProvider`` which has a single method
+    ``user_for_login_request(request)``. Login providers are iterated through
+    during ``/api/@@login``, the first non none userid that is returned is used
+    to generate JSON Web Tokens or set an AuthTkt cookie.
 
 Provides
 ========
 
 - A template layer system
+
+- A renderer ``jsend`` for `JSend <https://github.com/omniti-labs/jsend>`_
 
 - ``pyramid_tm`` with an explicit transaction manager on ``request.tm``
 
@@ -167,3 +176,7 @@ Provides
 
   The authentication policy doesn't include the non namespaced effective
   principal of the userid. Incase someone regisers a username as ``role:admin``
+
+- ``/api/`` route
+
+- ``/api/@@login`` view which looks up login providers

@@ -66,11 +66,13 @@ def includeme(config):
         config.include("pyramid_mailer")
 
     # Configure apweb
+    config.include(".login")
+    config.include(".rendering")
     config.include(".authentication")
     config.include(".database")
-    config.include(".rendering")
-    config.include(".frontend")
     config.include(".docs")
+    config.include(".view")
+    config.include(".frontend")
 
     # Because we provide default request methods - commit to allow the
     # consuming application to overried

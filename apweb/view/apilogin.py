@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from ..login import ILoginProvider
 from ..authentication.jwt import JWTNotConfiguredError
 from datetime import datetime
 from pyramid.decorator import reify
@@ -25,6 +26,10 @@ class APILogin(object):
 
     @reify
     def userid(self):
+        for provider in self.request.registry.getAllUtilitiesRegisteredFor(ILoginProvider):
+            userid = provider.userid_for_login_request(self.request)
+            if userid:
+                return userid
         return self.request.authenticated_userid
 
     @reify

@@ -23,11 +23,30 @@ class TestLogin(unittest.TestCase):
         self.view = apilogin.APILogin(None, self.request)
 
     def test_userid_no_login(self):
+        registry = MagicMock()
+        self.request.registry = registry
+        registry.getAllUntilitiesRegisteredFor.return_value = []
         self.assertEqual(self.view.userid, None)
 
     def test_userid(self):
+        registry = MagicMock()
+        registry.getAllUtilitiesRegisteredFor.return_value = []
+        self.request.registry = registry
         self.request.authenticated_userid = "foo@foo"
         self.assertEqual(self.view.userid, "foo@foo")
+
+    def test_userid_from_login_provider(self):
+        registry = MagicMock()
+        no_user = MagicMock()
+        no_user.userid_for_login_request.return_value = None
+        a_user = MagicMock()
+        a_user.userid_for_login_request.return_value = 'bar@bar'
+        registry.getAllUtilitiesRegisteredFor.return_value = [no_user, a_user]
+        self.request.registry = registry
+        self.request.authenticated_userid = "foo@foo"
+        result = self.view.userid
+        a_user.userid_for_login_request.assert_called_with(self.request)
+        self.assertEqual(self.view.userid, "bar@bar")
 
     @patch("apweb.view.apilogin.datetime")
     def test_jwt_iat(self, datetime):
@@ -40,9 +59,8 @@ class TestLogin(unittest.TestCase):
 
     @patch("apweb.view.apilogin.datetime")
     def test_jwt_access_token(self, mock_datetime):
+        self.view.__dict__["userid"] = 'foo@foo'
         mock_datetime.utcnow.return_value = datetime(2000, 1, 1, 1, 0)
-        self.request.auth_method = "session"
-        self.request.authenticated_userid = "foo@foo"
         generate_jwt = self.request.generate_jwt
         generate_jwt.return_value = "abc.def.hij"
         token = self.view.jwt_access_token
@@ -61,9 +79,8 @@ class TestLogin(unittest.TestCase):
 
     @patch("apweb.view.apilogin.datetime")
     def test_jwt_refresh_token(self, mock_datetime):
+        self.view.__dict__["userid"] = 'foo@foo'
         mock_datetime.utcnow.return_value = datetime(2000, 1, 1, 1, 0)
-        self.request.auth_method = "session"
-        self.request.authenticated_userid = "foo@foo"
         generate_jwt = self.request.generate_jwt
         generate_jwt.return_value = "abc.def.hij"
         token = self.view.jwt_refresh_token

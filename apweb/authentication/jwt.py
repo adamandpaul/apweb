@@ -94,9 +94,7 @@ class RefreshTokenLoginProvider(object):
     """Provide to the login view ability to use a refresh token"""
 
     def userid_for_login_request(self, request):
-        if request.method.UPPER() != "POST":
-            return None
-        claims = self.request.jwt_claims
+        claims = request.jwt_claims
         if claims is None:
             return None
         if "refresh" not in claims.get("aud", []):
@@ -124,4 +122,4 @@ def includeme(config):
     config.add_request_method(generate_jwt, "generate_jwt")
 
     # add login provider for refresh tokens
-    config.add_login_provider(RefreshTokenLoginProvider())
+    config.register_login_provider(RefreshTokenLoginProvider())

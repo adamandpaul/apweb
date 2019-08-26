@@ -176,3 +176,7 @@ Provides
 
   The authentication policy doesn't include the non namespaced effective
   principal of the userid. Incase someone regisers a username as ``role:admin``
+
+- ``/api/`` route
+
+- ``/api/@@login`` view which looks up login providers

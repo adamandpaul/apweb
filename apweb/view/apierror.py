@@ -30,7 +30,7 @@ class HandleException(object):
 
     @property
     def code(self):
-        return getattr(self.context, "code", None)
+        return getattr(self.context, "code", 500)
 
     @property
     def data(self):

@@ -17,7 +17,7 @@ class NotAbleToCreateLogin(Exception):
     """Was not able to create a login"""
 
 
-@view_config(route_name="api", name="login", request_method="POST")
+@view_config(route_name="api", name="login", request_method="POST", renderer="jsend")
 class APILogin(object):
     def __init__(self, context, request):
         self.context = context

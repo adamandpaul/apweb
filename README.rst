@@ -115,6 +115,8 @@ Provides
 
 - A template layer system
 
+- A renderer ``jsend`` for `JSend <https://github.com/omniti-labs/jsend>`_
+
 - ``pyramid_tm`` with an explicit transaction manager on ``request.tm``
 
 - ``/++docs++/`` static route for project level documentation

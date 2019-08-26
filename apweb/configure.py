@@ -66,8 +66,8 @@ def includeme(config):
         config.include("pyramid_mailer")
 
     # Configure apweb
-    config.include(".rendering")
     config.include(".login")
+    config.include(".rendering")
     config.include(".authentication")
     config.include(".database")
     config.include(".docs")

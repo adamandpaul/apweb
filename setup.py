@@ -28,6 +28,8 @@ setup(
         'zope.sqlalchemy',
 
         'pyjwt',
+
+        'contextplus>1.9',
     ],
     entry_points="""
         [console_scripts]

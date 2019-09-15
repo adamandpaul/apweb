@@ -34,7 +34,12 @@ class Site(contextplus.Site):
             settings["redis_url"], decode_responses=True
         )
 
-        mailer = pyramid_mailer.Mailer.from_settings(settings, "mail.")
+        class MailerTmp(pyramid_mailer.Mailer):
+
+            def __init__(self, **kw):
+                super().__init__(transaction_manager=tm, **kw)
+
+        mailer = MailerTmp.from_settings(settings, "mail.")
 
         return cls(settings=settings,
                    db_session=db_session,

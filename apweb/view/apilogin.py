@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
-from ..login import ILoginProvider
 from ..authentication.jwt import JWTNotConfiguredError
+from ..login import ILoginProvider
 from datetime import datetime
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPForbidden
@@ -26,7 +26,9 @@ class APILogin(object):
 
     @reify
     def userid(self):
-        for provider in self.request.registry.getAllUtilitiesRegisteredFor(ILoginProvider):
+        for provider in self.request.registry.getAllUtilitiesRegisteredFor(
+            ILoginProvider
+        ):
             userid = provider.userid_for_login_request(self.request)
             if userid:
                 return userid

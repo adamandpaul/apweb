@@ -20,7 +20,7 @@ class TestSite(TestCase):
     @patch('sqlalchemy.orm.sessionmaker')
     @patch('sqlalchemy.engine_from_config')
     @patch('transaction.TransactionManager')
-    def test_site_from_settings(self, TransactionManager, sa_engine_from_config, sa_sessionmaker, 
+    def test_from_settings(self, TransactionManager, sa_engine_from_config, sa_sessionmaker, 
                                 zope_sa_register, StrictRedis, Mailer):
         tm = TransactionManager.return_value
         db_engine = sa_engine_from_config.return_value
@@ -29,7 +29,7 @@ class TestSite(TestCase):
         redis = StrictRedis.from_url.return_value
         mailer = Mailer.from_settings.return_value
         settings = {'foo': 1, 'bar': 2, 'redis_url': 'path/to/redis'}
-        site = Site.site_from_settings(settings)
+        site = Site.from_settings(settings)
 
         TransactionManager.assert_called_with(explicit=True)
         sa_engine_from_config.assert_called_with(settings, "sqlalchemy.")

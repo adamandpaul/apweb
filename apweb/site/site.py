@@ -18,7 +18,7 @@ class Site(contextplus.Site):
         self.transaction_manager = transaction_manager
 
     @classmethod
-    def site_from_settings(cls, settings):
+    def from_settings(cls, settings):
         """Create a site object from a dictionary of settings
         """
 

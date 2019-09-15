@@ -70,6 +70,7 @@ def includeme(config):
     config.include(".rendering")
     config.include(".authentication")
     config.include(".database")
+    config.include(".redis")
     config.include(".docs")
     config.include(".view")
     config.include(".frontend")

@@ -27,6 +27,8 @@ setup(
         'sqlalchemy',
         'zope.sqlalchemy',
 
+        'redis',
+
         'pyjwt',
 
         'contextplus>1.9',

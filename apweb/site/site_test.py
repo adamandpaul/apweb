@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from . import users
 from .site import Site
 from unittest import TestCase
 from unittest.mock import MagicMock
@@ -13,6 +14,10 @@ class TestSite(TestCase):
         site = Site(mailer=mailer, transaction_manager=tm)
         self.assertEqual(site.mailer, mailer)
         self.assertEqual(site.transaction_manager, tm)
+
+        # test resources
+        user_collection = site["users"]
+        self.assertIsInstance(user_collection, users.UserCollection)
 
     @patch("redis.StrictRedis")
     @patch("zope.sqlalchemy.register")

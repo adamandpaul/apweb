@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 
+from . import users
+from contextplus import resource
 
 import contextplus
 import pyramid_mailer
@@ -11,6 +13,10 @@ import zope.sqlalchemy
 
 class Site(contextplus.Site):
     """A primitive site"""
+
+    @resource("users")
+    def get_user_collection(self):
+        return users.UserCollection(parent=self, name="users")
 
     def __init__(self, *args, mailer=None, transaction_manager=None, **kwargs):
         super().__init__(*args, **kwargs)

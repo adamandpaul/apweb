@@ -18,7 +18,7 @@ class Site(contextplus.Site):
         self.transaction_manager = transaction_manager
 
     @classmethod
-    def from_settings(cls, settings):
+    def from_settings(cls, settings, **kwargs):
         """Create a site object from a dictionary of settings
         """
 
@@ -46,10 +46,11 @@ class Site(contextplus.Site):
             redis=redis_instance,
             mailer=mailer,
             transaction_manager=tm,
+            **kwargs,
         )
 
     @classmethod
-    def from_request(cls, request):
+    def from_request(cls, request, **kwargs):
         """Create a site object from a request object"""
         return cls(
             settings=request.registry.settings,
@@ -57,4 +58,5 @@ class Site(contextplus.Site):
             redis=request.redis,
             mailer=request.mailer,
             transaction_manager=request.tm,
+            **kwargs,
         )

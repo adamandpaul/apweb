@@ -2,8 +2,8 @@
 
 
 import contextplus
-import redis
 import pyramid_mailer
+import redis
 import sqlalchemy
 import transaction
 import zope.sqlalchemy
@@ -35,23 +35,26 @@ class Site(contextplus.Site):
         )
 
         class MailerTmp(pyramid_mailer.Mailer):
-
             def __init__(self, **kw):
                 super().__init__(transaction_manager=tm, **kw)
 
         mailer = MailerTmp.from_settings(settings, "mail.")
 
-        return cls(settings=settings,
-                   db_session=db_session,
-                   redis=redis_instance,
-                   mailer=mailer,
-                   transaction_manager=tm)
+        return cls(
+            settings=settings,
+            db_session=db_session,
+            redis=redis_instance,
+            mailer=mailer,
+            transaction_manager=tm,
+        )
 
     @classmethod
     def from_request(cls, request):
         """Create a site object from a request object"""
-        return cls(settings=request.registry.settings,
-                   db_session=request.db_session,
-                   redis=request.redis,
-                   mailer=request.mailer,
-                   transaction_manager=request.tm)
+        return cls(
+            settings=request.registry.settings,
+            db_session=request.db_session,
+            redis=request.redis,
+            mailer=request.mailer,
+            transaction_manager=request.tm,
+        )

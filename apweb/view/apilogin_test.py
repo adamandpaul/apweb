@@ -44,8 +44,9 @@ class TestLogin(unittest.TestCase):
         registry.getAllUtilitiesRegisteredFor.return_value = [no_user, a_user]
         self.request.registry = registry
         self.request.authenticated_userid = "foo@foo"
+        result = self.view.userid
         a_user.userid_for_login_request.assert_called_with(self.request)
-        self.assertEqual(self.view.userid, "bar@bar")
+        self.assertEqual(result, "bar@bar")
 
     @patch("apweb.view.apilogin.datetime")
     def test_jwt_iat(self, datetime):

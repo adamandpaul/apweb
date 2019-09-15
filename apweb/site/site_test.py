@@ -43,3 +43,12 @@ class TestSite(TestCase):
         self.assertEqual(site.redis, redis)
         self.assertEqual(site.mailer, mailer)
         self.assertEqual(site.transaction_manager, tm)
+
+    def test_from_request(self):
+        request = MagicMock()
+        site = Site.from_request(request)
+        self.assertEqual(site.settings, request.registry.settings)
+        self.assertEqual(site.db_session, request.db_session)
+        self.assertEqual(site.redis, request.redis)
+        self.assertEqual(site.mailer, request.mailer)
+        self.assertEqual(site.transaction_manager, request.tm)

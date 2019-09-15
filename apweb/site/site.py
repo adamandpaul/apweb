@@ -41,3 +41,12 @@ class Site(contextplus.Site):
                    redis=redis_instance,
                    mailer=mailer,
                    transaction_manager=tm)
+
+    @classmethod
+    def from_request(cls, request):
+        """Create a site object from a request object"""
+        cls(settings=request.registry.settings,
+            db_session=request.db_session,
+            redis=request.redis,
+            mailer=request.mailer,
+            transaction_manager=request.tm)

@@ -123,7 +123,7 @@ class TestUser(TestCase):
     def test_get_logger(self):
         logger = self.user.get_logger()
         self.assertIsInstance(logger, ComponentLogger)
-        self.assertEqual(logger.component, f'user:{self.user.user_uuid}')
+        self.assertEqual(logger.component, f"user:{self.user.user_uuid}")
 
 
 class TestUserCollectionClass(TestCase):

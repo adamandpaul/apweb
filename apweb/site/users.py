@@ -101,10 +101,10 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         record.password_reset_token = token
         record.password_reset_expiry = now + timedelta(days=1)
 
-    @resource('logger')
+    @resource("logger")
     def get_logger(self):
         """Get the logger for this member"""
-        component = f'user:{self.user_uuid}'
+        component = f"user:{self.user_uuid}"
         logger = ComponentLogger(parent=self, component=component)
         return logger
 

@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from . import exc
+from .logs import ComponentLogger
 from .users import User
 from .users import UserCollection
 from datetime import datetime
@@ -118,6 +119,11 @@ class TestUser(TestCase):
         user.initiate_password_reset()
         self.assertEqual(len(user._record.password_reset_token), 32)
         self.assertIsInstance(user._record.password_reset_expiry, datetime)
+
+    def test_get_logger(self):
+        logger = self.user.get_logger()
+        self.assertIsInstance(logger, ComponentLogger)
+        self.assertEqual(logger.component, f'user:{self.user.user_uuid}')
 
 
 class TestUserCollectionClass(TestCase):

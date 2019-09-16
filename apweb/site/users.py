@@ -2,7 +2,9 @@
 
 from . import exc
 from . import orm
+from .logs import ComponentLogger
 from contextplus import record_property
+from contextplus import resource
 from contextplus import SQLAlchemyCollection
 from contextplus import SQLAlchemyItem
 from contextplus import WorkflowBehaviour
@@ -98,6 +100,13 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         token = secrets.token_urlsafe(24)
         record.password_reset_token = token
         record.password_reset_expiry = now + timedelta(days=1)
+
+    @resource('logger')
+    def get_logger(self):
+        """Get the logger for this member"""
+        component = f'user:{self.user_uuid}'
+        logger = ComponentLogger(parent=self, component=component)
+        return logger
 
 
 class UserCollection(SQLAlchemyCollection):

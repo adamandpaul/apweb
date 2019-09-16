@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from . import exc
 from . import orm
 from contextplus import record_property
 from contextplus import SQLAlchemyCollection
@@ -7,6 +8,8 @@ from contextplus import SQLAlchemyItem
 from contextplus import WorkflowBehaviour
 from datetime import datetime
 from datetime import timedelta
+from uuid import UUID
+from uuid import uuid4
 
 import bcrypt
 import re
@@ -103,3 +106,34 @@ class UserCollection(SQLAlchemyCollection):
     child_type = User
     title = "Users"
     description = "Users are identifiable entities by an email address and have capabilites to login"
+
+    def name_from_child(self, child):
+        """Return the travseral name for the child"""
+        return str(child.id["user_uuid"])
+
+    def id_from_name(self, name):
+        """Return the child record id for a given name"""
+        try:
+            user_uuid = UUID(name)
+        except ValueError as e:
+            raise TypeError("Name is not a valid user_uuid") from e
+        if name != str(user_uuid):
+            raise TypeError("Incorrectly formatted user_uuid")
+        return {"user_uuid": user_uuid}
+
+    def add(self, user_email):
+        if not User.is_user_email_valid(user_email):
+            raise exc.CreateUserErrorInvalidUserEmail()
+        db_session = self.acquire.db_session
+        user_exists_query = (
+            db_session.query(orm.User).filter_by(user_email=user_email).exists()
+        )
+        user_exists = db_session.query(user_exists_query).scalar()
+        if user_exists:
+            raise exc.CreateUserErrorUserExists()
+        user_uuid = uuid4()
+        record = orm.User(user_email=user_email, user_uuid=user_uuid)
+        db_session.add(record)
+        user = self.child_from_record(record)
+        user.logger.info(f"Created user for email {user_email}")
+        return user

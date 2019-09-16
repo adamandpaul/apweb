@@ -1,11 +1,13 @@
 # -*- coding:utf-8 -*-
 
+from . import exc
 from .users import User
 from .users import UserCollection
 from datetime import datetime
 from unittest import TestCase
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from uuid import UUID
 
 
 class TestUserClass(TestCase):
@@ -118,7 +120,42 @@ class TestUser(TestCase):
         self.assertIsInstance(user._record.password_reset_expiry, datetime)
 
 
-class TestUserCollection(TestCase):
+class TestUserCollectionClass(TestCase):
     def test_init(self):
         collection = UserCollection()
         self.assertIsNotNone(collection)
+
+
+class TestUserCollection(TestCase):
+    def setUp(self):
+        self.collection = UserCollection()
+
+    def test_name_from_child(self):
+        child = MagicMock()
+        child.id = {"user_uuid": UUID("18dcd264-bc84-48d5-a1be-6502447619f4")}
+        name = self.collection.name_from_child(child)
+        self.assertEqual(name, "18dcd264-bc84-48d5-a1be-6502447619f4")
+
+    def test_id_from_name(self):
+        result = self.collection.id_from_name("18dcd264-bc84-48d5-a1be-6502447619f4")
+        self.assertEqual(
+            result, {"user_uuid": UUID("18dcd264-bc84-48d5-a1be-6502447619f4")}
+        )
+
+    def test_add_user(self):
+        self.collection.db_session = MagicMock()
+        self.collection.db_session.query.return_value.scalar.return_value = False
+        user = self.collection.add("foo@noemail.adamandpaul.biz")
+        self.assertEqual(user.user_email, "foo@noemail.adamandpaul.biz")
+
+    def test_add_user_bad_email(self):
+        self.collection.db_session = MagicMock()
+        self.collection.db_session.query.return_value.scalar.return_value = False
+        with self.assertRaises(exc.CreateUserErrorInvalidUserEmail):
+            self.collection.add("bademail")
+
+    def test_add_user_user_exists(self):
+        self.collection.db_session = MagicMock()
+        self.collection.db_session.query.return_value.scalar.return_value = True
+        with self.assertRaises(exc.CreateUserErrorUserExists):
+            self.collection.add("foo@noemail.adamandpaul.biz")

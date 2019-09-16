@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 
+from .. import utils
+from . import orm
 from . import users
 from contextplus import resource
 
@@ -66,3 +68,57 @@ class Site(contextplus.Site):
             transaction_manager=request.tm,
             **kwargs,
         )
+
+    def set_redirect(self, path, query_string, redirect):
+        """Set a redirect for a given url.
+
+        The query string is re-ordered to be alphebetical. UTM paramitors are striped.
+
+        Args:
+            path (str): The path to match for a redirecting request
+            query_string (str): The query string to match for a redirecting request
+        """
+        query_string = query_string or ""
+        assert f"{path}?{query_string}".strip("?") != redirect.strip("?")
+        query_string = utils.normalize_query_string(
+            query_string, ignore_prefixes=["utm_"]
+        )
+        assert f"{path}?{query_string}".strip("?") != redirect.strip("?")
+        redirect = orm.Redirect(
+            request_path=path, request_query_string=query_string, redirect_to=redirect
+        )
+        self.db_session.merge(redirect)
+
+    def get_redirect(self, path, query_string):
+        """Retreive a redirect for a given path and query string
+
+        Args:
+            path (str): The path to match for a redirecting request
+            query_string (str): The query string to match for a redirecting request
+        """
+        if not self.get_database_is_inited():
+            return None
+        query_string = utils.normalize_query_string(
+            query_string, ignore_prefixes=["utm_"]
+        )
+        redirects = (
+            self.db_session.query(orm.Redirect)
+            .filter_by(request_path=path)
+            .filter(
+                sqlalchemy.sql.expression.text(
+                    ":input_query_string LIKE (request_query_string || '%')"
+                ).bindparams(input_query_string=query_string)
+            )
+        )
+
+        redirects = sorted(
+            redirects, key=lambda r: len(r.request_query_string) * -1
+        )  # longest query string match first
+        if len(redirects) > 0:
+            return redirects[0].redirect_to
+        else:
+            return None
+
+    def list_redirects(self):
+        """Return a list of current redirects"""
+        return self.db_session.query(orm.Redirect)

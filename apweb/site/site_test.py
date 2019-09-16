@@ -60,3 +60,19 @@ class TestSite(TestCase):
         self.assertEqual(site.redis, request.redis)
         self.assertEqual(site.mailer, request.mailer)
         self.assertEqual(site.transaction_manager, request.tm)
+
+
+class TestSiteRedirect(TestCase):
+    def test_set_redirect(self):
+
+        with patch("apweb.utils.normalize_query_string") as normalize_query_string:
+            normalize_query_string.return_value = "normalized=1"
+            site = Site(db_session=MagicMock())
+            site.set_redirect("/part1/part2", "b=2&a=1", "https://localhost")
+            normalize_query_string.assert_called_with(
+                "b=2&a=1", ignore_prefixes=["utm_"]
+            )
+            record = site.db_session.merge.call_args[0][0]
+            self.assertEqual(record.request_path, "/part1/part2")
+            self.assertEqual(record.request_query_string, "normalized=1")
+            self.assertEqual(record.redirect_to, "https://localhost")

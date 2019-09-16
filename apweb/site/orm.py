@@ -18,11 +18,11 @@ import sqlalchemy_utils
 # providers will autogenerate vastly different names making migrations more
 # difficult. See: http://alembic.zzzcomputing.com/en/latest/naming.html
 NAMING_CONVENTION = {
-    'ix': 'ix_%(column_0_label)s',
-    'uq': 'uq_%(table_name)s_%(column_0_name)s',
-    'ck': 'ck_%(table_name)s_%(constraint_name)s',
-    'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
-    'pk': 'pk_%(table_name)s',
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s",
 }
 meta_data = sqlalchemy.schema.MetaData(naming_convention=NAMING_CONVENTION)
 Base = sqlalchemy.ext.declarative.declarative_base(metadata=meta_data)
@@ -35,17 +35,23 @@ class LogEntry(Base):
     the admin interface. They support the capability to log against a componenet which
     is application defined.
     """
-    __tablename__ = 'log_entry'
-    log_entry_id = sqlalchemy.Column(sqlalchemy_utils.UUIDType, primary_key=True,
-                                     doc='UUID: **PK** a unique identifier for the log entry')
-    timestamp = sqlalchemy.Column(sqlalchemy.DateTime(timezone=False),
-                                  doc='DateTime: The time the log was emited')
-    component = sqlalchemy.Column(sqlalchemy.Unicode(2048), index=True,
-                                  doc='Unicode: The component the log was emited from')
-    level = sqlalchemy.Column(sqlalchemy.Integer,
-                              doc='The integer level of the log')
-    message = sqlalchemy.Column(sqlalchemy.UnicodeText,
-                                doc='The log message')
+
+    __tablename__ = "log_entry"
+    log_entry_id = sqlalchemy.Column(
+        sqlalchemy_utils.UUIDType,
+        primary_key=True,
+        doc="UUID: **PK** a unique identifier for the log entry",
+    )
+    timestamp = sqlalchemy.Column(
+        sqlalchemy.DateTime(timezone=False), doc="DateTime: The time the log was emited"
+    )
+    component = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048),
+        index=True,
+        doc="Unicode: The component the log was emited from",
+    )
+    level = sqlalchemy.Column(sqlalchemy.Integer, doc="The integer level of the log")
+    message = sqlalchemy.Column(sqlalchemy.UnicodeText, doc="The log message")
 
 
 class Redirect(Base):
@@ -54,13 +60,21 @@ class Redirect(Base):
     Redirects are consulted with a not found response is handled. This table
     stores the current site redirects
     """
-    __tablename__ = 'redirect'
-    request_path = sqlalchemy.Column(sqlalchemy.Unicode(2048), primary_key=True,
-                                     doc='The URL path the redirect matches')
-    request_query_string = sqlalchemy.Column(sqlalchemy.Unicode(2048), primary_key=True,
-                                             doc='The URL query string component that the request must match')
-    redirect_to = sqlalchemy.Column(sqlalchemy.Unicode(2048),
-                                    doc='The URL to redirect a browser to')
+
+    __tablename__ = "redirect"
+    request_path = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048),
+        primary_key=True,
+        doc="The URL path the redirect matches",
+    )
+    request_query_string = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048),
+        primary_key=True,
+        doc="The URL query string component that the request must match",
+    )
+    redirect_to = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048), doc="The URL to redirect a browser to"
+    )
 
 
 class User(Base):
@@ -68,7 +82,8 @@ class User(Base):
 
     Information which relates to authenticating a user is stored in this table
     """
-    __tablename__ = 'user'
+
+    __tablename__ = "user"
 
     # Identifiables.
     user_uuid = sqlalchemy.Column(
@@ -90,8 +105,7 @@ class User(Base):
         doc="""Bytes: The hash as secret used as an api_token""",
     )
     password = sqlalchemy.Column(
-        sqlalchemy.Unicode(2048),
-        doc="""Unicode: Hashed password""",
+        sqlalchemy.Unicode(2048), doc="""Unicode: Hashed password"""
     )
     password_reset_token = sqlalchemy.Column(
         sqlalchemy.Unicode(32),
@@ -99,19 +113,24 @@ class User(Base):
         doc="""Unicode: One-time use token needed to reset a password""",
     )
     password_reset_expiry = sqlalchemy.Column(
-        sqlalchemy.DateTime,
-        doc="""DateTime: When the password_reset_token expires""",
+        sqlalchemy.DateTime, doc="""DateTime: When the password_reset_token expires"""
     )
 
-    workflow_state = sqlalchemy.Column(sqlalchemy.Unicode(2048),
-                                       doc='Unicode: The workflow state of the user')
+    workflow_state = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048), doc="Unicode: The workflow state of the user"
+    )
 
 
 class UserGroups(Base):
     """Stores mappings from users to groups in the table ``user_groups``
     """
-    __tablename__ = 'user_groups'
-    user_uuid = sqlalchemy.Column(sqlalchemy_utils.UUIDType, primary_key=True,
-                                  doc='UUID: The user uuid to map to a group')
-    group_id = sqlalchemy.Column(sqlalchemy.Unicode(2048), primary_key=True,
-                                 doc='Unicode: The group id.')
+
+    __tablename__ = "user_groups"
+    user_uuid = sqlalchemy.Column(
+        sqlalchemy_utils.UUIDType,
+        primary_key=True,
+        doc="UUID: The user uuid to map to a group",
+    )
+    group_id = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048), primary_key=True, doc="Unicode: The group id."
+    )

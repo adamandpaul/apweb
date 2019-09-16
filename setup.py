@@ -25,6 +25,7 @@ setup(
         'pyramid_mailer',
 
         'sqlalchemy',
+        'sqlalchemy-utils',
         'zope.sqlalchemy',
 
         'redis',

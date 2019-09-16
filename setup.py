@@ -31,6 +31,7 @@ setup(
         'redis',
 
         'pyjwt',
+        'bcrypt',
 
         'contextplus>1.9',
     ],

@@ -6,6 +6,7 @@ from contextplus import SQLAlchemyCollection
 from contextplus import SQLAlchemyItem
 from contextplus import WorkflowBehaviour
 
+import bcrypt
 import re
 
 
@@ -63,6 +64,21 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         if len(user_email) > 254:
             return False
         return VALID_USER_EMAIL.match(user_email) is not None
+
+    @classmethod
+    def hash_password(cls, password):
+        return bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
+
+    def set_password(self, password):
+        password_hash = self.hash_password(password)
+        self._record.password_hash = password_hash
+
+    def check_password(self, password):
+        if not password:
+            return False
+        if not self._record.password_hash:
+            return False
+        return bcrypt.checkpw(password.encode("utf8"), self._record.password_hash)
 
 
 class UserCollection(SQLAlchemyCollection):

@@ -99,13 +99,9 @@ class User(Base):
         referenced such as granting emergency access from configruation rather then the database. But this should be rare.
         """,
     )
-    api_token_hash = sqlalchemy.Column(
+    password_hash = sqlalchemy.Column(
         sqlalchemy.LargeBinary,
-        unique=True,
-        doc="""Bytes: The hash as secret used as an api_token""",
-    )
-    password = sqlalchemy.Column(
-        sqlalchemy.Unicode(2048), doc="""Unicode: Hashed password"""
+        doc="""Bytes: The pasword hash used for authentication""",
     )
     password_reset_token = sqlalchemy.Column(
         sqlalchemy.Unicode(32),
@@ -115,7 +111,6 @@ class User(Base):
     password_reset_expiry = sqlalchemy.Column(
         sqlalchemy.DateTime, doc="""DateTime: When the password_reset_token expires"""
     )
-
     workflow_state = sqlalchemy.Column(
         sqlalchemy.Unicode(2048), doc="Unicode: The workflow state of the user"
     )

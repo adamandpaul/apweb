@@ -5,9 +5,12 @@ from contextplus import record_property
 from contextplus import SQLAlchemyCollection
 from contextplus import SQLAlchemyItem
 from contextplus import WorkflowBehaviour
+from datetime import datetime
+from datetime import timedelta
 
 import bcrypt
 import re
+import secrets
 
 
 # VALID_USER_EMAIL checks for a semi-validish email. Of most concern
@@ -79,6 +82,19 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         if not self._record.password_hash:
             return False
         return bcrypt.checkpw(password.encode("utf8"), self._record.password_hash)
+
+    def initiate_password_reset(self):
+        """Generates and sets the password_reset_token and
+        password_reset_expiry fields, if a password reset is not yet in
+        progress or has already expired.
+
+        :raises: User.ResetInProgressError if an active reset is in progress
+        """
+        record = self._record
+        now = datetime.utcnow()
+        token = secrets.token_urlsafe(24)
+        record.password_reset_token = token
+        record.password_reset_expiry = now + timedelta(days=1)
 
 
 class UserCollection(SQLAlchemyCollection):

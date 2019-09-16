@@ -2,6 +2,7 @@
 
 from .users import User
 from .users import UserCollection
+from datetime import datetime
 from unittest import TestCase
 from unittest.mock import MagicMock
 from unittest.mock import patch
@@ -102,6 +103,19 @@ class TestUser(TestCase):
         self.record.password_hash = b""
         result = self.user.check_password("fooblah")
         self.assertFalse(result)
+
+    def test_initiate_password_reset(self):
+        user = self.user
+
+        # Works the first time
+        user.initiate_password_reset()
+        self.assertEqual(len(user._record.password_reset_token), 32)
+        self.assertIsInstance(user._record.password_reset_expiry, datetime)
+
+        # Works on subsequent times too
+        user.initiate_password_reset()
+        self.assertEqual(len(user._record.password_reset_token), 32)
+        self.assertIsInstance(user._record.password_reset_expiry, datetime)
 
 
 class TestUserCollection(TestCase):

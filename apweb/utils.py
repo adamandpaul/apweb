@@ -2,6 +2,35 @@
 
 from numbers import Number
 
+import urllib.parse
+
+
+def normalize_query_string(query_string, ignore_prefixes=[]):
+    """Normalize a query string by sorting it's key value pairs, also optionally
+    filtering out key's which are prefixed by any values in ignore prefixes
+
+    Args:
+        query_string(str): A query string
+        ignore_prefixes(list): A list of prefixes which should be discarded
+
+    Returns:
+        str: A normalized query string
+    """
+    query_string = query_string or ""
+    query_items = urllib.parse.parse_qsl(query_string, keep_blank_values=True)
+    filtered_query_items = []
+    for key, value in query_items:
+        keep = True
+        for ignored_prefix in ignore_prefixes:
+            if key.startswith(ignored_prefix):
+                keep = False
+                break
+        if keep:
+            filtered_query_items.append((key, value))
+    query_items = sorted(filtered_query_items)
+    query_string = urllib.parse.urlencode(query_items)
+    return query_string
+
 
 def yesish(value, default=None):
     """Determins if a value is yes"""

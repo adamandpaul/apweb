@@ -6,7 +6,7 @@ from unittest import TestCase
 from unittest.mock import MagicMock
 
 
-class TestUserInit(TestCase):
+class TestUserClass(TestCase):
     def test_init(self):
         record = MagicMock()
         u = User(record=record)

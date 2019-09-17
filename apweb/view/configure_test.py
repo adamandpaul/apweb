@@ -9,5 +9,6 @@ class TestConfigure(TestCase):
     def test_includeme(self):
         config = MagicMock()
         configure.includeme(config)
+        config.register_template_layer.assert_called_with('apweb.view:templates')
         config.add_route.assert_called_with("api", "/api")
         config.scan.assert_called_with()

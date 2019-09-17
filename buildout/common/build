@@ -1,4 +1,13 @@
 #!/bin/bash
+#
+# A wrapper for buildout:
+#
+# - Calls the buildout script from the virtualenv created by the bootstrap
+#
+# - Adds the bin dir into the PATH.
+#
+# - Adds an environment var SOURCE_COMMIT
+#
 set -e
 
 # Figure out the buildout directory
@@ -26,5 +35,7 @@ BIN_DIR=$BUILDOUT_DIR/bin
 export PATH=$BIN_DIR:$PATH
 export SOURCE_COMMIT=`git rev-parse HEAD`
 
-echo '--> buildout...'
+echo '--> Running buildout...'
 exec buildout/py/bin/buildout "$@"
+
+echo '--> Build done. Refer to the project README in order to know more about what is available.'

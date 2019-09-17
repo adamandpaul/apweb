@@ -1,6 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
+# Select which python
+PYTHON=${PYTHON:-python3}
+
+# SOURCE_BUILDOUT_CFG is relative to the BUILDOUR_DIR
+SOURCE_BUILDOUT_CFG=buildout/common-pub/buildout.cfg
+
+echo "--> Bootstraping..."
 
 # Figure out the buildout directory
 # =================================
@@ -21,6 +28,9 @@ fi
 
 cd $BUILDOUT_DIR
 
+# Make sure we have an extends-cache
+#===================================
+mkdir -p buildout/extends-cache
 
 # Write a buildout/local.cfg
 # ==========================
@@ -37,12 +47,16 @@ then
     fi
 fi
 
+# Create a buildout.cfg from SOURCE_BUILDOUT_CFG
+# ==============================================
+cp -f $SOURCE_BUILDOUT_CFG buildout.cfg
+
 
 # Create a virtual environment with buildout installed
 # ====================================================
 
 echo '--> Creating virtual environment with zc.buildout installed...'
-python3 -m venv buildout/py
+$PYTHON -m venv buildout/py
 buildout/py/bin/pip install -U pip
 buildout/py/bin/pip install -U setuptools
 buildout/py/bin/easy_install -U zc.buildout
@@ -54,3 +68,5 @@ buildout/py/bin/easy_install -U zc.buildout
 echo '--> Installing mr.developer and pulling dependent repositories...'
 buildout/py/bin/buildout -N install mr.developer
 bin/develop update
+
+echo '--> bootstrap done. Ready to build, use bin/build to build the environment.'

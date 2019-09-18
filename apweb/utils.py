@@ -3,6 +3,12 @@
 from numbers import Number
 
 import urllib.parse
+import re
+
+
+PATTERN_API_DOMAIN = re.compile(
+    r"^api\.|^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
+)
 
 
 def normalize_query_string(query_string, ignore_prefixes=[]):

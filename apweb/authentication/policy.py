@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Sessions and authorization configuration for pyramid"""
 
+from .. import utils
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.interfaces import IAuthenticationPolicy
 from pyramid.security import Authenticated
@@ -8,24 +9,16 @@ from pyramid.security import Everyone
 from zope.interface import implementer
 
 import logging
-import re
 import secrets
 
 
 logger = logging.getLogger("apweb")
 
 
-# Policy Chooser
-
-PATTERN_API_DOMAIN = re.compile(
-    r"^api\.|^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"
-)
-
-
 def get_auth_policy_name_for_request(request):
     """Determin which policy should be used for authentication"""
     domain = request.domain
-    if PATTERN_API_DOMAIN.match(domain) is not None:
+    if utils.PATTERN_API_DOMAIN.match(domain) is not None:
         return "jwt"
     return "authtkt"
 

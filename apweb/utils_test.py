@@ -4,6 +4,28 @@ from . import utils
 from unittest import TestCase
 
 
+class TestPatternApiDomain(TestCase):
+
+    def test_is_api_domain(self):
+        data = [
+            "api.foo.bar",
+            "127.0.0.1",
+            "api.localhost",
+            "10.15.23.1",
+        ]
+        for domain in data:
+            self.assertIsNotNone(utils.PATTERN_API_DOMAIN.match(domain))
+
+
+    def test_is_not_api_domain(self):
+        data = [
+            "127.0.0.1.bar.com",
+            "adamandpaul.biz",
+        ]
+        for domain in data:
+            self.assertIsNone(utils.PATTERN_API_DOMAIN.match(domain))
+
+
 class TestYesish(TestCase):
     def test_yesish(self):
         data = [

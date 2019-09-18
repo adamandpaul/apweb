@@ -11,24 +11,19 @@ import unittest
 
 
 class TestAuthentication(unittest.TestCase):
-    def test_get_auth_policy_name_for_request(self):
-        data = [
-            ("api.foo.bar", "jwt"),
-            ("127.0.0.1.bar.com", "authtkt"),
-            ("127.0.0.1", "jwt"),
-            ("api.localhost", "jwt"),
-            ("10.15.23.1", "jwt"),
-            ("adamandpaul.biz", "authtkt"),
-        ]
-        for domain, expected_policy in data:
-            request = MagicMock()
-            request.domain = domain
-            result = policy.get_auth_policy_name_for_request(request)
-            self.assertEqual(
-                result,
-                expected_policy,
-                f"Unexpected policy {result} for domain {domain}",
-            )
+    @patch("apweb.utils.PATTERN_API_DOMAIN")
+    def test_get_auth_policy_name_for_api(self, pattern_api_domain):
+        request = MagicMock()
+        pattern_api_domain.match.return_value = "foo"
+        result = policy.get_auth_policy_name_for_request(request)
+        self.assertEqual(result, "jwt")
+
+    @patch("apweb.utils.PATTERN_API_DOMAIN")
+    def test_get_auth_policy_name_for_non_api(self, pattern_api_domain):
+        request = MagicMock()
+        pattern_api_domain.match.return_value = None
+        result = policy.get_auth_policy_name_for_request(request)
+        self.assertEqual(result, "authtkt")
 
 
 class TestJWTAuthenticationPolicy(unittest.TestCase):

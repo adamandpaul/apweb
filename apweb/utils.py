@@ -2,8 +2,8 @@
 
 from numbers import Number
 
-import urllib.parse
 import re
+import urllib.parse
 
 
 PATTERN_API_DOMAIN = re.compile(

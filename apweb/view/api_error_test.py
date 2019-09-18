@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from . import apierror
+from . import api_error
 from unittest import TestCase
 from unittest.mock import MagicMock
 
@@ -9,7 +9,7 @@ class TestAPIErrorException(TestCase):
     def setUp(self):
         self.context = Exception()
         self.request = MagicMock()
-        self.view = apierror.HandleException(self.context, self.request)
+        self.view = api_error.HandleException(self.context, self.request)
 
     def test_handle_exception(self):
         self.context.code = 500
@@ -26,7 +26,7 @@ class TestAPIErrorClientError(TestCase):
         self.context.code = 400
         self.context.jsend_data = {"foo": "123"}
         self.request = MagicMock()
-        self.view = apierror.HandleClientError(self.context, self.request)
+        self.view = api_error.HandleClientError(self.context, self.request)
 
     def test_handle_exception(self):
         result = self.view()

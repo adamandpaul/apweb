@@ -24,6 +24,7 @@ setup(
         'pyramid_exclog',
         'pyramid_tm',
         'pyramid_mailer',
+        'pyramid_zcml',
 
         'sqlalchemy',
         'sqlalchemy-utils',

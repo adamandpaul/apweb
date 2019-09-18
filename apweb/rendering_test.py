@@ -71,6 +71,7 @@ class TestRenderingConfig(TestCase):
     def test_includeme(self, c1, c2):
         config = MagicMock()
         rendering.includeme(config)
+        config.include.assert_called_with("pyramid_chameleon")
         c1.assert_called_with(config)
         c2.assert_called_with(config)
 

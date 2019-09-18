@@ -95,5 +95,6 @@ def configure_json_renderer(config):
 
 
 def includeme(config):
+    config.include("pyramid_chameleon")
     configure_template_layers(config)
     configure_json_renderer(config)

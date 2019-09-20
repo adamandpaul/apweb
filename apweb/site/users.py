@@ -73,6 +73,10 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
             return False
         return VALID_USER_EMAIL.match(user_email) is not None
 
+    #
+    # Passwords
+    #
+
     @classmethod
     def hash_password(cls, password):
         return bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
@@ -100,6 +104,35 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         token = secrets.token_urlsafe(24)
         record.password_reset_token = token
         record.password_reset_expiry = now + timedelta(days=1)
+
+    #
+    # Roles
+    #
+
+    @property
+    def assigned_roles(self):
+        q = self.acquire.db_session.query(orm.RoleAssignment)
+        q = q.filterby(principal=f"user:{self.user_uuid}")
+        return [record.role for record in q]
+
+    def assign_role(self, role):
+        if role in self.assigned_roles:
+            raise Exception(f"User already assigned to {role}")
+        record = orm.RoleAssignment(principal=f"user:{self.user_uuid}", role=role)
+        self.acquire.db_session.add(record)
+        self.logger.info("Assigned role {role}")
+
+    def revoke_role(self, role):
+        db_session = self.acquire.db_session
+        q = db_session.query(orm.RoleAssignment)
+        q = q.filterby(principal=f"user:{self.user_uuid}", role=role)
+        record = q.one()
+        db_session.delete(record)
+        self.logger.info("Revoked role {role}")
+
+    #
+    # Logging
+    #
 
     @resource("logger")
     def get_logger(self):

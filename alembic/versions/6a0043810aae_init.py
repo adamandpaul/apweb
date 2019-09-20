@@ -111,6 +111,22 @@ class User(Base):
     )
 
 
+class RoleAssignment(base):
+    """Stores a role assignment from a principal"""
+    __tablename__ = "role_assignment"
+    principal = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048),
+        doc="Unicode: The pyramid security principal e.g. user:foo@bar.com",
+        primary_key=True
+    )
+    role = sqlalchemy.Column(
+        sqlalchemy.Unicode(2048),
+        doc="Unicode: The pyramid rol assignment to the principal e.g. site-administrator",
+        primary_key=True,
+        index=True,
+    )
+
+
 class UserGroups(Base):
     """Stores mappings from users to groups in the table ``user_groups``
     """

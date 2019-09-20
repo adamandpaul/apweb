@@ -6,14 +6,13 @@ from unittest.mock import MagicMock
 
 
 class TestAddUser(TestCase):
-
     def setUp(self):
         self.cmd_context = MagicMock()
         self.args = self.cmd_context.args
         self.site = self.cmd_context.site
         self.users = self.site["users"]
         self.user = self.users.add.return_value
-        self.args.user_email = 'foo@bar.com'
+        self.args.user_email = "foo@bar.com"
         self.args.password = None
         self.args.initiate_password_reset = False
 
@@ -26,9 +25,9 @@ class TestAddUser(TestCase):
         self.site.transaction_manager.commit.assert_called()
 
     def test_add_user_with_password(self):
-        self.args.password = 'supersecret'
+        self.args.password = "supersecret"
         console.add_user(self.cmd_context)
-        self.user.set_password.assert_called_with('supersecret')
+        self.user.set_password.assert_called_with("supersecret")
 
     def test_add_user_with_password_reset(self):
         self.args.initiate_password_reset = True

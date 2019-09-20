@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from . import exc
+from . import orm
 from .logs import ComponentLogger
 from .users import User
 from .users import UserCollection
@@ -76,6 +77,8 @@ class TestUser(TestCase):
     def setUp(self):
         self.record = MagicMock()
         self.user = User(record=self.record)
+        self.db_session = MagicMock()
+        self.user.db_session = self.db_session
 
     def test_set_password(self):
         self.user.hash_password = MagicMock()
@@ -124,6 +127,40 @@ class TestUser(TestCase):
         logger = self.user.get_logger()
         self.assertIsInstance(logger, ComponentLogger)
         self.assertEqual(logger.component, f"user:{self.user.user_uuid}")
+
+    def test_assigned_roles(self):
+        query = self.db_session.query
+        query.return_value.filterby.return_value = [
+            orm.RoleAssignment(role="one"),
+            orm.RoleAssignment(role="two"),
+        ]
+        roles = self.user.assigned_roles
+        self.assertEqual(roles, ["one", "two"])
+        query.assert_called_with(orm.RoleAssignment)
+        q = query.return_value
+        q.filterby.assert_called_with(principal=f"user:{self.user.user_uuid}")
+
+    @patch("apweb.site.orm.RoleAssignment")
+    def test_assign_role(self, RoleAssignment):
+        self.user.assign_role("foo")
+        RoleAssignment.assert_called_with(
+            principal=f"user:{self.user.user_uuid}", role="foo"
+        )
+        record = RoleAssignment.return_value
+        self.db_session.add.assert_any_call(record)
+
+    def test_revoke_role(self):
+        query = self.db_session.query
+        record = query.return_value.filterby.return_value.one.return_value
+
+        self.user.revoke_role("foo")
+
+        query.assert_called_with(orm.RoleAssignment)
+        q = query.return_value
+        q.filterby.assert_called_with(
+            principal=f"user:{self.user.user_uuid}", role="foo"
+        )
+        self.db_session.delete.assert_called_with(record)
 
 
 class TestUserCollectionClass(TestCase):

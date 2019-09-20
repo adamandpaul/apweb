@@ -11,7 +11,7 @@ def add_user(cmd_context):
     initiate_password_reset = args.initiate_password_reset
 
     site.transaction_manager.begin()
-    user = site['users'].add(user_email=user_email)
+    user = site["users"].add(user_email=user_email)
     if password:
         user.set_password(password)
     if initiate_password_reset:
@@ -26,7 +26,19 @@ def cmd_configure(sub_commands):
     add_user_parser = sub_commands.add_parser(
         "add-user", help="Add a user to the database"
     )
-    add_user_parser.add_argument('user_email', help="the email used to authenticate the user")
-    add_user_parser.add_argument('-r', '--initiate-password-reset', action="store_true", help="immediately send password reset email")
-    add_user_parser.add_argument('-p', '--password', default=None, help="set password for password authenticateion")
+    add_user_parser.add_argument(
+        "user_email", help="the email used to authenticate the user"
+    )
+    add_user_parser.add_argument(
+        "-r",
+        "--initiate-password-reset",
+        action="store_true",
+        help="immediately send password reset email",
+    )
+    add_user_parser.add_argument(
+        "-p",
+        "--password",
+        default=None,
+        help="set password for password authenticateion",
+    )
     add_user_parser.set_defaults(func=add_user)

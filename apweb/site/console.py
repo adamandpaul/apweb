@@ -9,6 +9,7 @@ def add_user(cmd_context):
     user_email = args.user_email
     password = args.password
     initiate_password_reset = args.initiate_password_reset
+    roles = args.roles
 
     site.transaction_manager.begin()
     user = site["users"].add(user_email=user_email)
@@ -16,6 +17,8 @@ def add_user(cmd_context):
         user.set_password(password)
     if initiate_password_reset:
         user.initiate_password_reset()
+    for role in roles:
+        user.assign_role(role)
     site.transaction_manager.commit()
 
     return 0
@@ -30,7 +33,7 @@ def cmd_configure(sub_commands):
         "user_email", help="the email used to authenticate the user"
     )
     add_user_parser.add_argument(
-        "-r",
+        "-i",
         "--initiate-password-reset",
         action="store_true",
         help="immediately send password reset email",
@@ -40,5 +43,8 @@ def cmd_configure(sub_commands):
         "--password",
         default=None,
         help="set password for password authenticateion",
+    )
+    add_user_parser.add_argument(
+        "-r", "--role", action="append", dest="roles", help="assign roles to the user"
     )
     add_user_parser.set_defaults(func=add_user)

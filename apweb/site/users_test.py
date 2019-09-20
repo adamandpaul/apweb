@@ -130,7 +130,7 @@ class TestUser(TestCase):
 
     def test_assigned_roles(self):
         query = self.db_session.query
-        query.return_value.filterby.return_value = [
+        query.return_value.filter_by.return_value = [
             orm.RoleAssignment(role="one"),
             orm.RoleAssignment(role="two"),
         ]
@@ -138,7 +138,7 @@ class TestUser(TestCase):
         self.assertEqual(roles, ["one", "two"])
         query.assert_called_with(orm.RoleAssignment)
         q = query.return_value
-        q.filterby.assert_called_with(principal=f"user:{self.user.user_uuid}")
+        q.filter_by.assert_called_with(principal=f"user:{self.user.user_uuid}")
 
     @patch("apweb.site.orm.RoleAssignment")
     def test_assign_role(self, RoleAssignment):
@@ -151,13 +151,13 @@ class TestUser(TestCase):
 
     def test_revoke_role(self):
         query = self.db_session.query
-        record = query.return_value.filterby.return_value.one.return_value
+        record = query.return_value.filter_by.return_value.one.return_value
 
         self.user.revoke_role("foo")
 
         query.assert_called_with(orm.RoleAssignment)
         q = query.return_value
-        q.filterby.assert_called_with(
+        q.filter_by.assert_called_with(
             principal=f"user:{self.user.user_uuid}", role="foo"
         )
         self.db_session.delete.assert_called_with(record)

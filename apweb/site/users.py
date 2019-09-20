@@ -112,10 +112,11 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
     @property
     def assigned_roles(self):
         q = self.acquire.db_session.query(orm.RoleAssignment)
-        q = q.filterby(principal=f"user:{self.user_uuid}")
+        q = q.filter_by(principal=f"user:{self.user_uuid}")
         return [record.role for record in q]
 
     def assign_role(self, role):
+        assert role
         if role in self.assigned_roles:
             raise Exception(f"User already assigned to {role}")
         record = orm.RoleAssignment(principal=f"user:{self.user_uuid}", role=role)
@@ -123,9 +124,10 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         self.logger.info("Assigned role {role}")
 
     def revoke_role(self, role):
+        assert role
         db_session = self.acquire.db_session
         q = db_session.query(orm.RoleAssignment)
-        q = q.filterby(principal=f"user:{self.user_uuid}", role=role)
+        q = q.filter_by(principal=f"user:{self.user_uuid}", role=role)
         record = q.one()
         db_session.delete(record)
         self.logger.info("Revoked role {role}")

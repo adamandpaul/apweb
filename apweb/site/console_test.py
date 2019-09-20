@@ -15,6 +15,7 @@ class TestAddUser(TestCase):
         self.args.user_email = "foo@bar.com"
         self.args.password = None
         self.args.initiate_password_reset = False
+        self.args.roles = []
 
     def test_add_user(self):
         console.add_user(self.cmd_context)
@@ -33,3 +34,9 @@ class TestAddUser(TestCase):
         self.args.initiate_password_reset = True
         console.add_user(self.cmd_context)
         self.user.initiate_password_reset.assert_called_with()
+
+    def test_add_user_with_roles(self):
+        self.args.roles = ["role1", "role2"]
+        console.add_user(self.cmd_context)
+        self.user.assign_role.assert_any_call("role1")
+        self.user.assign_role.assert_any_call("role2")

@@ -80,6 +80,7 @@ def includeme(config):
         config.include("pyramid_mailer")
 
     # Configure apweb
+    config.include(".session")
     config.include(".login")
     config.include(".rendering")
     config.include(".authentication")

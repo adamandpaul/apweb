@@ -136,11 +136,12 @@ class TestConfigure(unittest.TestCase):
     def test_configure(self, AuthenticationPolicy):  # noqa: 803
 
         config = MagicMock()
-        config.registry = {"is_develop": False}
-        config.get_settings.return_value = {
-            "authtkt_secret": "super secret",
-            "authtkt_timeout": 3000,
+        config.registry = {
+            "cookie_session_secure": True,
+            "cookie_session_timeout": 123,
+            "cookie_session_reissue_time": 12,
         }
+        config.get_settings.return_value = {"authtkt_secret": "super secret"}
         policy.includeme(config)
 
         config.add_request_method.assert_called_with(
@@ -152,8 +153,8 @@ class TestConfigure(unittest.TestCase):
             {
                 "secret": "super secret",
                 "secure": True,
-                "timeout": 3000,
-                "reissue_time": 300,
+                "timeout": 123,
+                "reissue_time": 12,
                 "http_only": True,
                 "wild_domain": False,
             }

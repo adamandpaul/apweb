@@ -5,6 +5,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 
 import logging
 import pyramid_mailer
+import pyramid_nacl_session
 
 
 logger = logging.getLogger("apweb.configure")
@@ -50,6 +51,19 @@ def includeme(config):
 
     # Authorization Policy
     config.set_authorization_policy(ACLAuthorizationPolicy())
+
+    # Cookie session config
+    registry["cookie_session_timeout"] = int(
+        settings.get("cookie_session_timeout", 1200)
+    )
+    registry["cookie_session_reissue_time"] = int(
+        settings.get(
+            "cookie_session_reissue_time", int(registry["cookie_session_timeout"] / 10)
+        )
+    )
+    registry["cookie_session_secure"] = yesish(
+        settings.get("cookie_session_secure") or not registry["is_develop"]
+    )
 
     # configure dependent packages
     config.include("pyramid_exclog")

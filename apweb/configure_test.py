@@ -12,6 +12,7 @@ class TestIncludemeDevelop(TestCase):
             "is_develop": "yes",
             "frontend_static_location": "/foo/bar",
             "docs_static_location": "/path/docs",
+            "cookie_session_timeout": 3000,
         }
         self.config = MagicMock()
         self.config.get_settings.return_value = self.settings
@@ -45,6 +46,11 @@ class TestIncludemeDevelop(TestCase):
         c.set_authorization_policy.assert_called_with(
             ACLAuthorizationPolicy.return_value
         )
+
+        # Cookie session values
+        self.assertEqual(r["cookie_session_timeout"], 3000)
+        self.assertEqual(r["cookie_session_reissue_time"], 300)
+        self.assertEqual(r["cookie_session_secure"], False)
 
         # other packages
         c.include.assert_any_call("pyramid_exclog")

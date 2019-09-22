@@ -14,14 +14,14 @@ class TestConfigure(unittest.TestCase):
     def test_should_check_csrf(self):
 
         request = MagicMock()
-        request.auth_policy_for_request = "authtkt"
+        request.auth_policy_name_for_request = "authtkt"
         self.assertTrue(
             configure.should_check_csrf(request),
             "expected to check csrf for authtkt authentication",
         )
 
         request = MagicMock()
-        request.auth_policy_for_request = "jwt"
+        request.auth_policy_name_for_request = "jwt"
         self.assertFalse(
             configure.should_check_csrf(request),
             "expected not to check csrf for jwt authentication",

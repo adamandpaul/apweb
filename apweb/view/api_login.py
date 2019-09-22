@@ -18,7 +18,6 @@ class NotAbleToCreateLogin(Exception):
     """Was not able to create a login"""
 
 
-@view_config(route_name="api", name="login", request_method="POST", renderer="jsend")
 class APILogin(object):
     def __init__(self, context, request):
         self.context = context
@@ -63,6 +62,9 @@ class APILogin(object):
             sub=self.userid, aud=["refresh"], iat=self.jwt_iat, exp=self.jwt_refresh_exp
         )
 
+    @view_config(
+        route_name="api", name="login", request_method="POST", renderer="jsend"
+    )
     def post(self):
 
         # Check request paramitors
@@ -70,6 +72,12 @@ class APILogin(object):
             raise HTTPForbidden("Request method not allowed")
 
         if not self.userid:
+            logger.warning(
+                f"Failed login attempt.\n"
+                f"\tclient_addr: {self.request.client_addr}\n"
+                f"\tremote_addr: {self.request.remote_addr}\n"
+                f"\turl: {self.request.url}"
+            )
             raise HTTPForbidden("Was not able to login")
 
         # Try to create a browser session
@@ -88,7 +96,7 @@ class APILogin(object):
             jwt_access_token = None
             jwt_refresh_token = None
             if not browser_session:
-                logger.warn(f"Do you need to configure JSON Web Token? {e}")
+                logger.warning(f"Do you need to configure JSON Web Token? {e}")
 
         if (
             jwt_access_token is None or jwt_refresh_token is None

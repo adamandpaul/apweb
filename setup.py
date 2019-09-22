@@ -21,10 +21,11 @@ setup(
         'setuptools',
 
         'pyramid',
+        'pyramid_chameleon',
         'pyramid_exclog',
         'pyramid_tm',
         'pyramid_mailer',
-        'pyramid_zcml',
+        'pyramid_nacl_session',
 
         'sqlalchemy',
         'sqlalchemy-utils',
@@ -36,6 +37,8 @@ setup(
         'bcrypt',
 
         'contextplus>1.9',
+
+        'psycopg2-binary',
     ],
     entry_points="""
         [console_scripts]

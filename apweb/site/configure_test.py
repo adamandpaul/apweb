@@ -15,11 +15,15 @@ class TestSiteFactory(TestCase):
 
 
 class TestIncludeme(TestCase):
-    def test_includeme(self):
+    @patch("apweb.site.configure.PasswordLoginProvider")
+    def test_includeme(self, PasswordLoginProvider):
         config = MagicMock()
         configure.includeme(config)
         config.include.assert_called_with("apweb")
         config.add_request_method.assert_called_with(
             configure.site_factory, "site", reify=True
+        )
+        config.register_login_provider.assert_called_with(
+            PasswordLoginProvider.return_value
         )
         config.commit.assert_called_with()

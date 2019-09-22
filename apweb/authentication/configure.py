@@ -15,7 +15,7 @@ def get_roles(request):
 
 def should_check_csrf(request):
     """Determine if the csrf token should be checked"""
-    return request.auth_policy_for_request != "jwt"
+    return request.auth_policy_name_for_request != "jwt"
 
 
 def includeme(config):

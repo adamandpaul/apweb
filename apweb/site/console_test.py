@@ -15,7 +15,7 @@ class TestAddUser(TestCase):
         self.args.user_email = "foo@bar.com"
         self.args.password = None
         self.args.initiate_password_reset = False
-        self.args.roles = []
+        self.args.roles = None
 
     def test_add_user(self):
         console.add_user(self.cmd_context)

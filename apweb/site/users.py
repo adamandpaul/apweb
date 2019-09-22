@@ -181,3 +181,12 @@ class UserCollection(SQLAlchemyCollection):
         user = self.child_from_record(record)
         user.logger.info(f"Created user for email {user_email}")
         return user
+
+    def get_user_by_email(self, user_email: str):
+        """Return a user from a given email address"""
+        db_session = self.acquire.db_session
+        user_query = db_session.query(orm.User).filter_by(user_email=user_email)
+        record = user_query.one_or_none()
+        if record is not None:
+            return self.child_from_record(record)
+        return None

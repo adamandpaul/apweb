@@ -45,15 +45,22 @@ Settings Configuration
 ``jwt_refresh_ttl`` (default: 60 * 60 * 24 * 365 (one year))
     Timelimit on refresh tokens
 
+
+``cookie_session_timeout`` (default: 1200 (20 minutes)
+    The timeout for authtkt and nacl sessions
+
+``cookie_session_reissue_time`` (default: ``cookie_session_timeout`` / 10)
+    The reissue time for authtkt and nacl sessions
+
+``cookie_session_secret`` (default: ``not is_develop``)
+    Cookie policy as to wehter or not to send cookies over non secure connections
+
 ``authtkt_secret`` (default: Random)
     The secret used for authtkt. If not set a randomly generated
     secret is used. This will be unworkable for production systems.
 
-``authtkt_timeout`` (default: 1200 (20 minutes)
-    The authtkt timeout.
-
-``authtkt_reissue_time`` (default: ``authtkt_timeout`` / 10)
-    The reissue time for a new ticket to be issued.
+``nacl_session_secret`` (default: Random)
+    The secret used for nacl based cookie sessions
 
 Request Configuration
 =====================

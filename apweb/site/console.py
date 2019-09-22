@@ -17,8 +17,9 @@ def add_user(cmd_context):
         user.set_password(password)
     if initiate_password_reset:
         user.initiate_password_reset()
-    for role in roles:
-        user.assign_role(role)
+    if roles:
+        for role in roles:
+            user.assign_role(role)
     site.transaction_manager.commit()
 
     return 0

@@ -111,17 +111,11 @@ def includeme(config):
     authtkt_secret = settings.get("authtkt_secret", None)
     if authtkt_secret is None:
         authtkt_secret = secrets.token_urlsafe(32)
-    authtkt_timeout = int(
-        settings.get("authtkt_timeout", 1200)
-    )  # defautl is 20 minutes
-    authtkt_reissue_time = int(
-        settings.get("authtkt_reissue_time", int(authtkt_timeout / 10))
-    )  # default is tenth of timeout
     authtkt_policy_kwargs = {
         "secret": authtkt_secret,
-        "secure": not registry["is_develop"],
-        "timeout": authtkt_timeout,
-        "reissue_time": authtkt_reissue_time,
+        "secure": registry["cookie_session_secure"],
+        "timeout": registry["cookie_session_timeout"],
+        "reissue_time": registry["cookie_session_reissue_time"],
         "http_only": True,
         "wild_domain": False,
     }

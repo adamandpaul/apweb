@@ -9,6 +9,8 @@ from datetime import timedelta
 from uuid import UUID
 from uuid import uuid4
 
+import logging
+
 
 CRITICAL = 50
 ERROR = 40
@@ -23,6 +25,9 @@ LEVEL_NAMES = {
     INFO: "INFO",
     DEBUG: "DEBUG",
 }
+
+
+logger = logging.getLogger("apweb.site.logs")
 
 
 class LogEntry(SQLAlchemyItem):
@@ -102,7 +107,24 @@ class ComponentLogger(LogEntryCollection):
             message=message,
         )
         self.acquire.db_session.add(record)
+        logger.log(level, message)  # Additionally log to the application log
+
+    def debug(self, message):
+        """Log an info level message to the log_entry table"""
+        self.add(DEBUG, message)
 
     def info(self, message):
         """Log an info level message to the log_entry table"""
         self.add(INFO, message)
+
+    def warning(self, message):
+        """Log an info level message to the log_entry table"""
+        self.add(WARNING, message)
+
+    def error(self, message):
+        """Log an info level message to the log_entry table"""
+        self.add(ERROR, message)
+
+    def critical(self, message):
+        """Log an info level message to the log_entry table"""
+        self.add(CRITICAL, message)

@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
 
-from .utils import yesish
-
 import binascii
 import pyramid_nacl_session
 

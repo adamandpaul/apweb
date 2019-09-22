@@ -5,7 +5,6 @@ from pyramid.authorization import ACLAuthorizationPolicy
 
 import logging
 import pyramid_mailer
-import pyramid_nacl_session
 
 
 logger = logging.getLogger("apweb.configure")

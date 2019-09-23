@@ -17,8 +17,27 @@ class TestSessionInfo(TestCase):
         self.response = request.response
         self.view = session_info.SessionInfo(context, request)
 
+    def test_authenticated_true(self):
+        self.request.authenticated_userid = 'me@email.com'
+        self.assertTrue(self.view.authenticated)
+
+    def test_authenticated_false(self):
+        self.request.authenticated_userid = None
+        self.assertFalse(self.view.authenticated)
+
+    def test_roles(self):
+        self.request.roles = ['one', 'two']
+        self.assertEqual(self.view.roles, ['one', 'two'])
+
     def test_info(self):
-        self.assertEqual(self.view.info, {})
+        self.view.__dict__.update({
+            'authenticated': True,
+            'roles': ['foo', 'bar'],
+        })
+        self.assertEqual(self.view.info, {
+            'authenticated': True,
+            'roles': ['foo', 'bar'],
+        })
 
     @patch("pyramid.csrf.get_csrf_token")
     def test_set_cookie_csrf_token(self, get_csrf_token):
@@ -32,5 +51,5 @@ class TestSessionInfo(TestCase):
     def test_get_authtkt(self):
         self.request.auth_policy_name_for_request = "authtkt"
         self.view.set_cookie_csrf_token = MagicMock()
-        self.view.get()
+        self.view()
         self.view.set_cookie_csrf_token.assert_called()

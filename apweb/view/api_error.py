@@ -37,6 +37,7 @@ class HandleException(object):
         return getattr(self.context, "jsend_data", None)
 
     def __call__(self):
+        self.request.response.status_code = self.code
         jsend = {
             "status": self.status,
             "data": self.data,

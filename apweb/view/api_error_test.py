@@ -18,6 +18,7 @@ class TestAPIErrorException(TestCase):
             result,
             {"status": "error", "data": None, "code": 500, "message": "Server Error"},
         )
+        self.assertEqual(self.request.response.status_code, 500)
 
 
 class TestAPIErrorClientError(TestCase):

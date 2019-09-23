@@ -12,6 +12,7 @@ def includeme(config):
         secret = pyramid_nacl_session.generate_secret()
     else:
         secret = binascii.unhexlify(secret_hex)
+    secret = secret[:32]
     session_factory = pyramid_nacl_session.EncryptedCookieSessionFactory(
         secret,
         secure=registry["cookie_session_secure"],

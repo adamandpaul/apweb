@@ -21,11 +21,11 @@ class TestSession(TestCase):
     @patch("pyramid_nacl_session.EncryptedCookieSessionFactory")
     @patch("binascii.unhexlify")
     def test_includeme(self, unhexlify, EncryptedCookieSessionFactory):
+        unhexlify.return_value = b"01234567890123456789012345678901234567890"
         session.includeme(self.config)
         unhexlify.assert_called_with("big secret")
-        secret = unhexlify.return_value
         EncryptedCookieSessionFactory.assert_called_with(
-            secret,
+            b"01234567890123456789012345678901",
             secure=True,
             httponly=True,
             max_age=100,
@@ -41,10 +41,10 @@ class TestSession(TestCase):
         self, generate_secret, EncryptedCookieSessionFactory
     ):
         del self.settings["nacl_session_secret"]
+        generate_secret.return_value = b"01234567890123456789012345678901234567890"
         session.includeme(self.config)
-        secret = generate_secret.return_value
         EncryptedCookieSessionFactory.assert_called_with(
-            secret,
+            b"01234567890123456789012345678901",
             secure=True,
             httponly=True,
             max_age=100,

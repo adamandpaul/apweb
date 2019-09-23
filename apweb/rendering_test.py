@@ -89,10 +89,21 @@ class TestJSON(TestCase):
 
     @patch("pyramid.renderers.render")
     def test_jsend_renderer(self, render):
+        request = MagicMock()
         renderer = rendering.JSendRenderer({})
-        result = renderer({"foo"}, {"request": "req"})
+        result = renderer({"foo"}, {"request": request})
         self.assertEqual(result, render.return_value)
-        render.assert_called_with("json", {"status": "success", "data": {"foo"}}, "req")
+        render.assert_called_with("json", {"status": "success", "data": {"foo"}}, request)
+        self.assertEqual(request.response.content_type, 'application/json')
+        self.assertEqual(request.response.charset, 'utf-8')
+
+
+    @patch("pyramid.renderers.render")
+    def test_jsend_renderer_no_request(self, render):
+        renderer = rendering.JSendRenderer({})
+        result = renderer({"foo"}, {})
+        self.assertEqual(result, render.return_value)
+        render.assert_called_with("json", {"status": "success", "data": {"foo"}}, None)
 
     @patch("pyramid.renderers.JSON")
     def test_configure_json_renderer(self, JSON):  # noqa: N803

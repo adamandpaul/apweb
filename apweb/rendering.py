@@ -80,7 +80,13 @@ class JSendRenderer(object):
 
     def __call__(self, value, system):
         value = {"status": "success", "data": value}
-        return pyramid.renderers.render("json", value, system.get("request", None))
+        request = system.get("request", None)
+        result = pyramid.renderers.render("json", value, request)
+        if request:
+            response = request.response
+            response.content_type = 'application/json'
+            response.charset = 'utf-8'
+        return result
 
 
 def configure_json_renderer(config):

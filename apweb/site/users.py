@@ -47,7 +47,7 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
     record_type = orm.User
     id_fields = ("user_uuid",)
 
-    workflow_default_tate = "active"
+    workflow_default_state = "active"
     workflow_transitions = {
         "ban": {"from": ("active",), "to": "banned"},
         "reinstate": {"from": ("banned",), "to": "active"},

@@ -77,6 +77,14 @@ class TestJWT(unittest.TestCase):
             {"sub": "user1"}, key="priv key", algorithm="myalgo"
         )
 
+    def test_generate_jwt_not_configured(self):
+        request = MagicMock()
+        request.registry = {}
+        request.registry["jwt_private_key"] = None
+        request.registry["jwt_algorithm"] = None
+        with self.assertRaises(apweb_jwt.JWTNotConfiguredError):
+            token = apweb_jwt.generate_jwt(request, sub="user1")
+
     @patch("apweb.authentication.jwt.RefreshTokenLoginProvider")
     def test_includeme_no_config(self, RefreshTokenLoginProvider):  # noqa: N803
         config = MagicMock()

@@ -63,8 +63,8 @@ def generate_jwt(request, **claims):
     """
     private_key = request.registry["jwt_private_key"]
     algorithm = request.registry["jwt_algorithm"]
-    assert private_key is not None
-    assert algorithm is not None
+    if private_key is None or algorithm is None:
+        raise JWTNotConfiguredError()
     token_bytes = jwt.encode(claims, key=private_key, algorithm=algorithm)
     return token_bytes.decode()
 

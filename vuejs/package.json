@@ -1,0 +1,14 @@
+{
+  "name": "apweb",
+  "version": "1.0.0",
+  "description": "APWeb VueJS Components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}

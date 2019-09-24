@@ -4,6 +4,7 @@
 *.pyc
 *.pyo
 *id_rsa*
+*/node_modules/*
 /.coverage
 /.coveragerc
 /.installed.cfg

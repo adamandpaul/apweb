@@ -82,11 +82,11 @@ class APILogin(object):
 
         # Try to create a browser session
         try:
-            pyramid.security.remember(self.request, self.userid)
+            browser_headers = pyramid.security.remember(self.request, self.userid)
         except NotImplementedError:
-            browser_session = False
-        else:
-            browser_session = True
+            browser_headers = []
+        self.request.response.headers.update(browser_headers)
+        browser_session = len(browser_headers) > 0
 
         # Create a JWT token
         try:
@@ -95,12 +95,12 @@ class APILogin(object):
         except JWTNotConfiguredError as e:
             jwt_access_token = None
             jwt_refresh_token = None
-            if not browser_session:
+            if browser_session == 0:
                 logger.warning(f"Do you need to configure JSON Web Token? {e}")
 
         if (
             jwt_access_token is None or jwt_refresh_token is None
-        ) and not browser_session:
+        ) and browser_session == 0:
             raise NotAbleToCreateLogin("Unable to create jwt or login session")
 
         return {

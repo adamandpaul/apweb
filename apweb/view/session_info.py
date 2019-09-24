@@ -10,7 +10,8 @@ import pyramid.csrf
     route_name="api",
     name="session_info",
     physical_path=("",),
-    renderer="jsend", http_cache=0,
+    renderer="jsend",
+    http_cache=0,
 )
 class SessionInfo(object):
     def __init__(self, context, request):
@@ -27,10 +28,7 @@ class SessionInfo(object):
 
     @reify
     def info(self):
-        return {
-            'authenticated': self.authenticated,
-            'roles': self.roles,
-        }
+        return {"authenticated": self.authenticated, "roles": self.roles}
 
     def set_cookie_csrf_token(self):
         response = self.request.response

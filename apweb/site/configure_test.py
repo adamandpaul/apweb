@@ -17,16 +17,16 @@ class TestSiteFactory(TestCase):
 class TestRequestMethods(TestCase):
     def test_get_user_for_unauthenticated_userid(self):
         request = MagicMock()
-        request.unauthenticated_userid = 'foo@blah.com'
+        request.unauthenticated_userid = "foo@blah.com"
         result = configure.get_user_for_unauthenticated_userid(request)
         self.assertEqual(result, request.site["users"].get_user_by_email.return_value)
-        request.site["users"].get_user_by_email.assert_called_with('foo@blah.com')
+        request.site["users"].get_user_by_email.assert_called_with("foo@blah.com")
 
     def test_get_roles(self):
         request = MagicMock()
-        request.user.assigned_roles = ['one', 'two']
+        request.user.assigned_roles = ["one", "two"]
         result = configure.get_roles(request)
-        self.assertEqual(result, ['one', 'two'])
+        self.assertEqual(result, ["one", "two"])
 
 
 class TestIncludeme(TestCase):

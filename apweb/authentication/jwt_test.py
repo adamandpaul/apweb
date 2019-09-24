@@ -83,7 +83,7 @@ class TestJWT(unittest.TestCase):
         request.registry["jwt_private_key"] = None
         request.registry["jwt_algorithm"] = None
         with self.assertRaises(apweb_jwt.JWTNotConfiguredError):
-            token = apweb_jwt.generate_jwt(request, sub="user1")
+            apweb_jwt.generate_jwt(request, sub="user1")
 
     @patch("apweb.authentication.jwt.RefreshTokenLoginProvider")
     def test_includeme_no_config(self, RefreshTokenLoginProvider):  # noqa: N803

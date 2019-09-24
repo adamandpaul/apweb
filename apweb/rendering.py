@@ -84,8 +84,8 @@ class JSendRenderer(object):
         result = pyramid.renderers.render("json", value, request)
         if request:
             response = request.response
-            response.content_type = 'application/json'
-            response.charset = 'utf-8'
+            response.content_type = "application/json"
+            response.charset = "utf-8"
         return result
 
 

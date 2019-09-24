@@ -116,14 +116,14 @@ class TestLogin(unittest.TestCase):
         self.view.__dict__["device_id"] = "55555"
         self.view.__dict__["jwt_access_token"] = "token 123"
         self.view.__dict__["jwt_refresh_token"] = "token abc"
-        remember.return_value = ['header']
+        remember.return_value = ["header"]
         response = self.view.post()
         remember.assert_called_with(self.request, "foo@bar", tokens=["device_id-55555"])
         self.assertEqual(
             response,
             {"browser_session": True, "jwt": "token 123", "jwt_refresh": "token abc"},
         )
-        self.request.response.headers.update.assert_called_with(['header'])
+        self.request.response.headers.update.assert_called_with(["header"])
 
     @patch("pyramid.security.remember")
     def test_post_session_only(self, remember):
@@ -131,7 +131,7 @@ class TestLogin(unittest.TestCase):
         self.view.__dict__["device_id"] = "55555"
         self.view.__dict__["jwt_access_token"] = None
         self.view.__dict__["jwt_refresh_token"] = None
-        remember.return_value = ['header']
+        remember.return_value = ["header"]
         response = self.view.post()
         remember.assert_called_with(self.request, "foo@bar", tokens=["device_id-55555"])
         self.assertEqual(

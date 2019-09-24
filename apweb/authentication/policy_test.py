@@ -77,11 +77,13 @@ class TestAuthenticationPolicy(unittest.TestCase):
         p.unauthenticated_userid("foo")
         inner_policy.unauthenticated_userid.assert_called_with("foo")
 
-        p.remember("bar", "user1")
+        result = p.remember("bar", "user1")
         inner_policy.remember.assert_called_with("bar", "user1")
+        self.assertEqual(result, inner_policy.remember.return_value)
 
-        p.forget("123")
+        result = p.forget("123")
         inner_policy.forget.assert_called_with("123")
+        self.assertEqual(result, inner_policy.forget.return_value)
 
     def test_authenticated_userid_no_user(self):
         p = policy.AuthenticationPolicy({"secret": "one"})

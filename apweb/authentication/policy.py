@@ -74,11 +74,11 @@ class AuthenticationPolicy(object):
 
     def remember(self, request, userid, **kw):
         """Proxy remember method to the auth policy for this request"""
-        self.policy(request).remember(request, userid, **kw)
+        return self.policy(request).remember(request, userid, **kw)
 
     def forget(self, request):
         """Proxy forget method to the auth policy for this request"""
-        self.policy(request).forget(request)
+        return self.policy(request).forget(request)
 
     def authenticated_userid(self, request):
         if request.user is not None:

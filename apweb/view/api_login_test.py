@@ -48,6 +48,10 @@ class TestLogin(unittest.TestCase):
         a_user.userid_for_login_request.assert_called_with(self.request)
         self.assertEqual(result, "bar@bar")
 
+    @patch("apweb.view.api_login.uuid4")
+    def test_device_id(self, uuid4):
+        self.assertEqual(self.view.device_id, uuid4.return_value.hex)
+
     @patch("apweb.view.api_login.datetime")
     def test_jwt_iat(self, datetime):
         self.assertEqual(self.view.jwt_iat, datetime.utcnow.return_value)
@@ -60,6 +64,7 @@ class TestLogin(unittest.TestCase):
     @patch("apweb.view.api_login.datetime")
     def test_jwt_access_token(self, mock_datetime):
         self.view.__dict__["userid"] = "foo@foo"
+        self.view.__dict__["device_id"] = "55555"
         mock_datetime.utcnow.return_value = datetime(2000, 1, 1, 1, 0)
         generate_jwt = self.request.generate_jwt
         generate_jwt.return_value = "abc.def.hij"
@@ -70,6 +75,7 @@ class TestLogin(unittest.TestCase):
             aud=["access"],
             iat=datetime(2000, 1, 1, 1, 0),
             exp=datetime(2000, 1, 1, 1, 1),
+            device_id="55555",
         )
 
     @patch("apweb.view.api_login.datetime")
@@ -80,6 +86,7 @@ class TestLogin(unittest.TestCase):
     @patch("apweb.view.api_login.datetime")
     def test_jwt_refresh_token(self, mock_datetime):
         self.view.__dict__["userid"] = "foo@foo"
+        self.view.__dict__["device_id"] = "55555"
         mock_datetime.utcnow.return_value = datetime(2000, 1, 1, 1, 0)
         generate_jwt = self.request.generate_jwt
         generate_jwt.return_value = "abc.def.hij"
@@ -90,6 +97,7 @@ class TestLogin(unittest.TestCase):
             aud=["refresh"],
             iat=datetime(2000, 1, 1, 1, 0),
             exp=datetime(2000, 1, 1, 1, 2),
+            device_id="55555",
         )
 
     def test_post_should_forbid_bad_method(self):
@@ -105,11 +113,12 @@ class TestLogin(unittest.TestCase):
     @patch("pyramid.security.remember")
     def test_post(self, remember):
         self.view.__dict__["userid"] = "foo@bar"
+        self.view.__dict__["device_id"] = "55555"
         self.view.__dict__["jwt_access_token"] = "token 123"
         self.view.__dict__["jwt_refresh_token"] = "token abc"
         remember.return_value = ['header']
         response = self.view.post()
-        remember.assert_called_with(self.request, "foo@bar")
+        remember.assert_called_with(self.request, "foo@bar", tokens=["device_id-55555"])
         self.assertEqual(
             response,
             {"browser_session": True, "jwt": "token 123", "jwt_refresh": "token abc"},
@@ -119,11 +128,12 @@ class TestLogin(unittest.TestCase):
     @patch("pyramid.security.remember")
     def test_post_session_only(self, remember):
         self.view.__dict__["userid"] = "foo@bar"
+        self.view.__dict__["device_id"] = "55555"
         self.view.__dict__["jwt_access_token"] = None
         self.view.__dict__["jwt_refresh_token"] = None
         remember.return_value = ['header']
         response = self.view.post()
-        remember.assert_called_with(self.request, "foo@bar")
+        remember.assert_called_with(self.request, "foo@bar", tokens=["device_id-55555"])
         self.assertEqual(
             response, {"browser_session": True, "jwt": None, "jwt_refresh": None}
         )
@@ -131,6 +141,7 @@ class TestLogin(unittest.TestCase):
     @patch("pyramid.security.remember")
     def test_post_jwt_only(self, remember):
         self.view.__dict__["userid"] = "foo@bar"
+        self.view.__dict__["device_id"] = "55555"
         self.view.__dict__["jwt_access_token"] = "token 123"
         self.view.__dict__["jwt_refresh_token"] = "token abc"
         remember.side_effect = NotImplementedError()
@@ -143,6 +154,7 @@ class TestLogin(unittest.TestCase):
     @patch("pyramid.security.remember")
     def test_post_unable_to_login(self, remember):
         self.view.__dict__["userid"] = "foo@bar"
+        self.view.__dict__["device_id"] = "55555"
         self.view.__dict__["jwt_access_token"] = None
         self.view.__dict__["jwt_refresh_token"] = None
         remember.side_effect = NotImplementedError()

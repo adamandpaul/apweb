@@ -6,6 +6,7 @@ from datetime import datetime
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.view import view_config
+from uuid import uuid4
 
 import logging
 import pyramid.security
@@ -34,6 +35,10 @@ class APILogin(object):
         return self.request.authenticated_userid
 
     @reify
+    def device_id(self):
+        return uuid4().hex
+
+    @reify
     def jwt_iat(self):
         """datetime: The JWT iat (issued at) claism"""
         return datetime.utcnow()
@@ -47,7 +52,7 @@ class APILogin(object):
     def jwt_access_token(self):
         """str: A newly JWT access toekn"""
         return self.request.generate_jwt(
-            sub=self.userid, aud=["access"], iat=self.jwt_iat, exp=self.jwt_access_exp
+            sub=self.userid, aud=["access"], iat=self.jwt_iat, exp=self.jwt_access_exp, device_id=self.device_id
         )
 
     @reify
@@ -59,7 +64,7 @@ class APILogin(object):
     def jwt_refresh_token(self):
         """str: A newly JWT refresh toekn"""
         return self.request.generate_jwt(
-            sub=self.userid, aud=["refresh"], iat=self.jwt_iat, exp=self.jwt_refresh_exp
+            sub=self.userid, aud=["refresh"], iat=self.jwt_iat, exp=self.jwt_refresh_exp, device_id=self.device_id
         )
 
     @view_config(
@@ -82,7 +87,7 @@ class APILogin(object):
 
         # Try to create a browser session
         try:
-            browser_headers = pyramid.security.remember(self.request, self.userid)
+            browser_headers = pyramid.security.remember(self.request, self.userid, tokens=[f'device_id-{self.device_id}'])
         except NotImplementedError:
             browser_headers = []
         self.request.response.headers.update(browser_headers)

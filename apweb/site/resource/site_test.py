@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from . import users
+from . import user
 from .site import Site
 from unittest import TestCase
 from unittest.mock import MagicMock
@@ -17,7 +17,7 @@ class TestSite(TestCase):
 
         # test resources
         user_collection = site["users"]
-        self.assertIsInstance(user_collection, users.UserCollection)
+        self.assertIsInstance(user_collection, user.UserCollection)
 
     @patch("redis.StrictRedis")
     @patch("zope.sqlalchemy.register")

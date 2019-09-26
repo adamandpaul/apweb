@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from . import logs
+from . import log_entry
 from . import orm
 from datetime import datetime
 from unittest import TestCase
@@ -18,7 +18,7 @@ class TestLogEntry(TestCase):
             level=20,
             message="Hi",
         )
-        self.entry = logs.LogEntry(record=self.record)
+        self.entry = log_entry.LogEntry(record=self.record)
 
     def test_properties(self):
         e = self.entry
@@ -30,7 +30,7 @@ class TestLogEntry(TestCase):
 
 class TestLogEntryCollection(TestCase):
     def setUp(self):
-        self.collection = logs.LogEntryCollection()
+        self.collection = log_entry.LogEntryCollection()
 
     def test_name_from_child(self):
         child = MagicMock()
@@ -59,12 +59,12 @@ class TestLogEntryCollection(TestCase):
 
 class TestComponentLogger(TestCase):
     def setUp(self):
-        self.logger = logs.ComponentLogger(component="user")
+        self.logger = log_entry.ComponentLogger(component="user")
         self.logger.db_session = MagicMock()
 
-    @patch("apweb.site.logs.datetime")
-    @patch("apweb.site.logs.uuid4")
-    @patch("apweb.site.orm.LogEntry")
+    @patch("apweb.site.resource.log_entry.datetime")
+    @patch("apweb.site.resource.log_entry.uuid4")
+    @patch("apweb.site.resource.orm.LogEntry")
     def test_add(self, LogEntry, uuid4, datetime):
         self.logger.add(44, "Hello")
         LogEntry.assert_called_with(

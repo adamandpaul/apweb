@@ -6,14 +6,7 @@ from pyramid.view import view_config
 import pyramid.csrf
 
 
-@view_config(
-    route_name="api",
-    name="session_info",
-    physical_path=("",),
-    renderer="jsend",
-    http_cache=0,
-)
-class SessionInfo(object):
+class SessionView(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -42,7 +35,14 @@ class SessionInfo(object):
             httponly=False,
         )
 
-    def __call__(self):
+    @view_config(
+        route_name="api",
+        name="session",
+        physical_path=("",),
+        renderer="jsend",
+        http_cache=0,
+    )
+    def view(self):
         if self.request.auth_policy_name_for_request == "authtkt":
             self.set_cookie_csrf_token()
         return self.info

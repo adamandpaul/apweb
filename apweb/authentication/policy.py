@@ -89,7 +89,7 @@ class AuthenticationPolicy(object):
     def effective_principals(self, request):
         """Set the effective principals"""
         principals = [Everyone]
-        userid = self.authenticated_userid(self, request)
+        userid = self.authenticated_userid(request)
         if userid is not None:
             principals.extend([Authenticated, f"user:{userid}"])
         principals.extend([f"group:{g}" for g in request.groups])

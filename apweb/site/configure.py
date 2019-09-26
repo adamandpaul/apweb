@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
 
-from . import site
 from .password_login_provider import PasswordLoginProvider
+from .resource import Site
 
 
 def site_factory(request):
     """Return a default site factory"""
-    return site.Site.from_request(request)
+    return Site.from_request(request)
 
 
 def get_user_for_unauthenticated_userid(request):
@@ -28,4 +28,5 @@ def includeme(config):
     config.add_request_method(get_user_for_unauthenticated_userid, "user", reify=True)
     config.add_request_method(get_roles, "roles", reify=True)
     config.register_login_provider(PasswordLoginProvider())
+    config.include(".view")
     config.commit()

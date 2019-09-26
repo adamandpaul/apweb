@@ -2,7 +2,7 @@
 
 from . import exc
 from . import orm
-from .logs import ComponentLogger
+from .log_entry import ComponentLogger
 from contextplus import record_property
 from contextplus import resource
 from contextplus import SQLAlchemyCollection
@@ -10,6 +10,8 @@ from contextplus import SQLAlchemyItem
 from contextplus import WorkflowBehaviour
 from datetime import datetime
 from datetime import timedelta
+from pyramid.security import Allow
+from pyramid.security import DENY_ALL
 from uuid import UUID
 from uuid import uuid4
 
@@ -35,6 +37,9 @@ VALID_USER_EMAIL = re.compile(VALID_USER_EMAIL_EXPRESSION)
 
 class User(SQLAlchemyItem, WorkflowBehaviour):
     """A User"""
+
+    def __acl__(self):
+        return [(Allow, "user:{self.user_uuid}", ["view", "manage"]), DENY_ALL]
 
     @property
     def title(self):

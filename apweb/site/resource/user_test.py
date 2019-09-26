@@ -2,9 +2,9 @@
 
 from . import exc
 from . import orm
-from .logs import ComponentLogger
-from .users import User
-from .users import UserCollection
+from .log_entry import ComponentLogger
+from .user import User
+from .user import UserCollection
 from datetime import datetime
 from unittest import TestCase
 from unittest.mock import MagicMock
@@ -140,7 +140,7 @@ class TestUser(TestCase):
         q = query.return_value
         q.filter_by.assert_called_with(principal=f"user:{self.user.user_uuid}")
 
-    @patch("apweb.site.orm.RoleAssignment")
+    @patch("apweb.site.resource.orm.RoleAssignment")
     def test_assign_role(self, RoleAssignment):
         self.user.assign_role("foo")
         RoleAssignment.assert_called_with(

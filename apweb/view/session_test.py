@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
 
-from . import session_info
+from . import session
 from unittest import TestCase
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
 
-class TestSessionInfo(TestCase):
+class TestSessionView(TestCase):
     def setUp(self):
         self.context = context = MagicMock()
         self.request = request = MagicMock()
@@ -15,7 +15,7 @@ class TestSessionInfo(TestCase):
             "cookie_session_secure": True,
         }
         self.response = request.response
-        self.view = session_info.SessionInfo(context, request)
+        self.view = session.SessionView(context, request)
 
     def test_authenticated_true(self):
         self.request.authenticated_userid = "me@email.com"
@@ -47,5 +47,5 @@ class TestSessionInfo(TestCase):
     def test_get_authtkt(self):
         self.request.auth_policy_name_for_request = "authtkt"
         self.view.set_cookie_csrf_token = MagicMock()
-        self.view()
+        self.view.view()
         self.view.set_cookie_csrf_token.assert_called()

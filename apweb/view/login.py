@@ -12,14 +12,14 @@ import logging
 import pyramid.security
 
 
-logger = logging.getLogger("apweb.view.api_login")
+logger = logging.getLogger("apweb.view.login")
 
 
 class NotAbleToCreateLogin(Exception):
     """Was not able to create a login"""
 
 
-class APILogin(object):
+class LoginView(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request

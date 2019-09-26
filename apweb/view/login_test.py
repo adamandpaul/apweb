@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from . import api_login
+from . import login
 from datetime import datetime
 from datetime import timedelta
 from pyramid.httpexceptions import HTTPForbidden
@@ -20,7 +20,7 @@ class TestLogin(unittest.TestCase):
         self.request.registry = self.registry
         self.request.method = "post"
         self.request.authenticated_userid = None
-        self.view = api_login.APILogin(None, self.request)
+        self.view = login.LoginView(None, self.request)
 
     def test_userid_no_login(self):
         registry = MagicMock()
@@ -48,20 +48,20 @@ class TestLogin(unittest.TestCase):
         a_user.userid_for_login_request.assert_called_with(self.request)
         self.assertEqual(result, "bar@bar")
 
-    @patch("apweb.view.api_login.uuid4")
+    @patch("apweb.view.login.uuid4")
     def test_device_id(self, uuid4):
         self.assertEqual(self.view.device_id, uuid4.return_value.hex)
 
-    @patch("apweb.view.api_login.datetime")
+    @patch("apweb.view.login.datetime")
     def test_jwt_iat(self, datetime):
         self.assertEqual(self.view.jwt_iat, datetime.utcnow.return_value)
 
-    @patch("apweb.view.api_login.datetime")
+    @patch("apweb.view.login.datetime")
     def test_jwt_access_exp(self, mock_datetime):
         mock_datetime.utcnow.return_value = datetime(2000, 1, 1, 1, 0)
         self.assertEqual(self.view.jwt_access_exp, datetime(2000, 1, 1, 1, 1))
 
-    @patch("apweb.view.api_login.datetime")
+    @patch("apweb.view.login.datetime")
     def test_jwt_access_token(self, mock_datetime):
         self.view.__dict__["userid"] = "foo@foo"
         self.view.__dict__["device_id"] = "55555"
@@ -78,12 +78,12 @@ class TestLogin(unittest.TestCase):
             device_id="55555",
         )
 
-    @patch("apweb.view.api_login.datetime")
+    @patch("apweb.view.login.datetime")
     def test_jwt_refresh_exp(self, mock_datetime):
         mock_datetime.utcnow.return_value = datetime(2000, 1, 1, 1, 0)
         self.assertEqual(self.view.jwt_refresh_exp, datetime(2000, 1, 1, 1, 2))
 
-    @patch("apweb.view.api_login.datetime")
+    @patch("apweb.view.login.datetime")
     def test_jwt_refresh_token(self, mock_datetime):
         self.view.__dict__["userid"] = "foo@foo"
         self.view.__dict__["device_id"] = "55555"
@@ -158,5 +158,5 @@ class TestLogin(unittest.TestCase):
         self.view.__dict__["jwt_access_token"] = None
         self.view.__dict__["jwt_refresh_token"] = None
         remember.side_effect = NotImplementedError()
-        with self.assertRaises(api_login.NotAbleToCreateLogin):
+        with self.assertRaises(login.NotAbleToCreateLogin):
             self.view.post()

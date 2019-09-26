@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 
 class TestSiteFactory(TestCase):
-    @patch("apweb.site.site.Site")
+    @patch("apweb.site.configure.Site")
     def test_site_factory(self, Site):
         request = MagicMock()
         configure.site_factory(request)
@@ -34,7 +34,7 @@ class TestIncludeme(TestCase):
     def test_includeme(self, PasswordLoginProvider):
         config = MagicMock()
         configure.includeme(config)
-        config.include.assert_called_with("apweb")
+        config.include.assert_any_call("apweb")
         config.add_request_method.assert_any_call(
             configure.site_factory, "site", reify=True
         )
@@ -47,4 +47,5 @@ class TestIncludeme(TestCase):
         config.register_login_provider.assert_called_with(
             PasswordLoginProvider.return_value
         )
+        config.include.assert_any_call(".view")
         config.commit.assert_called_with()

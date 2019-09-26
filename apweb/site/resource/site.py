@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 
-from .. import utils
 from . import orm
-from . import users
+from . import user
+from apweb import utils
 from contextplus import resource
 
 import contextplus
@@ -18,7 +18,7 @@ class Site(contextplus.Site):
 
     @resource("users")
     def get_user_collection(self):
-        return users.UserCollection(parent=self, name="users")
+        return user.UserCollection(parent=self, name="users")
 
     def __init__(self, *args, mailer=None, transaction_manager=None, **kwargs):
         super().__init__(*args, **kwargs)

@@ -15,7 +15,7 @@ down_revision = '6a0043810aae'
 branch_labels = None
 depends_on = None
 
-from apweb.site.orm import NAMING_CONVENTION
+from apweb.site.resource.orm import NAMING_CONVENTION
 from alembic import op
 
 import sqlalchemy

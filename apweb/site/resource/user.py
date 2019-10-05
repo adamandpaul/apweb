@@ -126,7 +126,7 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
             raise Exception(f"User already assigned to {role}")
         record = orm.RoleAssignment(principal=f"user:{self.user_uuid}", role=role)
         self.acquire.db_session.add(record)
-        self.logger.info("Assigned role {role}")
+        self.logger.info(f"Assigned role {role}")
 
     def revoke_role(self, role):
         assert role
@@ -135,7 +135,7 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         q = q.filter_by(principal=f"user:{self.user_uuid}", role=role)
         record = q.one()
         db_session.delete(record)
-        self.logger.info("Revoked role {role}")
+        self.logger.info(f"Revoked role {role}")
 
     #
     # Logging

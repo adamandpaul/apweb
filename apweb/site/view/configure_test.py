@@ -14,4 +14,5 @@ class TestIncludeme(TestCase):
             name="password-login-form",
             renderer="templates/password-login-form.pt",
         )
+        config.include.assert_any_call(".admin")
         config.scan.assert_called_with()

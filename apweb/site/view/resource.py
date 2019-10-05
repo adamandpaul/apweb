@@ -49,7 +49,7 @@ class ResourceView(object):
         route_name="api",
         name="view-admin",
         renderer="jsend",
-        permission="admin",
+        permission="admin-access",
         request_method="get",
     )
     def view_admin(self):

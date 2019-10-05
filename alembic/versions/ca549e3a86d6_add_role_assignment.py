@@ -1,7 +1,7 @@
 """add role assignment
 
 Revision ID: ca549e3a86d6
-Revises: 6a0043810aae
+Revises: ea1015932189
 Create Date: 2019-09-20 05:02:28.976854+00:00
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'ca549e3a86d6'
-down_revision = '6a0043810aae'
+down_revision = 'ea1015932189'
 branch_labels = None
 depends_on = None
 

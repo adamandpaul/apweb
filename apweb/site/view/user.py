@@ -7,7 +7,7 @@ from venusian import lift
 
 
 @lift()
-@view_defaults(context="apweb.site.users.User")
+@view_defaults(context="apweb.site.resource.User")
 class UserView(ResourceView):
     @reify
     def info_manage(self):

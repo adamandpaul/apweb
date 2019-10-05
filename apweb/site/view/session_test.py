@@ -12,11 +12,11 @@ class TestSessionView(TestCase):
         self.context = MagicMock()
         self.view = session.SessionView(self.context, self.request)
 
-    @patch('apweb.site.view.session.UserView')
+    @patch("apweb.site.view.session.UserView")
     def test_user(self, UserView):
         self.assertEqual(self.view.user, UserView.return_value.info_manage)
         UserView.assert_called_with(self.request.user, self.request)
 
     def test_info(self):
-        self.view.__dict__['user'] = 'foo'
-        self.assertEqual(self.view.info['user'], 'foo')
+        self.view.__dict__["user"] = "foo"
+        self.assertEqual(self.view.info["user"], "foo")

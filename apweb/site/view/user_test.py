@@ -16,7 +16,7 @@ class TestUserView(TestCase):
         self.assertEqual(
             self.view.info_manage,
             {
-                'user_email': self.context.user_email,
-                'user_uuid': self.context.user_uuid,
-            }
+                "user_email": self.context.user_email,
+                "user_uuid": self.context.user_uuid,
+            },
         )

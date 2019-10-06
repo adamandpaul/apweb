@@ -62,10 +62,31 @@ class TestSite(TestCase):
         self.assertEqual(site.transaction_manager, request.tm)
 
 
+class TestSiteInstance(TestCase):
+    def setUp(self):
+        self.mailer = mailer = MagicMock()
+        self.transaction_manager = transaction_manager = MagicMock()
+        self.settings = settings = {
+            'application_url': 'https://appurl',
+            'application_deployment': 'testing',
+        }
+        self.site = Site(mailer=mailer,
+                         settings=settings,
+                         transaction_manager=transaction_manager)
+
+    def test_props(self):
+        s = self.site
+        self.assertEqual(s.settings, self.settings)
+        self.assertEqual(s.mailer, self.mailer)
+        self.assertEqual(s.transaction_manager, self.transaction_manager)
+        self.assertEqual(s.application_url, 'https://appurl')
+        self.assertEqual(s.application_deployment, 'testing')
+
+
 class TestSiteRedirect(TestCase):
     def test_set_redirect(self):
 
-        with patch("apweb.utils.normalize_query_string") as normalize_query_string:
+        with patch("apweb.site.resource.site.normalize_query_string") as normalize_query_string:
             normalize_query_string.return_value = "normalized=1"
             site = Site(db_session=MagicMock())
             site.set_redirect("/part1/part2", "b=2&a=1", "https://localhost")

@@ -64,6 +64,6 @@ def includeme(config):
             config.add_static_view(
                 "++docs++",
                 docs_static_location,
-                permission="project-docs",
+                permission="view-docs",
                 cache_max_age=300,
             )

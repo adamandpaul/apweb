@@ -38,5 +38,5 @@ class TestIncludemeProd(TestCase):
 
         monkey_patch.assert_called_with()
         c.add_static_view.assert_any_call(
-            "++docs++", "/path/docs", permission="project-docs", cache_max_age=300
+            "++docs++", "/path/docs", permission="view-docs", cache_max_age=300
         )

@@ -39,7 +39,11 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
     """A User"""
 
     def __acl__(self):
-        return [(Allow, "user:{self.user_uuid}", ["view", "manage"]), DENY_ALL]
+        return [
+            (Allow, "user:{self.user_uuid}", ["view", "manage"]),
+            (Allow, "role:system-owner", ["view", "admin-access", "debug"]),
+            DENY_ALL
+        ]
 
     @property
     def title(self):
@@ -151,6 +155,11 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
 
 class UserCollection(SQLAlchemyCollection):
     """A collection of users"""
+
+    __acl__ = [
+        (Allow, "role:system-owner", ["view", "admin-access", "debug"]),
+        DENY_ALL,
+    ]
 
     child_type = User
     title = "Users"

@@ -30,7 +30,7 @@ class ResourceView(object):
         return {}
 
     @view_config(
-        route_name="api", renderer="jsend", permission="view", request_method="get"
+        route_name="api", renderer="jsend", permission="view", request_method="GET"
     )
     def view(self):
         return self.info

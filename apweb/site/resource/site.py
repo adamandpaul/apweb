@@ -2,7 +2,8 @@
 
 from . import orm
 from . import user
-from apweb import utils
+from .utils import settings_property
+from apweb.utils import normalize_query_string
 from contextplus import resource
 
 import contextplus
@@ -15,10 +16,6 @@ import zope.sqlalchemy
 
 class Site(contextplus.Site):
     """A primitive site"""
-
-    @resource("users")
-    def get_user_collection(self):
-        return user.UserCollection(parent=self, name="users")
 
     def __init__(self, *args, mailer=None, transaction_manager=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -69,6 +66,13 @@ class Site(contextplus.Site):
             **kwargs,
         )
 
+    application_url = settings_property("application_url")
+    application_deployment = settings_property("application_deployment")
+
+    @resource("users")
+    def get_user_collection(self):
+        return user.UserCollection(parent=self, name="users")
+
     def set_redirect(self, path, query_string, redirect):
         """Set a redirect for a given url.
 
@@ -80,7 +84,7 @@ class Site(contextplus.Site):
         """
         query_string = query_string or ""
         assert f"{path}?{query_string}".strip("?") != redirect.strip("?")
-        query_string = utils.normalize_query_string(
+        query_string = normalize_query_string(
             query_string, ignore_prefixes=["utm_"]
         )
         assert f"{path}?{query_string}".strip("?") != redirect.strip("?")
@@ -98,7 +102,7 @@ class Site(contextplus.Site):
         """
         if not self.get_database_is_inited():
             return None
-        query_string = utils.normalize_query_string(
+        query_string = normalize_query_string(
             query_string, ignore_prefixes=["utm_"]
         )
         redirects = (

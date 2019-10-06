@@ -84,9 +84,7 @@ class Site(contextplus.Site):
         """
         query_string = query_string or ""
         assert f"{path}?{query_string}".strip("?") != redirect.strip("?")
-        query_string = normalize_query_string(
-            query_string, ignore_prefixes=["utm_"]
-        )
+        query_string = normalize_query_string(query_string, ignore_prefixes=["utm_"])
         assert f"{path}?{query_string}".strip("?") != redirect.strip("?")
         redirect = orm.Redirect(
             request_path=path, request_query_string=query_string, redirect_to=redirect
@@ -102,9 +100,7 @@ class Site(contextplus.Site):
         """
         if not self.get_database_is_inited():
             return None
-        query_string = normalize_query_string(
-            query_string, ignore_prefixes=["utm_"]
-        )
+        query_string = normalize_query_string(query_string, ignore_prefixes=["utm_"])
         redirects = (
             self.db_session.query(orm.Redirect)
             .filter_by(request_path=path)

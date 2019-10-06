@@ -42,7 +42,7 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         return [
             (Allow, "user:{self.user_uuid}", ["view", "manage"]),
             (Allow, "role:system-owner", ["view", "admin-access", "debug"]),
-            DENY_ALL
+            DENY_ALL,
         ]
 
     @property

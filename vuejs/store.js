@@ -60,7 +60,7 @@ export default {
 
         connect(context, options) {
             context.commit('apiSetConnecting', options.baseURL)
-            context.getters.api.get('@@session_info').then(response => {
+            context.getters.api.get('@@session').then(response => {
                 context.dispatch('setSessionInfo', {'sessionInfo': response.data.data})
                 context.commit('apiSetConnected')
             }).catch(error => {
@@ -83,22 +83,24 @@ export default {
     },
 
     getters: {
-        api(state) {
+        apiAxiosOptions(state) {
+            return {
+                baseURL: state.baseURL,
+                headers: {
+                    'X-CSRF-Token': state.csrf_token,
+                },
+            }
+        },
+        api(state, getters) {
             if (state.baseURL) {
-                return axios.create({
-                    baseURL: state.baseURL,
-                    headers: {
-                        'X-CSRF-Token': state.csrf_token,
-                    },
-                })
+                return axios.create(getters.apiAxiosOptions)
             } else {
                 return null
             }
         },
-
-        authenticated(state) { return state.authenticated },
-        roles(state) { return state.roles },
-
+        authenticated: s => s.authenticated,
+        roles: s => s.roles,
+        apiError: s => s.error,
     },
 
 }

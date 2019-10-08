@@ -7,7 +7,7 @@ export default {
     state: {
         user_email: null,
         user_uuid: null,
-        login_error: null,
+        loginError: null,
     },
 
     mutations: {
@@ -23,7 +23,7 @@ export default {
         },
 
         siteSetLoginError(state, error) {
-            state.login_error = error
+            state.loginError = error
         },
 
     },
@@ -52,7 +52,8 @@ export default {
     },
 
     getters: {
-        user_email(state) { return state.user_email },
+        loginError: s => s.loginError,
+        user_email: s => s.user_email,
     },
 
 }

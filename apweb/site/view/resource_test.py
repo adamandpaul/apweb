@@ -11,37 +11,27 @@ class TestResourceView(TestCase):
         self.context = MagicMock()
         self.view = resource.ResourceView(self.context, self.request)
 
-    def test_infos(self):
-        self.view.__dict__["breadcrumbs_admin"] = ["app", "foo"]
-        self.assertEqual(self.view.info, {})
-        self.assertEqual(self.view.info_manage, {})
-        self.assertEqual(self.view.info_admin, {"breadcrumbs": ["app", "foo"]})
-        self.assertEqual(self.view.info_debug, {})
+    def test_default_and_manage(self):
+        self.assertEqual(self.view.default, {})
+        self.assertEqual(self.view.manage, {})
 
-    def test_gets(self):
-        self.view.__dict__.update(
-            {
-                "info": {"a": "Info"},
-                "info_manage": {"b": "Info Manage"},
-                "info_admin": {"c": "Info Admin"},
-                "info_debug": {"d": "Info Debug"},
+    def test_admin(self):
+        self.view.__dict__["admin_breadcrumbs"] = ["app", "foo"]
+        self.assertEqual(self.view.admin, {"breadcrumbs": ["app", "foo"]})
+
+    def test_debug(self):
+        self.view.__dict__.update({
+            'default': 'ddd',
+            'manage': 'mmm',
+            'admin': 'aaa',
+        })
+        self.assertEqual(self.view.debug, {
+            'views': {
+                'default': 'ddd',
+                'manage': 'mmm',
+                'admin': 'aaa',
             }
-        )
-        self.assertEqual(self.view.view(), {"a": "Info"})
-        self.assertEqual(self.view.view_manage(), {"a": "Info", "b": "Info Manage"})
-        self.assertEqual(
-            self.view.view_admin(),
-            {"a": "Info", "b": "Info Manage", "admin": {"c": "Info Admin"}},
-        )
-        self.assertEqual(
-            self.view.view_debug(),
-            {
-                "a": "Info",
-                "b": "Info Manage",
-                "admin": {"c": "Info Admin"},
-                "debug": {"d": "Info Debug"},
-            },
-        )
+        })
 
 
 class TestResourceBreadcrumbsView(TestCase):
@@ -68,7 +58,7 @@ class TestResourceBreadcrumbsView(TestCase):
         self.view = resource.ResourceView(self.context, self.request)
 
     def test_breadcrumbs_admin(self):
-        result = self.view.breadcrumbs_admin
+        result = self.view.admin_breadcrumbs
         expected = [
             {
                 "title": "A",

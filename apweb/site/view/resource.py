@@ -12,8 +12,8 @@ class ResourceView(object):
     @view_config(
         route_name="api", renderer="jsend", permission="view", request_method="GET"
     )
-    def view(self):
-        return self.info
+    def view_default(self):
+        return self.default
 
     @view_config(
         route_name="api",
@@ -23,7 +23,7 @@ class ResourceView(object):
         request_method="GET",
     )
     def view_manage(self):
-        return {**self.view(), **self.info_manage}
+        return self.manage
 
     @view_config(
         route_name="api",
@@ -33,7 +33,7 @@ class ResourceView(object):
         request_method="GET",
     )
     def view_admin(self):
-        return {**self.view_manage(), "admin": self.info_admin}
+        return self.admin
 
     @view_config(
         route_name="api",
@@ -43,30 +43,25 @@ class ResourceView(object):
         request_method="GET",
     )
     def view_debug(self):
-        return {**self.view_admin(), "debug": self.info_debug}
+        return self.debug
 
     @reify
-    def info(self):
+    def default(self):
         """Public Information"""
         return {}
 
     @reify
-    def info_manage(self):
+    def manage(self):
         """Information for people responsible for this resource"""
         return {}
 
     @reify
-    def info_admin(self):
+    def admin(self):
         """Information for people who are responsible for the system"""
-        return {"breadcrumbs": self.breadcrumbs_admin}
+        return {"breadcrumbs": self.admin_breadcrumbs}
 
     @reify
-    def info_debug(self):
-        """People who need to have internals for debugging"""
-        return {}
-
-    @reify
-    def breadcrumbs_admin(self):
+    def admin_breadcrumbs(self):
         """Breadcrumbs which include named resources of each ancestor"""
         breadcrumbs = []
         resources = [self.context, *self.context.iter_ancestors()]
@@ -86,3 +81,14 @@ class ResourceView(object):
                 }
             )
         return breadcrumbs
+
+    @reify
+    def debug(self):
+        """People who need to have internals for debugging"""
+        return {
+            'views': {
+                'default': self.default,
+                'manage': self.manage,
+                'admin': self.admin,
+            },
+        }

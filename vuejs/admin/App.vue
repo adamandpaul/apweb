@@ -1,10 +1,8 @@
 <template>
     <div>
         <div>
-            <!-- left side bar -->
-        </div>
-        <div>
             <div>
+                <NavigationMenu/>
                 <!-- head -->
             </div>
             <ResourceManager />
@@ -14,6 +12,7 @@
 <script>
 
 import ResourceManager from './ResourceManager.vue'
+import NavigationMenu from './NavigationMenu.vue'
 import { mapGetters } from 'vuex'
 
 function decodeRoute(route) {
@@ -40,6 +39,7 @@ export default {
         ])
     },
     components: {
+        NavigationMenu,
         ResourceManager,
     },
 
@@ -66,3 +66,16 @@ export default {
 
 
 </script>
+<style lang="sass">
+
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display|Source+Sans+Pro&display=swap');
+
+html
+body
+    margin: 0
+    padding: 0
+    font-family: 'Source Sans Pro', sans-serif
+
+</style>
+
+

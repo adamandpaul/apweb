@@ -1,6 +1,12 @@
 
 import axios from 'axios'
 
+const DEFAULT_ROOT_NAVIGATION_NODE = {
+    "title": "App",
+    "path": [""],
+    "named_resources": [],
+}
+
 export default {
 
     state: {
@@ -8,7 +14,8 @@ export default {
         view: "main",
         loading: true,
         error: null,
-        resource: null,
+        breadcrumbs: [DEFAULT_ROOT_NAVIGATION_NODE],
+        rootNavigationNode: DEFAULT_ROOT_NAVIGATION_NODE,
     },
 
     mutations: {
@@ -16,17 +23,23 @@ export default {
             state.path = path
             state.loading = true
             state.error = null
-            state.resource = null
+
+            // reset current workspace state
+            state.breadcrumbs = [state.rootNavigationNode]
         },
         loadingComplete(state, data) {
             state.loading = false
             state.error = null
-            state.resource = data
+
+            // set workspace state
+            state.breadcrumbs = data.breadcrumbs
+
+            // Save root navigation node
+            state.rootNavigationNode = state.breadcrumbs[0]
         },
         loadingError(state, error) {
             state.loading = false
             state.error = error
-            state.resource = null
         },
         setView(state, view) {
             state.view = view
@@ -57,7 +70,8 @@ export default {
         path: s => s.path,
         view: s => s.view,
         loading: s => s.loading,
-        resource: s=> s.resource,
+        rootNavigationNode: s => s.rootNavigationNode,
+        breadcrumbs: s => s.breadcrumbs,
 
         error(state, getters, rootState, rootGetters) {
             return rootGetters.apiError || rootGetters.loginError || state.error

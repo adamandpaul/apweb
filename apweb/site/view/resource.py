@@ -17,48 +17,81 @@ class ResourceView(object):
 
     @view_config(
         route_name="api",
-        name="view-manage",
+        name="manage-info",
         renderer="jsend",
         permission="manage",
         request_method="GET",
     )
     def view_manage(self):
-        return self.manage
+        return self.manage_info
 
     @view_config(
         route_name="api",
-        name="view-admin",
+        name="admin-info",
         renderer="jsend",
         permission="admin-access",
         request_method="GET",
     )
     def view_admin(self):
-        return self.admin
+        return {
+            "description": self.description,
+            "breadcrumbs": self.admin_breadcrumbs,
+            "views": self.admin_views,
+        }
 
     @view_config(
         route_name="api",
-        name="view-debug",
+        name="resource-info",
         renderer="jsend",
-        permission="debug",
+        permission="admin-access",
         request_method="GET",
     )
-    def view_debug(self):
-        return self.debug
+    def view_resource_info(self):
+        """Information for this resource. For use in the admin default page"""
+        return {
+            'summary': self.resource_info_summary,
+            'views': {
+                'default': self.default,
+                'manage-info': self.manage_info,
+            },
+        }
 
     @reify
     def default(self):
         """Public Information"""
-        return {}
+        return {
+            'name': self.name,
+        }
 
     @reify
-    def manage(self):
+    def manage_info(self):
         """Information for people responsible for this resource"""
-        return {}
+        return {
+            **self.default
+        }
 
     @reify
-    def admin(self):
-        """Information for people who are responsible for the system"""
-        return {"breadcrumbs": self.admin_breadcrumbs}
+    def name(self):
+        return self.context.name
+
+    @reify
+    def title(self):
+        return self.context.title
+
+    @reify
+    def description(self):
+        return self.context.description
+
+    @reify
+    def admin_views(self):
+        return {
+            'info': {
+                'sort_key': 0,
+                'title': 'Default',
+                'api': '@@resource-info',
+                'ui': 'view-resource-info',
+            },
+        }
 
     @reify
     def admin_breadcrumbs(self):
@@ -83,12 +116,22 @@ class ResourceView(object):
         return breadcrumbs
 
     @reify
-    def debug(self):
-        """People who need to have internals for debugging"""
-        return {
-            'views': {
-                'default': self.default,
-                'manage': self.manage,
-                'admin': self.admin,
-            },
-        }
+    def resource_info_summary(self):
+        """Return a list of summary information"""
+        summary = []
+        if self.name is not None:
+            summary.append({
+                    "title": "URL Name",
+                    "value": self.name,
+            })
+        if self.title is not None:
+            summary.append({
+                "title": "Title",
+                "value": self.title,
+            })
+        if self.description is not None:
+            summary.append({
+                "title": "Description",
+                "value": self.description,
+            })
+        return summary

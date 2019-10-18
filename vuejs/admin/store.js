@@ -11,9 +11,10 @@ export default {
 
     state: {
         path: null,
-        view: "main",
+        views: [],
         loading: true,
         error: null,
+        description: null,
         breadcrumbs: [DEFAULT_ROOT_NAVIGATION_NODE],
         rootNavigationNode: DEFAULT_ROOT_NAVIGATION_NODE,
     },
@@ -25,14 +26,26 @@ export default {
             state.error = null
 
             // reset current workspace state
+            state.description = null
             state.breadcrumbs = [state.rootNavigationNode]
+            state.views = []
         },
         loadingComplete(state, data) {
             state.loading = false
             state.error = null
 
             // set workspace state
+            state.description = data.description
             state.breadcrumbs = data.breadcrumbs
+            const views = []
+            for (let v in data.views) {
+                views.push({
+                    "name": v,
+                    ...data.views[v],
+                })
+            }
+            views.sort((a, b) => (b.sort_key - a.sort_key))
+            state.views = views
 
             // Save root navigation node
             state.rootNavigationNode = state.breadcrumbs[0]
@@ -41,15 +54,12 @@ export default {
             state.loading = false
             state.error = error
         },
-        setView(state, view) {
-            state.view = view
-        },
     },
 
     actions: {
         loadResource(context, opts) {
             context.commit('loadingStart', opts.path)
-            context.getters.resourceApi.get("@@view-admin")
+            context.getters.resourceApi.get("@@admin-info")
             .then((resp) => {
                 context.commit("loadingComplete", resp.data.data)
             }).catch((error) => {
@@ -61,18 +71,23 @@ export default {
                 context.dispatch("loadResource", opts)
             }
         },
-        changeView(context, opts) {
-            context.commit('setView', opts.view)
-        },
     },
 
     getters: {
         path: s => s.path,
-        view: s => s.view,
         loading: s => s.loading,
         rootNavigationNode: s => s.rootNavigationNode,
+        description: s => s.description,
         breadcrumbs: s => s.breadcrumbs,
-
+        namedResources: s => s.breadcrumbs[s.breadcrumbs.length - 1].named_resources,
+        viewsList: s => s.views,
+        viewsByName(state, getters) {
+            const views = {}
+            for (let v of getters.viewsList) {
+                views[v.name] = v
+            }
+            return views
+        },
         error(state, getters, rootState, rootGetters) {
             return rootGetters.apiError || rootGetters.loginError || state.error
         },
@@ -90,7 +105,7 @@ export default {
                     part = encodeURIComponent(part)
                     encodedParts.push(part)
                 }
-                return encodedParts.join('/')
+                return encodedParts.join('/') || "/"
             }
             return null
         },

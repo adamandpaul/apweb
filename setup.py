@@ -26,6 +26,7 @@ setup(
         'pyramid_tm',
         'pyramid_mailer',
         'pyramid_nacl_session',
+        'colander',
 
         'sqlalchemy',
         'sqlalchemy-utils',

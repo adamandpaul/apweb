@@ -2,8 +2,10 @@
 
 from pyramid.decorator import reify
 from pyramid.view import view_config
+from pyramid.view import view_defaults
 
 
+@view_defaults(context="contextplus.Base")
 class ResourceView(object):
     def __init__(self, context, request):
         self.context = context
@@ -135,3 +137,11 @@ class ResourceView(object):
                 "value": self.description,
             })
         return summary
+
+    def bind_schema(self, schema):
+        """Utility to bind a colenda schema with the view, context and request"""
+        schema.bind(
+            view=self,
+            context=self.context,
+            request=self.request
+        )

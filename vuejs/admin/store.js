@@ -44,7 +44,7 @@ export default {
                     ...data.views[v],
                 })
             }
-            views.sort((a, b) => (b.sort_key - a.sort_key))
+            views.sort((a, b) => (a.sort_key - b.sort_key))
             state.views = views
 
             // Save root navigation node

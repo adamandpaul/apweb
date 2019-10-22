@@ -20,18 +20,11 @@ class TestResourceView(TestCase):
         self.assertEqual(self.view.admin, {"breadcrumbs": ["app", "foo"]})
 
     def test_debug(self):
-        self.view.__dict__.update({
-            'default': 'ddd',
-            'manage': 'mmm',
-            'admin': 'aaa',
-        })
-        self.assertEqual(self.view.debug, {
-            'views': {
-                'default': 'ddd',
-                'manage': 'mmm',
-                'admin': 'aaa',
-            }
-        })
+        self.view.__dict__.update({"default": "ddd", "manage": "mmm", "admin": "aaa"})
+        self.assertEqual(
+            self.view.debug,
+            {"views": {"default": "ddd", "manage": "mmm", "admin": "aaa"}},
+        )
 
 
 class TestResourceBreadcrumbsView(TestCase):

@@ -2,8 +2,8 @@
 
 from . import exc
 from . import orm
-from .utils import is_valid_email
 from .log_entry import ComponentLogger
+from .utils import is_valid_email
 from contextplus import record_property
 from contextplus import resource
 from contextplus import SQLAlchemyCollection

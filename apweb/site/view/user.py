@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 
 from ..resource.utils import is_valid_email
-from .resource import ResourceView
 from .collection import CollectionView
+from .resource import ResourceView
 from pyramid.decorator import reify
 from pyramid.view import view_defaults
 from venusian import lift

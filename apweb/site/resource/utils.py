@@ -3,7 +3,6 @@
 import re
 
 
-
 # VALID_USER_EMAIL checks for a semi-validish email. Of most concern
 # it will fail to validate emails with unsafe url charactors
 VALID_USER_EMAIL_EXPRESSION = (
@@ -34,7 +33,6 @@ def is_valid_email(email):
     if len(email) > 254:
         return False
     return VALID_USER_EMAIL.match(email) is not None
-
 
 
 def settings_property(name):

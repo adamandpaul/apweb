@@ -17,7 +17,11 @@ class CollectionView(ResourceView):
     """An api view of a collection object"""
 
     @view_config(
-        name="schema-add", route_name="api", renderer="jsend", permission="add", request_method="GET"
+        name="schema-add",
+        route_name="api",
+        renderer="jsend",
+        permission="add",
+        request_method="GET",
     )
     def view_schema_add(self):
         schema = self.schema_add
@@ -35,7 +39,9 @@ class CollectionView(ResourceView):
             kwargs = self.request.json
             jsonschema.validate(instance=kwargs, schema=self.schema_add)
             child = self.add(**kwargs)
-            return render_view_to_response(child, self.request, name='internal-admin-tile')
+            return render_view_to_response(
+                child, self.request, name="internal-admin-tile"
+            )
 
     def add(self, **kwargs):
         return self.context.add(**kwargs)
@@ -43,11 +49,11 @@ class CollectionView(ResourceView):
     @reify
     def admin_views(self):
         views = {**super().admin_views}
-        if self.schema_add is not None and self.request.has_permission('add'):
-            views['add'] = {
-                'sort_key': 60,
-                'title': 'Add',
-                'api': '@@schema-add',
-                'ui': 'view-add-child',
+        if self.schema_add is not None and self.request.has_permission("add"):
+            views["add"] = {
+                "sort_key": 60,
+                "title": "Add",
+                "api": "@@schema-add",
+                "ui": "view-add-child",
             }
         return views

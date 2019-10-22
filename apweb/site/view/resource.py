@@ -52,17 +52,12 @@ class ResourceView(object):
     def view_resource_info(self):
         """Information for this resource. For use in the admin default page"""
         return {
-            'summary': self.resource_info_summary,
-            'views': {
-                'default': self.default,
-                'manage-info': self.manage_info,
-            },
+            "summary": self.resource_info_summary,
+            "views": {"default": self.default, "manage-info": self.manage_info},
         }
 
     @view_config(
-        name="internal-admin-tile",
-        renderer=null_renderer,
-        permission="admin-access",
+        name="internal-admin-tile", renderer=null_renderer, permission="admin-access"
     )
     def view_internal_admin_tile(self):
         return self.admin_tile
@@ -70,16 +65,12 @@ class ResourceView(object):
     @reify
     def default(self):
         """Public Information"""
-        return {
-            'name': self.name,
-        }
+        return {"name": self.name}
 
     @reify
     def manage_info(self):
         """Information for people responsible for this resource"""
-        return {
-            **self.default
-        }
+        return {**self.default}
 
     @reify
     def name(self):
@@ -96,12 +87,12 @@ class ResourceView(object):
     @reify
     def admin_views(self):
         return {
-            'info': {
-                'sort_key': 0,
-                'title': 'Info',
-                'api': '@@resource-info',
-                'ui': 'view-resource-info',
-            },
+            "info": {
+                "sort_key": 0,
+                "title": "Info",
+                "api": "@@resource-info",
+                "ui": "view-resource-info",
+            }
         }
 
     @reify
@@ -128,28 +119,16 @@ class ResourceView(object):
 
     @reify
     def admin_tile(self):
-        return {
-            "title": self.title,
-            "path": self.context.path_names,
-        }
+        return {"title": self.title, "path": self.context.path_names}
 
     @reify
     def resource_info_summary(self):
         """Return a list of summary information"""
         summary = []
         if self.name is not None:
-            summary.append({
-                    "title": "URL Name",
-                    "value": self.name,
-            })
+            summary.append({"title": "URL Name", "value": self.name})
         if self.title is not None:
-            summary.append({
-                "title": "Title",
-                "value": self.title,
-            })
+            summary.append({"title": "Title", "value": self.title})
         if self.description is not None:
-            summary.append({
-                "title": "Description",
-                "value": self.description,
-            })
+            summary.append({"title": "Description", "value": self.description})
         return summary

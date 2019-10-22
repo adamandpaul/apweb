@@ -7,20 +7,6 @@ from pyramid.decorator import reify
 from pyramid.view import view_defaults
 from venusian import lift
 
-import colander
-
-
-def user_email_validator(ndoe, value):
-    if not is_valid_email(value):
-        raise colander.Invalid(node, 'Not a valid email address')
-
-
-class SchemaAddUser(colander.MappingSchema):
-    user_email = colander.SchemaNode(
-        colander.String(),
-        validator=user_email_validator,
-    )
-
 
 @view_defaults(context="apweb.site.resource.User")
 @lift()
@@ -34,4 +20,17 @@ class UserView(ResourceView):
 @view_defaults(context="apweb.site.resource.UserCollection")
 @lift()
 class UserCollectionView(CollectionView):
-    schema_factory_add = SchemaAddUser
+    schema_add = {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "Add User",
+        "description": "Add a user to the system",
+        "type": "object",
+        "properties": {
+            "user_email": {
+                "title": "User Email",
+                "description": "An email address used to authenticate a user",
+                "type": "string",
+            }
+        },
+        "required": ["user_email"],
+    }

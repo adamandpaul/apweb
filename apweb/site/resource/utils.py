@@ -31,9 +31,9 @@ def is_valid_email(email):
     Returns:
         bool: True if the user_email was valid. Otherwise False
     """
-    if len(user_email) > 254:
+    if len(email) > 254:
         return False
-    return VALID_USER_EMAIL.match(user_email) is not None
+    return VALID_USER_EMAIL.match(email) is not None
 
 
 

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view">
         <v-lazy>
             <div v-if="error">{{ error }}</div>
             <div v-else-if="loading">Loading...</div>
@@ -67,3 +67,10 @@ export default {
 
 }
 </script>
+<style lang="sass" scoped>
+
+.view
+    padding: 32px 0
+
+
+</style>

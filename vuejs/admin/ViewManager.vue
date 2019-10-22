@@ -1,15 +1,11 @@
 <template>
     <div class="view-manager">
-        <v-tabs>
+        <v-tabs dark>
             <v-tabs-slider></v-tabs-slider>
 
             <v-tab v-for="(view, idx) in viewsList" :key="idx">{{ view.title }}</v-tab>
             <v-tab-item v-for="(view, idx) in viewsList" :key="idx">
-                <v-card flat tile>
-                    <v-card-text>
-                        <AdminView :viewName="view.name" />
-                    </v-card-text>
-                </v-card>
+                <AdminView :viewName="view.name" />
             </v-tab-item>
 
         </v-tabs>

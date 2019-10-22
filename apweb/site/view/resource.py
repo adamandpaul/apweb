@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from pyramid.decorator import reify
+from pyramid.renderers import null_renderer
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 
@@ -58,6 +59,14 @@ class ResourceView(object):
             },
         }
 
+    @view_config(
+        name="internal-admin-tile",
+        renderer=null_renderer,
+        permission="admin-access",
+    )
+    def view_internal_admin_tile(self):
+        return self.admin_tile
+
     @reify
     def default(self):
         """Public Information"""
@@ -89,7 +98,7 @@ class ResourceView(object):
         return {
             'info': {
                 'sort_key': 0,
-                'title': 'Default',
+                'title': 'Info',
                 'api': '@@resource-info',
                 'ui': 'view-resource-info',
             },
@@ -118,6 +127,13 @@ class ResourceView(object):
         return breadcrumbs
 
     @reify
+    def admin_tile(self):
+        return {
+            "title": self.title,
+            "path": self.context.path_names,
+        }
+
+    @reify
     def resource_info_summary(self):
         """Return a list of summary information"""
         summary = []
@@ -137,11 +153,3 @@ class ResourceView(object):
                 "value": self.description,
             })
         return summary
-
-    def bind_schema(self, schema):
-        """Utility to bind a colenda schema with the view, context and request"""
-        schema.bind(
-            view=self,
-            context=self.context,
-            request=self.request
-        )

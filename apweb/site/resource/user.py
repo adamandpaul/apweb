@@ -33,7 +33,7 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
 
     @property
     def title(self):
-        return f"User: {self.email}"
+        return f"User: {self.user_email}"
 
     @property
     def description(self):

@@ -12,7 +12,7 @@ from venusian import lift
 @lift()
 class UserView(ResourceView):
     @reify
-    def info_manage(self):
+    def manage(self):
         u = self.context
         return {"user_email": u.user_email, "user_uuid": u.user_uuid}
 

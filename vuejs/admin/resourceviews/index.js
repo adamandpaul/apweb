@@ -1,13 +1,12 @@
 
-import ResourceInfo from './ResourceInfo.vue'
-import AddChild from './AddChild.vue'
-import TileResource from './TileResource.vue'
+import TabOverview from './TabOverview.vue'
+import TabAdd from './TabAdd.vue'
+import Tile from './Tile.vue'
 
 export default {
     install(Vue) {
-        Vue.component('view-resource-info', ResourceInfo)
-        Vue.component('view-add-child', AddChild)
-        Vue.component('tile-resource', TileResource)
+        Vue.component('resource-tab-overview', TabOverview)
+        Vue.component('resource-tab-add', TabAdd)
+        Vue.component('resource-tile', Tile)
     },
 }
-

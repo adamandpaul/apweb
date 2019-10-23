@@ -59,7 +59,7 @@ export default {
     actions: {
         loadResource(context, opts) {
             context.commit('loadingStart', opts.path)
-            context.getters.resourceApi.get("@@admin-info")
+            context.getters.resourceApi.get("@@admin")
             .then((resp) => {
                 context.commit("loadingComplete", resp.data.data)
             }).catch((error) => {

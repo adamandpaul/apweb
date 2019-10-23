@@ -126,7 +126,7 @@ class UserCollection(SQLAlchemyCollection):
     """A collection of users"""
 
     __acl__ = [
-        (Allow, "role:system-owner", ["view", "add", "admin-access", "debug"]),
+        (Allow, "role:system-owner", ["view", "add", "admin-access", "admin-add", "debug"]),
         DENY_ALL,
     ]
 

@@ -20,7 +20,7 @@
            Added {{ itemsAdded.length }} item(s)
         </p>
         <div v-for="(item, idx) in itemsAdded" :key="idx">
-            <component :is="item.ui || 'tile-resource'" :tile="item" />
+            <component :is="item.ui || 'resource-tile'" :tile="item" />
         </div>
     </div>
 </template>

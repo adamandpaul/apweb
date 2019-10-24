@@ -34,3 +34,15 @@ class UserCollectionView(CollectionView):
         },
         "required": ["user_email"],
     }
+
+    schema_search = {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "filter_by:user_email": {
+                "title": "User Email",
+                "description": "An email address used to authenticate a user",
+                "type": "string",
+            }
+        },
+    }

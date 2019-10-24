@@ -24,7 +24,7 @@ class ResourceBehaviour(object):
         return self.manage
 
     @view_config(name="internal-view", renderer=null_renderer, permission="no-permission")
-    def internal_view():
+    def internal_view(self):
         """A special view designed to return the view object on a context"""
         return self
 

@@ -20,24 +20,19 @@ class CollectionView(ResourceView):
     schema_search = None
 
     @view_config(route_name="api", renderer="jsend", permission="add", request_method="POST")
+    @view_config(route_name="api", renderer="jsend", name="admin-add", permission="admin-add", request_method="POST")
     def view_add(self):
         """Add a child to this collection"""
+        is_admin = self.request.view_name == "admin-search"
         if self.schema_add is None:
             raise HTTPNotFound()
         kwargs = self.request.json
         jsonschema.validate(instance=kwargs, schema=self.schema_add)
         child_view = self.add(**kwargs)
-        return child_view.tile
-
-    @view_config(route_name="api", renderer="jsend", name="admin-add", permission="admin-add", request_method="POST")
-    def view_admin_add(self):
-        """Special add that returns an admin tile"""
-        if self.schema_add is None:
-            raise HTTPNotFound()
-        kwargs = self.request.json
-        jsonschema.validate(instance=kwargs, schema=self.schema_add)
-        child_view = self.add(**kwargs)
-        return child_view.admin_tile
+        if is_admin:
+            return child_view.admin_tile
+        else:
+            return child_view.tile
 
     @view_config(route_name="api", renderer="jsend", name="schema-add", permission="add", request_method="GET")
     def view_schema_add(self):
@@ -46,10 +41,32 @@ class CollectionView(ResourceView):
             raise HTTPNotFound()
         return self.schema_add
 
-    def add(self, **kwargs):
-        child = self.context.add(**kwargs)
-        child_view = render_view_to_response(child, self.request, "internal-view")
-        return child_view
+    @view_config(name="search", route_name="api", renderer="jsend", permission="view", request_method="GET")
+    @view_config(name="admin-search", route_name="api", renderer="jsend", permission="admin-access", request_method="GET")
+    def view_search(self):
+        schema = self.schema_search
+        is_admin = self.request.view_name == "admin-search"
+        if schema is not None:
+            kwargs = dict(self.request.params)
+            jsonschema.validate(instance=kwargs, schema=self.schema_search)
+        else:
+            kwargs = {
+                'limit': self.request.params.get('limit', 100),
+                'offset': self.request.params.get('offset', 0),
+            }
+
+        # convert views into tiles
+        tiles = []
+        results = self.search(**kwargs)
+        for view in results['items']:
+            if is_admin:
+                tiles.append(view.admin_tile)
+            else:
+                tiles.append(view.tile)
+        return {
+            "total": results['total'],
+            "items": tiles,
+        }
 
     @view_config(
         name="schema-search",
@@ -74,12 +91,57 @@ class CollectionView(ResourceView):
                 "api": "@@schema-add",
                 "ui": "resource-tab-add",
             }
-        if self.schema_search is not None and self.request.has_permission("admin-access"):
-            views["find"] = {
-                "sort_key": 30,
-                "title": "Find",
-                "api": "@@schema-search",
-                "ui": "resource-tab-search",
-            }
-
+        if self.request.has_permission("admin-access"):
+            if self.schema_search is not None:
+                views["find"] = {
+                    "sort_key": 30,
+                    "title": "Search",
+                    "api": "@@schema-search",
+                    "ui": "resource-tab-search",
+                }
+            else:
+                views["find"] = {
+                    "sort_key": 25,
+                    "title": "Contents",
+                    "api": None,
+                    "ui": "resource-tab-contents",
+                }
         return views
+
+    def add(self, **kwargs):
+        child = self.context.add(**kwargs)
+        child_view = render_view_to_response(child, self.request, "internal-view", secure=False)
+        return child_view
+
+    def search(self, limit, offset, criteria=None, **kwargs):
+        # construct critera - we only support filter_by criteria
+        # other criteria can be consumed by decendent views
+        criteria = criteria or []
+        for key, value in kwargs.items():
+            if key.startswith('filter_by:'):
+                if value:
+                    field = key.split(':', 1)[1]
+                    criteria.append({
+                        'type': 'filter_by',
+                        'field': field,
+                        'value': value,
+                    })
+            else:
+                raise HTTPClientError()
+
+        # Perform search
+        results = self.context.filter(
+            criteria=criteria,
+            limit=int(limit),
+            offset=int(offset),
+        )
+
+        # Convert results into view objects
+        views = []
+        for child in results['items']:
+            view = render_view_to_response(child, self.request, "internal-view", secure=False)
+            views.append(view)
+        return {
+            "total": results["total"],
+            "items": views,
+        }

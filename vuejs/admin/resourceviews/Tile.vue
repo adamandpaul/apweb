@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card>
+        <v-card outlined>
             <v-card-text>
                 <router-link :to="routeTo" >{{ tile.title }}</router-link>
             </v-card-text>

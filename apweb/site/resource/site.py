@@ -98,8 +98,6 @@ class Site(contextplus.Site):
             path (str): The path to match for a redirecting request
             query_string (str): The query string to match for a redirecting request
         """
-        if not self.get_database_is_inited():
-            return None
         query_string = normalize_query_string(query_string, ignore_prefixes=["utm_"])
         redirects = (
             self.db_session.query(orm.Redirect)

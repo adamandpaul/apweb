@@ -4,7 +4,7 @@
             <v-card>
                 <v-card-title>{{ this.schema.title }}</v-card-title>
                 <v-card-text>
-                    <v-jsonschema-form v-if="schema" :schema="schema" :model="value" :options="options" @error="showError" />
+                    <v-jsonschema-form v-if="schema" :schema="schema" :model="value" :options="formOptions" @error="showError" />
                     <v-alert v-if="error" type="error" text>
                         {{ error }}
                     </v-alert>
@@ -32,17 +32,17 @@ import {mapGetters} from 'vuex'
 export default {
 
     props: {
-        data: Object,
+        data: [Object, null],
+        options: [Object, null],
     },
 
     data() {
         return {
-            schema: this.data,
             value: {},
             updateKey: 0,
             valid: false,
             error: null,
-            options: {
+            formOptions: {
                 debug: false,
                 disableAll: false,
                 autoFoldObjects: false,
@@ -55,6 +55,9 @@ export default {
         ...mapGetters([
             'resourceApi',
         ]),
+        schema() {
+            return this.data || this.options.schema
+        }
     },
 
     methods: {

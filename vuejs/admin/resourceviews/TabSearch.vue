@@ -4,7 +4,7 @@
             <v-card>
                 <v-card-title>Search</v-card-title>
                 <v-card-text>
-                    <v-jsonschema-form v-if="schema" :schema="schema" :model="query" :options="options"/>
+                    <v-jsonschema-form v-if="schema" :schema="schema" :model="query" :options="formOptions"/>
                     <v-alert v-if="error" type="error" text>
                         {{ error }}
                     </v-alert>
@@ -30,14 +30,14 @@ export default {
     },
 
     props: {
-        data: Object,
+        data: [Object, null],
+        options: [Object, null],
     },
 
     data() {
         return {
             valid: false,
-            schema: this.data,
-            options: {
+            formOptions: {
                 debug: false,
                 disableAll: false,
                 autoFoldObjects: false,
@@ -45,6 +45,12 @@ export default {
             error: null,
             query: {},
             currentQuery: null,
+        }
+    },
+
+    computed: {
+        schema() {
+            return this.data || this.options.schema
         }
     },
 

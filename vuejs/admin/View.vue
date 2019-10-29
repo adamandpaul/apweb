@@ -4,7 +4,7 @@
             <div v-if="error">{{ error }}</div>
             <div v-else-if="loading">Loading...</div>
             <div v-else>
-                <component :is="view.ui" :data="data" />
+                <component :is="view.ui" :data="data" :options="view.options" />
             </div>
         </v-lazy>
     </div>

@@ -29,7 +29,10 @@ export default {
     computed: {
         ...mapGetters([
             'user_email',
-        ])
+        ]),
+        apiBaseURL() {
+            return this.$root.apiBaseURL
+        },
     },
     components: {
         NavigationMenu,
@@ -51,7 +54,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch('connect', {baseURL: '/api/'})
+        this.$store.dispatch('connect', {baseURL: this.apiBaseURL})
     },
 }
 

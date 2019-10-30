@@ -71,9 +71,16 @@ Vue.use(ResourceViews)
 
 // Create Vue app
 const app = new Vue({
+    props: {
+        apiBaseURL: {
+            type: String,
+            default: "/api/",
+        },
+    },
     router,
     store,
     vuetify,
     render: h => h(App),
 })
-app.$mount('#app')
+
+export default app

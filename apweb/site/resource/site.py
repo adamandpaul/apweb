@@ -17,10 +17,11 @@ import zope.sqlalchemy
 class Site(contextplus.Site):
     """A primitive site"""
 
-    def __init__(self, *args, mailer=None, transaction_manager=None, **kwargs):
+    def __init__(self, *args, mailer=None, transaction_manager=None, request=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.mailer = mailer
         self.transaction_manager = transaction_manager
+        self._request = request
 
     @classmethod
     def from_settings(cls, settings, **kwargs):
@@ -63,6 +64,7 @@ class Site(contextplus.Site):
             redis=request.redis,
             mailer=request.mailer,
             transaction_manager=request.tm,
+            request=request,
             **kwargs,
         )
 
@@ -72,6 +74,10 @@ class Site(contextplus.Site):
     @resource("users")
     def get_user_collection(self):
         return user.UserCollection(parent=self, name="users")
+
+    def get_current_user(self):
+        if self._request is not None:
+            return self._request.user
 
     def set_redirect(self, path, query_string, redirect):
         """Set a redirect for a given url.

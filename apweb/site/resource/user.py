@@ -173,3 +173,8 @@ class UserCollection(SQLAlchemyCollection):
         if record is not None:
             return self.child_from_record(record)
         return None
+
+    @resource("me")
+    def get_me(self):
+        """Get the current user"""
+        return self.acquire.get_current_user()

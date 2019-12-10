@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from pyramid.response import Response
 from pyramid.httpexceptions import HTTPClientError
 from pyramid.view import view_config
 
@@ -30,7 +31,11 @@ class HandleException(object):
 
     @property
     def code(self):
-        return getattr(self.context, "code", 500)
+        if isinstance(self.context, Response):
+            return getattr(self.context, "code", None) or 500
+        else:
+            return 500
+
 
     @property
     def data(self):

@@ -29,16 +29,20 @@ class Site(contextplus.Site):
         """
 
         tm = transaction.TransactionManager(explicit=True)
+        db_session = None
+        redis_instance = None
 
-        db_engine = sqlalchemy.engine_from_config(settings, "sqlalchemy.")
-        db_session_factory = sqlalchemy.orm.sessionmaker()
-        db_session_factory.configure(bind=db_engine)
-        db_session = db_session_factory()
-        zope.sqlalchemy.register(db_session, transaction_manager=tm)
+        if settings.get("sqlalchemy.url"):
+            db_engine = sqlalchemy.engine_from_config(settings, "sqlalchemy.")
+            db_session_factory = sqlalchemy.orm.sessionmaker()
+            db_session_factory.configure(bind=db_engine)
+            db_session = db_session_factory()
+            zope.sqlalchemy.register(db_session, transaction_manager=tm, keep_session=True)
 
-        redis_instance = redis.StrictRedis.from_url(
-            settings["redis_url"], decode_responses=True
-        )
+        if settings.get("redis_url"):
+            redis_instance = redis.StrictRedis.from_url(
+                settings["redis_url"], decode_responses=True
+            )
 
         class MailerTmp(pyramid_mailer.Mailer):
             def __init__(self, **kw):

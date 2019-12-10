@@ -23,7 +23,7 @@ class CollectionView(ResourceView):
     @view_config(route_name="api", renderer="jsend", name="admin-add", permission="admin-add", request_method="POST")
     def view_add(self):
         """Add a child to this collection"""
-        is_admin = self.request.view_name == "admin-search"
+        is_admin = self.request.view_name == "admin-add"
         if self.schema_add is None:
             raise HTTPNotFound()
         kwargs = self.request.json

@@ -7,10 +7,8 @@
             <div v-else-if="error">
                 Error...
             </div>
-            <div v-else>
-                <div class="description">{{ description }}</div>
-                <ViewManager class="view-manager" />
-            </div>
+            <div class="description">{{ description }}</div>
+            <ViewManager class="view-manager" />
         </div>
     </div>
 </template>
@@ -34,6 +32,7 @@ export default {
             'description',
         ]),
     },
+
 }
 
 

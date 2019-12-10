@@ -53,8 +53,24 @@ export default {
         },
     },
 
+    methods: {
+
+        onResourceUpdated() {
+            this.$store.dispatch("reloadResource")
+        },
+
+    },
+
     mounted() {
         this.$store.dispatch('connect', {baseURL: this.apiBaseURL})
+
+        // Add resource updated event handler
+        this.$root.$on('resourceUpdated', this.onResourceUpdated)
+    },
+
+    beforeDestroy() {
+        // Add resource updated event handler
+        this.$root.$off('resourceUpdated', this.onResourceUpdated)
     },
 }
 

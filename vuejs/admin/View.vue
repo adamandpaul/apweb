@@ -1,12 +1,11 @@
 <template>
     <div class="view">
-        <v-lazy>
-            <div v-if="error">{{ error }}</div>
-            <div v-else-if="loading">Loading...</div>
-            <div v-else>
-                <component :is="view.ui" :data="data" :options="view.options" />
-            </div>
-        </v-lazy>
+        <div v-if="error">{{ error }}</div>
+        <div v-if="reloading">Reloading...</div>
+        <div v-if="loading">Loading...</div>
+        <div v-else>
+            <component v-show="!reloading" :is="view.ui" :data="data" :options="view.options" />
+        </div>
     </div>
 </template>
 <script>
@@ -24,6 +23,7 @@ export default {
         return {
             error: null,
             loading: true,
+            reloading: false,
             data: null,
         }
     },
@@ -47,6 +47,11 @@ export default {
                 this.loading = false
                 return
             }
+            this.resourceApi.get(this.view.api)
+                .then(this.handleApiResponse)
+                .catch(this.handleApiError)
+        },
+        reload() {
             this.resourceApi.get(this.view.api)
                 .then(this.handleApiResponse)
                 .catch(this.handleApiError)

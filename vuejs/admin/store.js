@@ -30,6 +30,10 @@ export default {
             state.breadcrumbs = [state.rootNavigationNode]
             state.views = []
         },
+        reloadStart(state) {
+            state.loading = true
+            state.error = null
+        },
         loadingComplete(state, data) {
             state.loading = false
             state.error = null
@@ -59,6 +63,15 @@ export default {
     actions: {
         loadResource(context, opts) {
             context.commit('loadingStart', opts.path)
+            context.getters.resourceApi.get("@@admin")
+            .then((resp) => {
+                context.commit("loadingComplete", resp.data.data)
+            }).catch((error) => {
+                context.commit("loadingError", error)
+            })
+        },
+        reloadResource(context, opts) {
+            context.commit('reloadingStart')
             context.getters.resourceApi.get("@@admin")
             .then((resp) => {
                 context.commit("loadingComplete", resp.data.data)

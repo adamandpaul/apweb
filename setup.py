@@ -20,6 +20,9 @@ setup(
     install_requires=[
         'setuptools',
 
+        'plone.testing',
+        'requests'
+
         'pyramid',
         'pyramid_chameleon',
         'pyramid_exclog',

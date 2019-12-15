@@ -16,12 +16,30 @@ class SessionView(object):
         return bool(self.request.authenticated_userid)
 
     @reify
+    def authenticated_userid(self):
+        return self.request.authenticated_userid
+
+    @reify
+    def identifiers(self):
+        return self.request.identifiers
+
+    @reify
+    def groups(self):
+        return self.request.groups
+
+    @reify
     def roles(self):
         return self.request.roles
 
     @reify
     def info(self):
-        return {"authenticated": self.authenticated, "roles": self.roles}
+        return {
+            "authenticated": self.authenticated,
+            "authenticated_userid": self.authenticated_userid,
+            "identifiers": self.identifiers,
+            "groups": self.groups,
+            "roles": self.roles,
+        }
 
     def set_cookie_csrf_token(self):
         response = self.request.response

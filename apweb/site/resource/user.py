@@ -4,6 +4,7 @@ from . import exc
 from . import orm
 from .log_entry import ComponentLogger
 from .utils import is_valid_email
+from contextplus import id_property
 from contextplus import record_property
 from contextplus import resource
 from contextplus import SQLAlchemyCollection
@@ -48,8 +49,10 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
         "reinstate": {"from": ("banned",), "to": "active"},
     }
 
-    user_uuid = record_property("user_uuid")
+    user_uuid = id_property("user_uuid")
     user_email = record_property("user_email")
+    password_reset_token = record_property("password_reset_token")
+    password_reset_expiry = record_property("password_reset_expiry")
 
     #
     # Passwords
@@ -167,11 +170,13 @@ class UserCollection(SQLAlchemyCollection):
 
     def get_user_by_email(self, user_email: str):
         """Return a user from a given email address"""
-        db_session = self.acquire.db_session
-        user_query = db_session.query(orm.User).filter_by(user_email=user_email)
-        record = user_query.one_or_none()
-        if record is not None:
-            return self.child_from_record(record)
+        user_uuid = (
+            self.acquire.db_session.query(orm.User.user_uuid)
+            .filter_by(user_email=user_email)
+            .scalar()
+        )
+        if user_uuid is not None:
+            return self[str(user_uuid)]
         return None
 
     @resource("me")

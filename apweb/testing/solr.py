@@ -42,17 +42,37 @@ class SolrLayer(Layer):
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
+
+        cores = []
+
         tries = 0
+
+        # Check if solr is running
         while True:
             tries += 1
             try:
-                result = requests.get(self['solr_url'])
+                result = requests.get(self['solr_url'] + "solr/admin/cores?action=STATUS")
                 assert result.status_code == 200
+                cores = result.json()['status'].keys()
                 break
             except (AssertionError, requests.exceptions.ConnectionError) as e:
                 if tries >= 10:
                     raise Exception("Could not connect to solr") from e
                 time.sleep(0.4)
+
+        # Check that the cores are online
+        for core in cores:
+            tries = 0
+            while True:
+                tries += 1
+                try:
+                    result = requests.get(self['solr_url'] + f"solr/{core}/admin/ping")
+                    assert result.json()['status'] == 'OK'
+                    break
+                except (AssertionError, requests.exceptions.ConnectionError) as e:
+                    if tries >= 10:
+                        raise Exception("Could not connect to solr core {core}") from e
+                    time.sleep(0.4)
 
     def stopSolr(self):
         # stop redis

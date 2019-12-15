@@ -5,6 +5,13 @@ def get_user(request):
     return None
 
 
+def get_identifiers(request):
+    userid = request.authenticated_userid
+    if userid:
+        return [("user", userid)]
+    return []
+
+
 def get_groups(request):
     return []
 
@@ -27,5 +34,6 @@ def includeme(config):
 
     # Setup default request methods
     config.add_request_method(get_user, "user", reify=True)
+    config.add_request_method(get_identifiers, "identifiers", reify=True)
     config.add_request_method(get_groups, "groups", reify=True)
     config.add_request_method(get_roles, "roles", reify=True)

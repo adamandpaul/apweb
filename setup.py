@@ -21,7 +21,7 @@ setup(
         'setuptools',
 
         'plone.testing',
-        'requests'
+        'requests',
 
         'pyramid',
         'pyramid_chameleon',

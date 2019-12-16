@@ -109,11 +109,15 @@ def includeme(config):
     authtkt_secret = settings.get("authtkt_secret", None)
     if authtkt_secret is None:
         authtkt_secret = secrets.token_urlsafe(32)
+
+    authtkt_hashalg = settings.get("authtkt_hashalg", "sha512")
+
     authtkt_policy_kwargs = {
         "secret": authtkt_secret,
         "secure": registry["cookie_session_secure"],
         "timeout": registry["cookie_session_timeout"],
         "reissue_time": registry["cookie_session_reissue_time"],
+        "hashalg": authtkt_hashalg,
         "http_only": True,
         "wild_domain": False,
     }

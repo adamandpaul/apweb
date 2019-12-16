@@ -25,8 +25,33 @@ def add_user(cmd_context):
     return 0
 
 
+def assign_role(cmd_context):
+    """Assign a role to a user"""
+    site = cmd_context.site
+    args = cmd_context.args
+
+    user_email_or_uuid = args.user
+    role = args.role
+
+    site.transaction_manager.begin()
+    user = None
+    try:
+        user = site['users'][user_email_or_uuid]
+    except KeyError as e:
+        user = site['users'].get_user_by_email(user_email_or_uuid)
+        if user is None:
+            raise Exception("user not found") from e
+
+    role = role.strip()
+    assert role
+    user.assign_role(role)
+    site.transaction_manager.commit()
+
+
 def cmd_configure(sub_commands):
     """Configure arg parser commands related to apweb site"""
+
+    # Add user command
     add_user_parser = sub_commands.add_parser(
         "add-user", help="Add a user to the database"
     )
@@ -49,3 +74,15 @@ def cmd_configure(sub_commands):
         "-r", "--role", action="append", dest="roles", help="assign roles to the user"
     )
     add_user_parser.set_defaults(func=add_user)
+
+    # Assign role command
+    assign_role_parser = sub_commands.add_parser(
+        "assign-role", help="Assign a role to a user"
+    )
+    assign_role_parser.add_argument(
+        "user", help="The user_uuid or email"
+    )
+    assign_role_parser.add_argument(
+        "role", help="Trole to assign the user"
+    )
+    assign_role_parser.set_defaults(func=assign_role)

@@ -16,6 +16,7 @@
                 </v-card-actions>
             </v-card>
         </v-form>
+        <request-error v-if="requestError" :error="requestError" />
         <p v-if="itemsAdded.length > 0">
            Added {{ itemsAdded.length }} item(s)
         </p>
@@ -42,6 +43,7 @@ export default {
             updateKey: 0,
             valid: false,
             error: null,
+            requestError: null,
             formOptions: {
                 debug: false,
                 disableAll: false,
@@ -70,6 +72,7 @@ export default {
                 return
             }
             this.inProgress = true
+            this.requestError = null
             this.resourceApi.post('', this.value)
                 .then(this.handleResponse)
                 .catch(this.handleError)
@@ -88,7 +91,7 @@ export default {
         },
         handleError(err) {
             this.inProgress = false
-            this.showError(err)
+            this.requestError = err
         },
     }
 

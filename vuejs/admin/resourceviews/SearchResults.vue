@@ -10,9 +10,9 @@
             </div>
         </div>
         <v-btn v-if="isMore || inProgress" :loading="inProgress" @click="more">More</v-btn>
-        <v-alert v-if="error" type="error" text>
-            {{ error }}
-        </v-alert>
+        <template v-if="error">
+            <request-error :error="error" />
+        </template>
     </div>
 </template>
 <script>
@@ -81,6 +81,7 @@ export default {
             }
             const xSearchCount = this.searchCount
             this.inProgress = true
+            this.error = null
             this.resourceApi.get(this.api, {params, xSearchCount})
                 .then(this.handleResponse)
                 .catch(this.handleError)

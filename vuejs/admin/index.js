@@ -22,6 +22,7 @@ import APWebSiteStore from '../site/store'
 // Admin imports
 import AdminStore from './store'
 import AdminRoutes from './router'
+import RequestError from './RequestError'
 import App from './App.vue'
 import ResourceViews from './resourceviews'
 
@@ -43,6 +44,9 @@ Vue.use(Vuetify, {
     },
 })
 const vuetify = new Vuetify({})
+
+// Configure request-error component
+Vue.component("request-error", RequestError)
 
 // Configure JSON Schema Form
 Vue.component('v-jsonschema-form', VJsonschemaForm)

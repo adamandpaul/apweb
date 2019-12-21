@@ -18,6 +18,9 @@
                 </v-card-actions>
             </v-card>
         </v-form>
+        <template v-if="requestError">
+            <request-error :error="requestError" />
+        </template>
     </div>
 </template>
 <script>
@@ -38,6 +41,7 @@ export default {
             updateKey: 0,
             valid: false,
             error: null,
+            requestError: null,
             formOptions: {
                 debug: false,
                 disableAll: false,
@@ -78,6 +82,7 @@ export default {
                 this.value[key] = null
             }
             this.error = null
+            this.requestError = null
             this.$refs.form.reset()
         },
         handleResponse(resp) {
@@ -87,7 +92,7 @@ export default {
         },
         handleError(err) {
             this.inProgress = false
-            this.showError(err)
+            this.requestError = err
         },
     }
 

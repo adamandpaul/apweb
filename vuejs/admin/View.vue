@@ -1,6 +1,8 @@
 <template>
     <div class="view">
-        <div v-if="error">{{ error }}</div>
+        <div v-if="error">
+            <request-error :error="error" />
+        </div>
         <div v-if="reloading">Reloading...</div>
         <div v-if="loading">Loading...</div>
         <div v-else>

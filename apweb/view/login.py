@@ -5,6 +5,7 @@ from ..login import ILoginProvider
 from datetime import datetime
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPForbidden
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 from uuid import uuid4
 
@@ -78,7 +79,7 @@ class LoginView(object):
     @view_config(
         route_name="api", name="login", request_method="POST", renderer="jsend"
     )
-    def post(self):
+    def login(self):
 
         # Check request paramitors
         if self.request.method.lower() != "post":
@@ -123,3 +124,20 @@ class LoginView(object):
             "jwt": jwt_access_token,
             "jwt_refresh": jwt_refresh_token,
         }
+
+    @view_config(
+        route_name="api", name="logout", renderer="jsend"
+    )
+    def api_logout(self):
+        self.request.session.invalidate()
+        browser_headers = pyramid.security.forget(self.request)
+        self.request.response.headers.extend(browser_headers)
+        self.request.session.invalidate()
+        return {}
+
+    @view_config(name="logout")
+    def logout(self):
+        response = HTTPFound('/')
+        self.request.response = response
+        self.api_logout()
+        return response

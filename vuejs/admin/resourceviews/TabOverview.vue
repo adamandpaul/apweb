@@ -9,11 +9,14 @@
           ></v-data-table>
         <ResourceMenu
             :items="namedResources" />
+        <ResourceLinkMenu
+            :items="links" />
     </div>
 </template>
 <script>
 
 import ResourceMenu from '../ResourceMenu.vue'
+import ResourceLinkMenu from '../ResourceLinkMenu.vue'
 import {mapGetters} from 'vuex'
 
 export default {
@@ -43,12 +46,14 @@ export default {
 
     components: {
         ResourceMenu,
+        ResourceLinkMenu,
     },
 
     computed: {
         ...mapGetters([
             'description',
             'namedResources',
+            'links',
         ]),
         summary() {
             return this.data.summary

@@ -2,6 +2,7 @@
 """Behaviour for admin objects"""
 
 from pyramid.decorator import reify
+from pyramid.view import render_view_to_response
 from pyramid.view import view_defaults
 from pyramid.view import view_config
 
@@ -25,23 +26,33 @@ class AdminBehaviour(object):
         }
 
     @reify
+    def admin_named_resources(self):
+        named_resources = []
+        for named_resource in self.context.iter_named_resources():
+            named_resources.append(
+                {"title": named_resource.title, "path": named_resource.path_names}
+            )
+        return named_resources
+
+    @reify
+    def admin_links(self):
+        links = []
+        return links
+
+    @reify
     def admin_breadcrumbs(self):
         """Breadcrumbs which include named resources of each ancestor"""
         breadcrumbs = []
         resources = [self.context, *self.context.iter_ancestors()]
         resources.reverse()
         for resource in resources:
-            named_resources = []
-            for named_resource in resource.iter_named_resources():
-                named_resources.append(
-                    {"title": named_resource.title, "path": named_resource.path_names}
-                )
-
+            resource_view = render_view_to_response(resource, self.request, "internal-view", secure=False)
             breadcrumbs.append(
                 {
                     "title": resource.title,
                     "path": resource.path_names,
-                    "named_resources": named_resources,
+                    "named_resources": resource_view.admin_named_resources,
+                    "links": resource_view.admin_links,
                 }
             )
         return breadcrumbs

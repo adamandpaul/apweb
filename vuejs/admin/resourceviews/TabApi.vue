@@ -67,8 +67,17 @@ export default {
         api() {
             return this.options.api
         },
+        method() {
+            return this.options.method || "get"
+        },
         executeText() {
-            return this.options.executeText || 'Execute'
+            if (this.options.executeText) {
+                return this.options.executeText
+            } else if (this.method == "get") {
+                return "Query"
+            } else {
+                return "Commit"
+            }
         },
     },
 
@@ -83,11 +92,20 @@ export default {
             this.currentResult = null
             this.currentInput = {...this.input}
             this.inProgress = true
-            this.resourceApi.get(this.api, {
-                params: this.currentInput,
-            })
-                .then(this.handleResponse)
-                .catch(this.handleError)
+
+            let promise = null
+            if (this.method == "get") {
+                promise = this.resourceApi.get(this.api, {
+                    params: this.currentInput,
+                })
+            } else {
+                promise = this.resourceApi({
+                    method: this.method,
+                    url: this.api,
+                    data: this.currentInput,
+                })
+            }
+            promise.then(this.handleResponse).catch(this.handleError)
         },
         clear() {
             for (let key in this.input) {

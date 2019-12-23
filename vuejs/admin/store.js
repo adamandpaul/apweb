@@ -93,6 +93,7 @@ export default {
         description: s => s.description,
         breadcrumbs: s => s.breadcrumbs,
         namedResources: s => s.breadcrumbs[s.breadcrumbs.length - 1].named_resources,
+        links: s => s.breadcrumbs[s.breadcrumbs.length -1].links,
         viewsList: s => s.views,
         viewsByName(state, getters) {
             const views = {}

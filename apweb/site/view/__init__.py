@@ -6,3 +6,4 @@ from .error_notfound import error_notfound
 from .resource import ResourceView
 from .collection import CollectionView
 from .record import RecordItemView
+from .site import SiteView

@@ -14,16 +14,22 @@
             v-if="zoom"
             :items="resourceMenuItems"
             />
+        <ResourceLinkMenu
+            v-if="zoom"
+            :items="resourceLinkItems"
+            />
     </div>
 </template>
 <script>
 
 import utils from '../utils'
 import ResourceMenu from './ResourceMenu.vue'
+import ResourceLinkMenu from './ResourceLinkMenu.vue'
 
 export default {
     components: {
         ResourceMenu,
+        ResourceLinkMenu,
     },
 
     props: {
@@ -40,6 +46,9 @@ export default {
         resourceMenuItems() {
             return this.node.named_resources
         },
+        resourceLinkItems() {
+            return this.node.links
+        }
     },
     methods: {
         pathToString: utils.pathToString,

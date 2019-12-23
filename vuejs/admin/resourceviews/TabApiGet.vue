@@ -25,6 +25,7 @@
         <div v-if="currentResult">
             <pre>{{ JSON.stringify(currentResult, null, 2) }}</pre>
         </div>
+        <request-error v-if="requestError" :error="requestError" />
     </div>
 </template>
 <script>
@@ -48,6 +49,7 @@ export default {
                 autoFoldObjects: false,
             },
             error: null,
+            requestError: null,
             input: {},
             inProgress: false,
             currentInput: null,
@@ -77,6 +79,8 @@ export default {
                 return
             }
             this.error = null
+            this.requestError = null
+            this.currentResult = null
             this.currentInput = {...this.input}
             this.inProgress = true
             this.resourceApi.get(this.api, {
@@ -98,7 +102,7 @@ export default {
         },
         handleError(err) {
             this.inProgress = false
-            this.error = err
+            this.requestError = err
         },
     },
 }

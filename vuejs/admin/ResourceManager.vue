@@ -5,7 +5,7 @@
                 Loading {{resourceURL}}...
             </div>
             <div v-else-if="error">
-                Error...
+                <request-error :error="error" />
             </div>
             <div class="description">{{ description }}</div>
             <ViewManager class="view-manager" />

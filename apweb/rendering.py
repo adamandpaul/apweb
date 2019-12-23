@@ -2,6 +2,7 @@
 
 from datetime import date
 from datetime import datetime
+from decimal import Decimal
 from pyramid.renderers import get_renderer
 from uuid import UUID
 
@@ -74,6 +75,10 @@ def json_uuid_adapter(obj, request):
     return str(obj)
 
 
+def json_decimal_adapter(obj, request):
+    return str(obj)
+
+
 class JSendRenderer(object):
     def __init__(self, info):
         pass
@@ -96,6 +101,7 @@ def configure_json_renderer(config):
     json_renderer.add_adapter(datetime, json_datetime_adapter)
     json_renderer.add_adapter(date, json_datetime_adapter)
     json_renderer.add_adapter(UUID, json_uuid_adapter)
+    json_renderer.add_adapter(Decimal, json_decimal_adapter)
     config.add_renderer("json", json_renderer)
     config.add_renderer("jsend", JSendRenderer)
 

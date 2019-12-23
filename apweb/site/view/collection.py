@@ -127,7 +127,11 @@ class CollectionView(ResourceView):
                         'value': value,
                     })
             else:
-                raise HTTPClientError()
+                if value:
+                    criteria.append({
+                        'type': key,
+                        'value': value,
+                    })
 
         # Perform search
         results = self.context.filter(

@@ -70,8 +70,7 @@ def includeme(config):
 
     if registry["is_develop"]:
         # Development specific configuration
-        mailer = pyramid_mailer.mailer.DummyMailer()
-        pyramid_mailer._set_mailer(config, mailer)
+        config.include('pyramid_mailer.debug')
         config.include("pyramid_debugtoolbar")
 
     else:

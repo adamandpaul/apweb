@@ -10,10 +10,13 @@
             </div>
         </div>
         <div v-else>
-            <div class="container">
-                <div class="description">{{ description }}</div>
-                <ViewManager class="view-manager" />
+            <div class="resource-header">
+                <div class="container">
+                    <div class="title">{{ title }}</div>
+                    <div class="description">{{ description }}</div>
+                </div>
             </div>
+            <ViewManager class="view-manager" />
         </div>
     </div>
 </template>
@@ -34,6 +37,7 @@ export default {
             'loading',
             'error',
             'resourceURL',
+            'title',
             'description',
         ]),
     },
@@ -48,7 +52,8 @@ export default {
     margin: 0 auto
     max-width: 980px
 
-.view-manager
-    margin-top: 32px
+
+.resource-header
+    background: #f5f5f5
 
 </style>

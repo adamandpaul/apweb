@@ -29,6 +29,7 @@ export default {
         views: [],
         loading: true,
         error: null,
+        title: null,
         description: null,
         breadcrumbs: [DEFAULT_ROOT_NAVIGATION_NODE],
         rootNavigationNode: DEFAULT_ROOT_NAVIGATION_NODE,
@@ -54,6 +55,7 @@ export default {
             state.error = null
 
             // set workspace state
+            state.title = data.title
             state.description = data.description
             state.breadcrumbs = data.breadcrumbs
             const views = []
@@ -115,6 +117,7 @@ export default {
         path: s => s.path,
         loading: s => s.loading,
         rootNavigationNode: s => s.rootNavigationNode,
+        title: s => s.title,
         description: s => s.description,
         breadcrumbs: s => s.breadcrumbs,
         namedResources: s => s.breadcrumbs[s.breadcrumbs.length - 1].named_resources,

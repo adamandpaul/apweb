@@ -13,6 +13,7 @@ class AdminBehaviour(object):
     @view_config(route_name="api", renderer="jsend", name="admin", permission="admin-access", request_method="GET")
     def view_admin(self):
         return {
+            "title": self.title,
             "description": self.description,
             "breadcrumbs": self.admin_breadcrumbs,
             "views": self.admin_views,

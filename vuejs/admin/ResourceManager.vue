@@ -1,14 +1,19 @@
 <template>
     <div class="resource-manager">
-        <div class="container">
-            <div v-if="loading">
-                Loading {{resourceURL}}...
-            </div>
-            <div v-else-if="error">
+        <div v-if="loading">
+            <v-progress-linear indeterminate/>
+            <div class="container loading">Loading {{resourceURL}}...</div>
+        </div>
+        <div v-else-if="error">
+            <div class="container">
                 <request-error :error="error" />
             </div>
-            <div class="description">{{ description }}</div>
-            <ViewManager class="view-manager" />
+        </div>
+        <div v-else>
+            <div class="container">
+                <div class="description">{{ description }}</div>
+                <ViewManager class="view-manager" />
+            </div>
         </div>
     </div>
 </template>
@@ -38,9 +43,6 @@ export default {
 
 </script>
 <style lang="sass" scoped>
-
-.resource-manager
-    padding: 32px 16px
 
 .container
     margin: 0 auto

@@ -32,6 +32,9 @@ export default {
         title: null,
         description: null,
         thumbnail_url: null,
+        has_workflow: false,
+        workflow_actions: [],
+        workflow_state: null,
         breadcrumbs: [DEFAULT_ROOT_NAVIGATION_NODE],
         rootNavigationNode: DEFAULT_ROOT_NAVIGATION_NODE,
     },
@@ -45,6 +48,10 @@ export default {
             // reset current workspace state
             state.description = null
             state.breadcrumbs = [state.rootNavigationNode]
+            state.thumbnail_url = null
+            state.has_workflow = false
+            state.workflow_actions = []
+            state.workflow_state = null
             state.views = []
         },
         reloadStart(state) {
@@ -59,6 +66,9 @@ export default {
             state.title = data.title
             state.description = data.description
             state.thumbnail_url = data.thumbnail_url
+            state.has_workflow = data.has_workflow
+            state.workflow_actions = data.workflow_actions
+            state.workflow_state = data.workflow_state
             state.breadcrumbs = data.breadcrumbs
             const views = []
             for (let v in data.views) {
@@ -122,6 +132,9 @@ export default {
         title: s => s.title,
         description: s => s.description,
         thumbnail_url: s => s.thumbnail_url,
+        has_workflow: s => s.has_workflow,
+        workflow_state: s => s.workflow_state,
+        workflow_actions: s => s.workflow_actions,
         breadcrumbs: s => s.breadcrumbs,
         namedResources: s => s.breadcrumbs[s.breadcrumbs.length - 1].named_resources,
         links: s => s.breadcrumbs[s.breadcrumbs.length -1].links,

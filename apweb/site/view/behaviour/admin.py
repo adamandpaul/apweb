@@ -18,6 +18,9 @@ class AdminBehaviour(object):
             "thumbnail_url": self.admin_thumbnail_url,
             "breadcrumbs": self.admin_breadcrumbs,
             "views": self.admin_views,
+            "has_workflow": self.has_workflow,
+            "workflow_state": self.workflow_state,
+            "workflow_actions": self.workflow_actions,
         }
 
     @view_config(route_name="api", renderer="jsend", name="admin-overview", permission="admin-access", request_method="GET")
@@ -26,6 +29,21 @@ class AdminBehaviour(object):
         return {
             "summary": self.admin_summary,
         }
+
+    @view_config(route_name="api", renderer="jsend", name="workflow-action", permission="workflow", request_method="POST")
+    @view_config(route_name="api", renderer="jsend", name="admin-workflow-action", permission="admin-workflow", request_method="POST")
+    def view_workflow_action(self):
+        if self.has_workflow:
+            action = self.request.json["action"]
+            if action not in self.workflow_actions:
+                raise Exception("Invalid workflow action")
+            workflow_from = self.context.workflow_state
+            self.context.workflow_action(action)
+            return {
+                "from": workflow_from,
+                "to": self.context.workflow_state,
+            }
+        raise Exception("Object does not have workflows")
 
     @reify
     def admin_named_resources(self):

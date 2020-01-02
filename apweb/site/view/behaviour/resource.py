@@ -54,3 +54,25 @@ class ResourceBehaviour(object):
     @reify
     def description(self):
         return self.context.description
+
+    @reify
+    def workflow_transitions(self):
+        return getattr(self.context, "workflow_transitions", None)
+
+    @reify
+    def has_workflow(self):
+        return self.workflow_transitions is not None
+
+    @reify
+    def workflow_actions(self):
+        if self.has_workflow:
+            actions = []
+            for action, transition in self.workflow_transitions.items():
+                if self.workflow_state in transition["from"]:
+                    actions.append(action)
+            return actions
+        return []
+
+    @reify
+    def workflow_state(self):
+        return getattr(self.context, "workflow_state", None)

@@ -31,6 +31,7 @@ export default {
         error: null,
         title: null,
         description: null,
+        thumbnail_url: null,
         breadcrumbs: [DEFAULT_ROOT_NAVIGATION_NODE],
         rootNavigationNode: DEFAULT_ROOT_NAVIGATION_NODE,
     },
@@ -57,6 +58,7 @@ export default {
             // set workspace state
             state.title = data.title
             state.description = data.description
+            state.thumbnail_url = data.thumbnail_url
             state.breadcrumbs = data.breadcrumbs
             const views = []
             for (let v in data.views) {
@@ -119,6 +121,7 @@ export default {
         rootNavigationNode: s => s.rootNavigationNode,
         title: s => s.title,
         description: s => s.description,
+        thumbnail_url: s => s.thumbnail_url,
         breadcrumbs: s => s.breadcrumbs,
         namedResources: s => s.breadcrumbs[s.breadcrumbs.length - 1].named_resources,
         links: s => s.breadcrumbs[s.breadcrumbs.length -1].links,

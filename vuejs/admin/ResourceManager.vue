@@ -12,8 +12,13 @@
         <div v-else>
             <div class="resource-header">
                 <div class="container">
-                    <div class="title">{{ title }}</div>
-                    <div class="description">{{ description }}</div>
+                    <div v-if="thumbnail_url" class="thumbnail">
+                        <img :src="thumbnail_url" />
+                    </div>
+                    <div class="details">
+                        <div class="title">{{ title }}</div>
+                        <div class="description">{{ description }}</div>
+                    </div>
                 </div>
             </div>
             <ViewManager class="view-manager" />
@@ -39,6 +44,7 @@ export default {
             'resourceURL',
             'title',
             'description',
+            'thumbnail_url',
         ]),
     },
 
@@ -53,7 +59,25 @@ export default {
     max-width: 980px
 
 
+
+    
 .resource-header
     background: #f5f5f5
+
+    .container
+        padding: 32px 0
+        display: flex
+        align-items: center
+
+    .thumbnail
+        background: white
+        padding: 8px
+        border-radius: 5px
+        margin-right: 24px
+        box-shadow: 3px 3px 6px 0px rgba(0,0,0,0.08)
+
+        img
+            display: block
+            width: 128px
 
 </style>

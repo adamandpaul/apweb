@@ -15,6 +15,7 @@ class AdminBehaviour(object):
         return {
             "title": self.title,
             "description": self.description,
+            "thumbnail_url": self.admin_thumbnail_url,
             "breadcrumbs": self.admin_breadcrumbs,
             "views": self.admin_views,
         }
@@ -69,6 +70,10 @@ class AdminBehaviour(object):
                 "ui": "resource-tab-overview",
             }
         }
+
+    @reify
+    def admin_thumbnail_url(self):
+        return None
 
     @reify
     def admin_summary(self):

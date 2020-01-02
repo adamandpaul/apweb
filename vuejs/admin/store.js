@@ -7,10 +7,25 @@ const DEFAULT_ROOT_NAVIGATION_NODE = {
     "named_resources": [],
 }
 
+function isPathsEqual(p1, p2) {
+    if (p1 === null || p1 === null) {
+        return p1 === p2
+    }
+    if (p1.length != p2.length)
+        return false;
+    for (var i = 0, l=p1.length; i < l; i++) {
+        if (p1[i] != p2[i]) {
+            return False
+        }
+    }       
+    return true;
+}
+
 export default {
 
     state: {
         path: null,
+        view: null,
         views: [],
         loading: true,
         error: null,
@@ -50,6 +65,9 @@ export default {
             }
             views.sort((a, b) => (a.sort_key - b.sort_key))
             state.views = views
+            if (views.length > 0 && state.view == null) {
+                state.view = views[0].name
+            }
 
             // Save root navigation node
             state.rootNavigationNode = state.breadcrumbs[0]
@@ -57,6 +75,9 @@ export default {
         loadingError(state, error) {
             state.loading = false
             state.error = error
+        },
+        setView(state, view) {
+            state.view = view 
         },
     },
 
@@ -79,9 +100,13 @@ export default {
                 context.commit("loadingError", error)
             })
         },
-        changeResource(context, opts) {
-            if (context.getters.path !== opts.path) {
+        changeResourceOrView(context, opts) {
+            if (!isPathsEqual(context.getters.path, opts.path)) {
+                const view = opts.view || null
+                context.commit("setView", view)
                 context.dispatch("loadResource", opts)
+            } else if  (opts.view && context.getters.selectedView != opts.view) {
+                context.commit("setView", opts.view)
             }
         },
     },
@@ -95,6 +120,7 @@ export default {
         namedResources: s => s.breadcrumbs[s.breadcrumbs.length - 1].named_resources,
         links: s => s.breadcrumbs[s.breadcrumbs.length -1].links,
         viewsList: s => s.views,
+        selectedView: s => s.view,
         viewsByName(state, getters) {
             const views = {}
             for (let v of getters.viewsList) {

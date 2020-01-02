@@ -21,6 +21,7 @@ function decodeRoute(route) {
     }
     return {
         path: path,
+        view: route.query.view || null,
     }
 }
 
@@ -42,13 +43,13 @@ export default {
     watch: {
         '$route' (to, from) {
             const opts = decodeRoute(to)
-            this.$store.dispatch('changeResource', opts)
+            this.$store.dispatch('changeResourceOrView', opts)
         },
 
         user_email(to) {
             if(to && (this.$store.state.path !== null)) {
                 const opts = decodeRoute(this.$route)
-                this.$store.dispatch('changeResource', opts)
+                this.$store.dispatch('changeResourceOrView', opts)
             }
         },
     },

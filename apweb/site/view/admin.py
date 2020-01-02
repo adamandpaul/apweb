@@ -1,5 +1,8 @@
 # -*- coding:utf-8 -*-
 
+from pyramid.httpexceptions import HTTPFound
+from pyramid.view import view_config
+
 import os.path
 
 
@@ -19,15 +22,15 @@ def includeme(config):
         registry["admin_app_html"] = None
 
     # add view
-    config.add_view(
-        view,
-        name="admin",
-        request_method="GET",
-        physical_path="/",
-        permission="admin-access",
-    )
+    config.add_route("admin", "/admin*traverse")
 
 
+@view_config(route_name="admin", physical_path=("",), request_method="GET")
+def redirect_to_app(request):
+    return HTTPFound("/admin/@@app")
+
+
+@view_config(name="app", route_name="admin", physical_path=("",), request_method="GET", permission="admin-access")
 def view(request):
     """Serve up the admin html application"""
     response = request.response

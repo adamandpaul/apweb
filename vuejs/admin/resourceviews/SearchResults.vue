@@ -9,7 +9,8 @@
                 <component :is="item.ui || 'resource-tile'" :tile="item" />
             </div>
         </div>
-        <v-btn v-if="isMore || inProgress" :loading="inProgress" @click="more">More</v-btn>
+        <v-progress-linear v-if="inProgress" indeterminate/>
+        <v-btn v-if="isMore && !inProgress" @click="more">More</v-btn>
         <template v-if="error">
             <request-error :error="error" />
         </template>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-form ref="form" v-model="valid" @submit.prevent="execute">
-            <v-card>
+            <v-card flat>
                 <v-card-title>{{ title }}</v-card-title>
                 <v-card-text>
                     <v-jsonschema-form v-if="schema" :schema="schema" :model="input" :options="formOptions"/>
@@ -23,7 +23,11 @@
             </v-card>
         </v-form>
         <div v-if="currentResult">
-            <pre>{{ JSON.stringify(currentResult, null, 2) }}</pre>
+            <v-card class="my-4">
+                <v-card-text>
+                    <pre>{{ JSON.stringify(currentResult, null, 2) }}</pre>
+                </v-card-text>
+            </v-card>
         </div>
         <request-error v-if="requestError" :error="requestError" />
     </div>

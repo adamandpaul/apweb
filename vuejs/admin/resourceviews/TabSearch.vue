@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-form ref="form" v-model="valid" @submit.prevent="search">
-            <v-card>
+            <v-card flat>
                 <v-card-title>Search</v-card-title>
                 <v-card-text>
                     <v-jsonschema-form v-if="schema" :schema="schema" :model="query" :options="formOptions"/>

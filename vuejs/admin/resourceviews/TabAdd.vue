@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-form ref="form" v-model="valid" @submit.prevent="add" :update-key="updateKey">
-            <v-card>
+            <v-card flat>
                 <v-card-title>{{ this.schema.title }}</v-card-title>
                 <v-card-text>
                     <v-jsonschema-form v-if="schema" :schema="schema" :model="value" :options="formOptions" @error="showError" />

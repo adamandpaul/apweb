@@ -65,7 +65,7 @@ export default {
     background: #f5f5f5
 
     .container
-        padding: 32px 0
+        padding: 56px 0 32px 0
         display: flex
         align-items: center
 

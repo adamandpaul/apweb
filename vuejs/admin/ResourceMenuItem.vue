@@ -1,10 +1,13 @@
 <template>
-    <router-link
+    <v-btn
         class="router-link"
-        :to="routeTo">
-        <span class="arrow">› </span>
-        <span>{{ title }}</span>
-    </router-link>
+        :to="routeTo"
+        elevation="0"
+        :color="color"
+        :dark="dark"
+        >
+        {{ title }}
+    </v-btn>
 </template>
 <script>
 
@@ -14,11 +17,22 @@ export default {
 
     props: {
         item: Object,
+        dark: {
+            type: Boolean,
+            default: false,
+        }
     },
 
     computed: {
         title() { return this.item.title },
         routeTo() { return this.pathToString(this.item.path) },
+        color() {
+            if (this.dark) {
+                return "blue-grey"
+            } else {
+                return "blue-grey lighten-5"
+            }
+        }
     },
 
     methods: {
@@ -29,23 +43,7 @@ export default {
 <style lang="sass" scoped>
 
 .router-link
-    box-sizing: border-box
-    background: #021f54
-    border: thin solid #0c59cf
-    border-radius: 2px
-    color: white
-    outline: none
-
-    margin: 8px
-    padding: 8px
-    line-height: 28px
-
-    text-decoration: none
-
-    &:hover
-        border-color: white
-
-.arrow
-    font-weight: 900
+    margin-right: 8px
+    margin-top: 6px
 
 </style>

@@ -98,6 +98,7 @@ export default {
                 return null
             }
         },
+        csrf_token: s => s.csrf_token,
         authenticated: s => s.authenticated,
         roles: s => s.roles,
         apiError: s => s.error,

@@ -70,21 +70,21 @@ export default {
 
 .menu
     background: black
-    padding: 8px 16px
+    padding-bottom: 24px
 
 .container
     position: relative
     margin: 0 auto
+    padding: 0
 
 .row
-    margin: 0 -8px
     display: flex
     flex-wrap: wrap
 
     &>*
         flex-basis: content
         flex-grow: 1
-        margin: 8px 8px
+        margin-left: 12px
 
         &.page-title
             flex-grow: 10
@@ -95,6 +95,7 @@ export default {
     flex-basis: 200px
 
 .zoom-toggle
+    margin-top: 24px
     width: 64px
     height: 64px
     flex-basis: 64px

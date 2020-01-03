@@ -13,10 +13,12 @@
         <ResourceMenu
             v-if="zoom"
             :items="resourceMenuItems"
+            dark
             />
         <ResourceLinkMenu
             v-if="zoom"
             :items="resourceLinkItems"
+            dark
             />
     </div>
 </template>
@@ -67,6 +69,7 @@ export default {
 
 
 .node-link
+    margin-top: 24px
     background: #3d8af7
     color: white
     border: thin solid #3d8af7

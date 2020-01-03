@@ -1,16 +1,16 @@
 <template>
     <div>
-
+        <ResourceMenu
+            :items="namedResources" />
+        <ResourceLinkMenu
+            :items="links" />
         <v-data-table
+            class="data-table"
             :headers="summaryHeaders"
             :hide-default-header="true"
             :items="summary"
             :items-per-page="5"
           ></v-data-table>
-        <ResourceMenu
-            :items="namedResources" />
-        <ResourceLinkMenu
-            :items="links" />
     </div>
 </template>
 <script>
@@ -66,5 +66,8 @@ export default {
 
 .description
     font-weight: bold
+
+.data-table
+    margin-top: 32px
 
 </style>

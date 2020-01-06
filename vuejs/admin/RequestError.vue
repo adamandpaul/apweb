@@ -32,7 +32,6 @@ export default {
 
     props: {
         error: {
-            type: Object,
             defatul: {},
         },
     },

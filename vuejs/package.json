@@ -9,14 +9,14 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "core-js": "^2.6.5",
-    "axios": "^0.18.0",
-    "vuetify": "^2.1.16",
-    "material-design-icons-iconfont": "^3.0.3",
+    "@koumoul/vuetify-jsonschema-form": "^0.36.0",
     "@mdi/font": "*",
+    "@mdi/js": "^4.7.95",
+    "axios": "^0.18.0",
+    "core-js": "^2.6.5",
+    "material-design-icons-iconfont": "^3.0.3",
     "roboto-fontface": "*",
-    "@koumoul/vuetify-jsonschema-form": "^0.36.0"
+    "vuetify": "^2.1.16"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

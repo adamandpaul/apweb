@@ -5,7 +5,7 @@
             <v-btn-toggle class="tab-buttons" :value="selectedView" @change="change" rounded>
                 <v-btn v-for="(view, idx) in tabViews" :key="idx" :value="view.name">{{ view.title }}</v-btn>
 
-                <v-btn v-if="secondaryViews.length > 0" value="secondaryViews">More...</v-btn>
+                <v-btn v-if="secondaryViews.length > 0" value="secondaryViews"><v-icon>menu</v-icon></v-btn>
 
             </v-btn-toggle>
         </div>

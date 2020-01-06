@@ -45,7 +45,7 @@ export default {
             this.error = null
             this.loading = true
             this.data = null
-            if (this.view.api === null) {
+            if (this.view.api !== "" && !this.view.api) {
                 this.loading = false
                 return
             }

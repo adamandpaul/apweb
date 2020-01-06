@@ -2,7 +2,12 @@
     <div>
         <v-card outlined>
             <v-card-text>
-                <router-link :to="routeTo" >{{ tile.title }}</router-link>
+                <router-link :to="routeTo" >
+                    <div class="row">
+                        <img v-if="tile.thumbnail_url" :src="tile.thumbnail_url" />
+                        <div>{{ tile.title }}</div>
+                    </div>
+                </router-link>
             </v-card-text>
         </v-card>
     </div>
@@ -26,3 +31,11 @@ export default {
 }
 
 </script>
+
+<style lang="sass" scoped>
+
+img
+    float: left
+    width: 64px
+
+</style>

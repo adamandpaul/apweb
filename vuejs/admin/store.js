@@ -15,7 +15,7 @@ function isPathsEqual(p1, p2) {
         return false;
     for (var i = 0, l=p1.length; i < l; i++) {
         if (p1[i] != p2[i]) {
-            return False
+            return false
         }
     }       
     return true;
@@ -106,7 +106,7 @@ export default {
             })
         },
         reloadResource(context, opts) {
-            context.commit('reloadingStart')
+            context.commit('reloadStart')
             context.getters.resourceApi.get("@@admin")
             .then((resp) => {
                 context.commit("loadingComplete", resp.data.data)

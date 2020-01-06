@@ -6,7 +6,7 @@
         <div v-for="(page, pageIdx) in pages" :key="pageIdx">
             <hr v-if="pageIdx > 0"/>
             <div class="item" v-for="(item, itemIdx) in page" :key="itemIdx">
-                <component :is="item.ui || 'resource-tile'" :tile="item" />
+                <resource-tile :tile="item" />
             </div>
         </div>
         <v-progress-linear v-if="inProgress" indeterminate/>

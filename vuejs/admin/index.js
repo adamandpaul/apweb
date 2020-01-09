@@ -1,6 +1,15 @@
 // Vuew + dependencies
 import Vue from 'vue'
 import Vuetify, {
+    VApp,
+    VProgressLinear,
+    VBtnToggle,
+    VBtn,
+    VTabsItems,
+    VTabItem,
+    VForm,
+    VCardTitle,
+    VDataTable,
     VFlex,
     VCard,
     VSubheader,
@@ -34,6 +43,15 @@ Vue.config.productionTip = false
 Vue.use(Vuetify, {
     iconfont: 'md',
     components: {
+        VApp,
+        VProgressLinear,
+        VBtnToggle,
+        VBtn,
+        VTabsItems,
+        VTabItem,
+        VForm,
+        VCardTitle,
+        VDataTable,
         VFlex,
         VCard,
         VSubheader,

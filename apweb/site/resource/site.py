@@ -48,7 +48,10 @@ class Site(contextplus.Site):
             def __init__(self, **kw):
                 super().__init__(transaction_manager=tm, **kw)
 
-        mailer = MailerTmp.from_settings(settings, "mail.")
+        if settings.get("is_develop") == 'true':  # WARN Value is a string, not boolean
+            mailer = pyramid_mailer.mailer.DebugMailer('mail')  # Store mail in 'mail' dir in CWD
+        else:
+            mailer = MailerTmp.from_settings(settings, "mail.")
 
         return cls(
             settings=settings,

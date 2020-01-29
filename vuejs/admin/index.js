@@ -9,6 +9,8 @@ import Vuetify, {
     VTabItem,
     VForm,
     VCardTitle,
+    VCardText,
+    VCardActions,
     VDataTable,
     VFlex,
     VCard,
@@ -19,6 +21,9 @@ import Vuetify, {
     VTooltip,
     VIcon,
     VList,
+    VListItem,
+    VListItemTitle,
+    VSpacer,
     VMenu,
 } from 'vuetify/lib'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -53,6 +58,8 @@ Vue.use(Vuetify, {
         VTabItem,
         VForm,
         VCardTitle,
+        VCardText,
+        VCardActions,
         VDataTable,
         VFlex,
         VCard,
@@ -63,6 +70,9 @@ Vue.use(Vuetify, {
         VTooltip,
         VIcon,
         VList,
+        VListItem,
+        VListItemTitle,
+        VSpacer,
         VMenu,
     },
 })

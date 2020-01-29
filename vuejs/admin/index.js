@@ -28,6 +28,7 @@ import Vuetify, {
     VListItemGroup,
     VListItemTitle,
     VSpacer,
+    VSelect,
     VMenu,
 } from 'vuetify/lib'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -81,6 +82,7 @@ Vue.use(Vuetify, {
         VListItemGroup,
         VListItemTitle,
         VSpacer,
+        VSelect,
         VMenu,
     },
 })

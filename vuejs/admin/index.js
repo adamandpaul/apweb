@@ -18,6 +18,8 @@ import Vuetify, {
     VTextField,
     VTooltip,
     VIcon,
+    VList,
+    VMenu,
 } from 'vuetify/lib'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
@@ -60,6 +62,8 @@ Vue.use(Vuetify, {
         VTextField,
         VTooltip,
         VIcon,
+        VList,
+        VMenu,
     },
 })
 const vuetify = new Vuetify({})

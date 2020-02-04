@@ -4,6 +4,7 @@ from datetime import date
 from datetime import datetime
 from decimal import Decimal
 from pyramid.renderers import get_renderer
+from pyramid.view import render_view_to_response
 from uuid import UUID
 
 import os
@@ -44,11 +45,12 @@ def register_template_layer(config, resource_spec_dir, prefix=""):
             config.registry["templates"][prefix + template_key] = template_spec
 
 
-def inject_templates(renderer_globals):
+def inject_template_vars(renderer_globals):
     if renderer_globals.get("request", None) is not None:
         renderer_globals["templates"] = TemplateLoader(
             renderer_globals["request"].registry
         )
+    renderer_globals["render_view_to_response"] = render_view_to_response
 
 
 def inject_tools(render_globals):
@@ -59,7 +61,7 @@ def configure_template_layers(config):
     if getattr(config, "register_template_layer", None) is None:
         config.registry["templates"] = {}
         config.add_directive("register_template_layer", register_template_layer)
-        config.add_subscriber(inject_templates, pyramid.events.BeforeRender)
+        config.add_subscriber(inject_template_vars, pyramid.events.BeforeRender)
         config.add_subscriber(inject_tools, pyramid.events.BeforeRender)
 
 

@@ -73,7 +73,7 @@ export default {
             }
             this.inProgress = true
             this.requestError = null
-            this.resourceApi.post('', this.value)
+            this.resourceApi.post('@@admin-add', this.value)
                 .then(this.handleResponse)
                 .catch(this.handleError)
         },

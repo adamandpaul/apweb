@@ -9,7 +9,7 @@
             :headers="summaryHeaders"
             :hide-default-header="true"
             :items="summary"
-            :items-per-page="5"
+            :items-per-page="10"
           ></v-data-table>
     </div>
 </template>

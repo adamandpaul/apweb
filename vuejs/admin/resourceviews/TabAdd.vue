@@ -33,8 +33,10 @@ import {mapGetters} from 'vuex'
 export default {
 
     props: {
-        data: [Object, null],
-        options: [Object, null],
+        data: {type: Object, default: null},
+        options: {type: Object, default: null},
+        resourceURL: {type: String, default: null},
+        resourceApi: {default: null},
     },
 
     data() {
@@ -54,9 +56,6 @@ export default {
         }
     },
     computed: {
-        ...mapGetters([
-            'resourceApi',
-        ]),
         schema() {
             return this.data || this.options.schema
         }

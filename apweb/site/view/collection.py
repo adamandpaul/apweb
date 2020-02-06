@@ -76,10 +76,13 @@ class CollectionView(ResourceView):
         request_method="GET",
     )
     def view_schema_search(self):
-        schema = self.schema_search
-        if schema is None:
+        schema_search = self.schema_search
+        if schema_search is None:
             raise HTTPNotFound()
-        return self.schema_search
+        return {
+            "schema_search": schema_search,
+            "schema_add": self.schema_add,
+        }
 
     @reify
     def admin_views(self):
@@ -117,12 +120,14 @@ class CollectionView(ResourceView):
         # construct critera - we only support filter_by criteria
         # other criteria can be consumed by decendent views
         criteria = criteria or []
+        supported_filter_types = ['filter_by', 'sub_string']
         for key, value in kwargs.items():
-            if key.startswith('filter_by:'):
+            key_parts = key.split(':')
+            if len(key_parts) > 1 and key_parts[0] in supported_filter_types:
                 if value:
                     field = key.split(':', 1)[1]
                     criteria.append({
-                        'type': 'filter_by',
+                        'type': key_parts[0],
                         'field': field,
                         'value': value,
                     })

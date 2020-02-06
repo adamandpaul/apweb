@@ -6,7 +6,7 @@
         <div v-if="reloading">Reloading...</div>
         <div v-if="loading">Loading...</div>
         <div v-else>
-            <component v-show="!reloading" :is="view.ui" :data="data" :options="view.options" />
+            <component v-show="!reloading" :is="view.ui" :data="data" :options="options" :resourceUrl="_resourceURL" :resourceApi="resourceApi" />
         </div>
     </div>
 </template>
@@ -18,7 +18,8 @@ import {resolve} from 'url'
 export default {
 
     props: {
-        viewName: String,
+        view: Object,
+        resourceURL: [String, null],
     },
 
     data() {
@@ -31,13 +32,15 @@ export default {
     },
 
     computed: {
-        ...mapGetters([
-            'viewsByName',
-            'resourceApi',
-        ]),
-        view() {
-            return this.viewsByName[this.viewName]
+        _resourceURL() {
+            return this.resourceURL || this.$store.getters.resourceURL
         },
+        resourceApi() {
+            return this.$store.getters.resourceApiForResourceURL(this._resourceURL)
+        },
+        options() {
+            return this.view.options || {}
+        }
     },
 
     methods: {

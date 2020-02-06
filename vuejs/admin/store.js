@@ -151,10 +151,16 @@ export default {
             return rootGetters.apiError || rootGetters.loginError || state.error
         },
 
-        resourceApi(state, getters, rootState, rootGetters) {
-            const options = {...rootGetters.apiAxiosOptions}
-            options.baseURL = options.baseURL + getters.resourceURL
-            return axios.create(options)
+        resourceApiForResourceURL(state, getters, rootState, rootGetters) {
+            return function(resourceURL) {
+                const options = {...rootGetters.apiAxiosOptions}
+                options.baseURL = options.baseURL + resourceURL
+                return axios.create(options)
+            }
+        },
+
+        resourceApi(state, getters) {
+            return getters.resourceApiForResourceURL(getters.resourceURL)
         },
 
         resourceURL(state) {

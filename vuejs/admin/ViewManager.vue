@@ -13,13 +13,13 @@
         <div class="container">
             <v-tabs-items class="tab-container" :value="selectedView">
                 <v-tab-item v-for="(view, idx) in tabViews" :key="idx" :value="view.name">
-                    <AdminView :viewName="view.name" />
+                    <AdminView :view="view" />
                 </v-tab-item>
                 <v-tab-item v-if="secondaryViews.length > 0" value="secondaryViews">
                     <div v-for="(view, idx) in secondaryViews" :key="idx">
                         <hr v-if="idx != 0" />
                         <div class="title">{{ view.title }}</div>
-                        <AdminView :viewName="view.name" />
+                        <AdminView :view="view" />
                     </div>
                 </v-tab-item>
             </v-tabs-items>

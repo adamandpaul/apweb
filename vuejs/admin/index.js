@@ -34,6 +34,11 @@ import Vuetify, {
     VSpacer,
     VSelect,
     VMenu,
+    VExpansionPanels,
+    VExpansionPanel,
+    VExpansionPanelHeader,
+    VExpansionPanelContent,
+    VFileInput,
 } from 'vuetify/lib'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
@@ -92,6 +97,11 @@ Vue.use(Vuetify, {
         VSpacer,
         VSelect,
         VMenu,
+        VExpansionPanels,
+        VExpansionPanel,
+        VExpansionPanelHeader,
+        VExpansionPanelContent,
+        VFileInput,
     },
 })
 const vuetify = new Vuetify({})

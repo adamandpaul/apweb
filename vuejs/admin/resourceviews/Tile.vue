@@ -1,14 +1,34 @@
 <template>
     <div>
         <v-card outlined>
-            <v-card-text>
-                <router-link :to="routeTo" >
-                    <div class="row">
-                        <img v-if="tile.thumbnail_url" :src="tile.thumbnail_url" />
-                        <div>{{ tile.title }}</div>
-                    </div>
-                </router-link>
-            </v-card-text>
+
+            <slot name="start" v-bind:resource="tile"></slot>
+
+            <v-list-item three-line>
+                
+                <slot name="left" v-bind:resource="tile"></slot>
+
+                <v-list-item-avatar v-if="tile.thumbnail_url" tile height="128" width="128">
+                    <v-img :src="tile.thumbnail_url" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                    <div class="overline mb-4">{{ tile.meta_title }}</div>
+                    <v-list-item-title>{{ tile.title }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ tile.description }}</v-list-item-subtitle>
+                </v-list-item-content>
+
+                <v-list-item-action v-if="!newTab" class="right-action">
+                    <v-btn text class="open primary right-action-btn" :to="routeTo"><v-icon>mdi-arrow-right</v-icon></v-btn>
+                </v-list-item-action>
+
+                <v-list-item-action v-if="newTab" class="right-action">
+                    <v-btn text class="open right-action-btn" target="_blank" :to="routeTo"><v-icon>open_in_new</v-icon></v-btn>
+                </v-list-item-action>
+                
+            </v-list-item>
+
+            <slot name="end" v-bind:resource="tile"></slot>
+
         </v-card>
     </div>
 </template>
@@ -19,6 +39,7 @@ import utils from '../../utils'
 export default {
     props: {
         tile: Object,
+        newTab: {type: Boolean, default: false},
     },
     computed: {
         routeTo() {
@@ -34,8 +55,13 @@ export default {
 
 <style lang="sass" scoped>
 
-img
-    float: left
-    width: 64px
+.right-action
+    align-self: stretch
+    .right-action-btn
+        height: auto
+        align-self: stretch
+    
+
+
 
 </style>

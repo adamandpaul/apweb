@@ -6,7 +6,11 @@
         <div v-for="(page, pageIdx) in pages" :key="pageIdx">
             <hr v-if="pageIdx > 0"/>
             <div class="item" v-for="(item, itemIdx) in page" :key="itemIdx">
-                <resource-tile :tile="item" />
+                <resource-tile :tile="item" :newTab="tileNewTab" >
+                    <template v-slot:start="{resource}"><slot name="tile-start" :resource="resource"></slot></template>
+                    <template v-slot:left="{resource}"><slot name="tile-left" :resource="resource"></slot></template>
+                    <template v-slot:end="{resource}"><slot name="tile-end" :resource="resource"></slot></template>
+                </resource-tile>
             </div>
         </div>
         <v-progress-linear v-if="inProgress" indeterminate/>
@@ -26,7 +30,8 @@ export default {
 
     props: {
         query: {type: Object, default: null},
-        resourceURL: {type: String, default: null}
+        resourceURL: {type: String, default: null},
+        tileNewTab: {},
     },
 
     data() {

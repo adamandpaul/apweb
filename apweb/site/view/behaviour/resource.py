@@ -48,6 +48,11 @@ class ResourceBehaviour(object):
         return self.context.name
 
     @reify
+    def meta_title(self):
+        """The meta title of the object"""
+        return self.context.get_meta_title()
+
+    @reify
     def title(self):
         return self.context.title
 

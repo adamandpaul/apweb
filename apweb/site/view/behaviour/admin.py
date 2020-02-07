@@ -108,7 +108,10 @@ class AdminBehaviour(object):
     @reify
     def admin_tile(self):
         return {
+            "name": self.name,
+            "meta_title": self.meta_title,
             "title": self.title,
+            "description": self.description,
             "path": self.context.path_names,
             "thumbnail_url": self.admin_thumbnail_url,
         }

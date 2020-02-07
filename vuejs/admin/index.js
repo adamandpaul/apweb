@@ -39,6 +39,7 @@ import Vuetify, {
     VExpansionPanelHeader,
     VExpansionPanelContent,
     VFileInput,
+    VProgressCircular,
 } from 'vuetify/lib'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
@@ -102,6 +103,7 @@ Vue.use(Vuetify, {
         VExpansionPanelHeader,
         VExpansionPanelContent,
         VFileInput,
+        VProgressCircular,
     },
 })
 const vuetify = new Vuetify({})

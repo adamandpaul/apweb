@@ -84,6 +84,23 @@ class CollectionView(ResourceView):
             "schema_add": self.schema_add,
         }
 
+    @view_config(
+        name="admin-browse",
+        route_name="api",
+        renderer="jsend",
+        permission="admin-access",
+        request_method="GET",
+    )
+    def view_admin_browse(self):
+        schema_search = self.schema_search
+        if schema_search is None:
+            raise HTTPNotFound()
+        return {
+            "schema_search": schema_search,
+            "schema_add": self.schema_add,
+            "title": self.title,
+        }
+
     @reify
     def admin_views(self):
         views = {**super().admin_views}

@@ -78,3 +78,14 @@ def context_reify(name, default=_MISSING):
         return value
 
     return prop
+
+
+def map_context_reify(*names):
+    """Map a set of reify property attributes into a class definition
+    for which the return value is the attribue from the context
+    """
+    def wrapper(klass):
+        for name in names:
+            setattr(klass, name, context_reify(name))
+        return klass
+    return wrapper

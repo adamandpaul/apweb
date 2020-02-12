@@ -99,10 +99,6 @@ class AdminBehaviour(object):
         summary = []
         if self.name is not None:
             summary.append({"title": "URL Name", "value": self.name})
-        if self.title is not None:
-            summary.append({"title": "Title", "value": self.title})
-        if self.description is not None:
-            summary.append({"title": "Description", "value": self.description})
         return summary
 
     @reify

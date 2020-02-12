@@ -40,7 +40,7 @@ setup(
         'pyjwt',
         'bcrypt',
 
-        'contextplus>1.9',
+        'contextplus',
 
         'psycopg2-binary',
     ],

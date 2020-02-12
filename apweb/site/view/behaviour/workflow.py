@@ -1,10 +1,10 @@
 # -*- coding:utf-8 -*-
-from apweb.utils import context_property
+from apweb.utils import context_reify
 
 
 class WorkflowBehaviour(object):
 
-    workflow_state = context_property("workflow_state", reify=True)
+    workflow_state = context_reify("workflow_state", reify=True)
 
     @reify
     def workflow_transitions(self):

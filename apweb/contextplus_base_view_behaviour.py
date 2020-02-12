@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from apweb.utils import context_property
+from apweb.utils import context_reify
 from pyramid.decorator import reify
 from pyramid.renderers import null_renderer
 from pyramid.view import view_defaults
@@ -13,9 +13,9 @@ class ContextPlusBaseViewBehaviour(object):
         self.context = context
         self.request = request
 
-    name = context_property("name", reify=True)
-    title = context_property("title", reify=True)
-    description = context_property("description", reify=True)
+    name = context_reify("name", reify=True)
+    title = context_reify("title", reify=True)
+    description = context_reify("description", reify=True)
 
     @reify
     def meta_title(self):

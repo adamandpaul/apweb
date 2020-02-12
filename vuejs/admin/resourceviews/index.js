@@ -9,6 +9,7 @@ import Tile from './Tile.vue'
 import CollectionBrowse from './CollectionBrowse.vue'
 import CollectionSearchResults from './CollectionSearchResults.vue'
 import CollectionAdd from './CollectionAdd.vue'
+import TabUserRoles from './TabUserRoles.vue'
 
 export default {
     install(Vue) {
@@ -22,5 +23,7 @@ export default {
         Vue.component('collection-browse', CollectionBrowse)
         Vue.component('collection-search-results', CollectionSearchResults)
         Vue.component('collection-add', CollectionAdd)
+
+        Vue.component('resource-tab-user-roles', TabUserRoles)
     },
 }

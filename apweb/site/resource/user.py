@@ -28,17 +28,21 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
     def __acl__(self):
         return [
             (Allow, "user:{self.user_uuid}", ["view", "manage"]),
-            (Allow, "role:system-owner", ["view", "admin-access", "debug"]),
+            (Allow, "role:system-owner", ["view", "admin-access", "admin-workflow", "admin-edit", "debug"]),
             DENY_ALL,
         ]
 
     @property
     def title(self):
-        return f"User: {self.user_email}"
+        return self.user_email
 
     @property
     def description(self):
-        return f"{self.workflow_state} user. User UUID: {self.user_uuid}"
+        value = self.workflow_state.title() + " user"
+        roles = ", ".join(self.assigned_roles)
+        if roles:
+            value += f' ({roles})'
+        return value
 
     record_type = orm.User
     id_fields = ("user_uuid",)
@@ -134,8 +138,8 @@ class UserCollection(SQLAlchemyCollection):
     ]
 
     child_type = User
-    title = "Users"
-    description = "Users are identifiable entities by an email address and have capabilites to login"
+    title = "User Logins"
+    description = "Users logins are entities identifiable by an email."
 
     def name_from_child(self, child):
         """Return the travseral name for the child"""
@@ -183,3 +187,12 @@ class UserCollection(SQLAlchemyCollection):
     def get_me(self):
         """Get the current user"""
         return self.acquire.get_current_user()
+
+    @property
+    def roles(self):
+        query = (
+            self.acquire.db_session.query(orm.RoleAssignment.role)
+            .group_by(orm.RoleAssignment.role)
+            .order_by(orm.RoleAssignment.role)
+        )
+        return list(t[0] for t in query)

@@ -3,6 +3,7 @@
 from numbers import Number
 
 import re
+import pyramid.decorator
 import urllib.parse
 
 
@@ -56,3 +57,43 @@ def yesish(value, default=None):
             return False
         raise TypeError("Can not determin a yesish value")
     raise TypeError("Can not determin a yesish value")
+
+
+def context_property(name, reify=False):
+    """A read only context property proxy for pyramid views
+
+    Example::
+        class Obj(...):
+            foo = context_propery('foo')
+    """
+
+    if reify:
+        property_wrapper = pyramid.decorator.reify
+    else:
+        property_wrapper = property
+
+    @property_wrapper
+    def prop(self):
+        return getattr(self.context, name)
+
+    return prop
+
+
+def request_property(name, reify=False):
+    """A read only request property proxy for pyramid views
+
+    Example::
+        class Obj(...):
+            foo = request_propery('foo')
+    """
+
+    if reify:
+        property_wrapper = pyramid.decorator.reify
+    else:
+        property_wrapper = property
+
+    @property_wrapper
+    def prop(self):
+        return getattr(self.request, name)
+
+    return prop

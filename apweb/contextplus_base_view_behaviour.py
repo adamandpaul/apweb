@@ -13,9 +13,9 @@ class ContextPlusBaseViewBehaviour(object):
         self.context = context
         self.request = request
 
-    name = context_reify("name", reify=True)
-    title = context_reify("title", reify=True)
-    description = context_reify("description", reify=True)
+    name = context_reify("name")
+    title = context_reify("title")
+    description = context_reify("description")
 
     @reify
     def meta_title(self):

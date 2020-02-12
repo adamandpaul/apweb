@@ -1,10 +1,12 @@
 # -*- coding:utf-8 -*-
+
 from apweb.utils import context_reify
+from pyramid.decorator import reify
 
 
 class WorkflowBehaviour(object):
 
-    workflow_state = context_reify("workflow_state", reify=True)
+    workflow_state = context_reify("workflow_state", None)
 
     @reify
     def workflow_transitions(self):

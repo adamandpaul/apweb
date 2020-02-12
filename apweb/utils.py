@@ -12,6 +12,9 @@ PATTERN_API_DOMAIN = re.compile(
 )
 
 
+_MISSING = object()
+
+
 def normalize_query_string(query_string, ignore_prefixes=[]):
     """Normalize a query string by sorting it's key value pairs, also optionally
     filtering out key's which are prefixed by any values in ignore prefixes
@@ -59,7 +62,7 @@ def yesish(value, default=None):
     raise TypeError("Can not determin a yesish value")
 
 
-def context_reify(name):
+def context_reify(name, default=_MISSING):
     """A read only context property proxy for pyramid views
 
     Example::
@@ -69,6 +72,9 @@ def context_reify(name):
 
     @reify
     def prop(self):
-        return getattr(self.context, name)
+        value = getattr(self.context, name, default)
+        if value is _MISSING:
+            raise AttributeError(name)
+        return value
 
     return prop

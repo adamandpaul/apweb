@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
 from .behaviour import AdminBehaviour
-from .behaviour import ResourceBehaviour
 from .behaviour import WorkflowBehaviour
 from apweb.contextplus_base_view_behaviour import ContextPlusBaseViewBehaviour
 from pyramid.view import view_defaults

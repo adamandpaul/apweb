@@ -1,5 +1,10 @@
 <template>
     <div>
+        <ResourceMenu
+            :items="namedResources" />
+        <ResourceLinkMenu
+            :items="links" />
+        
         <v-form ref="form" v-model="valid" @submit.prevent="search">
             <v-card flat>
                 <v-card-title>Search</v-card-title>
@@ -30,11 +35,17 @@
 <script>
 
 import SearchResults from './SearchResults.vue'
+import ResourceMenu from '../ResourceMenu.vue'
+import ResourceLinkMenu from '../ResourceLinkMenu.vue'
+import {mapGetters} from 'vuex'
+
 
 export default {
 
     components: {
         SearchResults,
+        ResourceMenu,
+        ResourceLinkMenu,
     },
 
     props: {
@@ -61,6 +72,10 @@ export default {
     },
 
     computed: {
+        ...mapGetters([
+            'namedResources',
+            'links',
+        ]),
         schema_search() {
             return this.data["schema_search"] || this.options["schema_search"]
         },

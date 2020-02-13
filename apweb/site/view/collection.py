@@ -104,7 +104,7 @@ class CollectionView(ResourceView):
     @reify
     def admin_views(self):
         views = {**super().admin_views}
-        if self.schema_add is not None and self.request.has_permission("admin-add"):
+        if self.schema_add is not None and self.request.has_permission("admin-add") and not self.schema_search:
             views["add"] = {
                 "sort_key": 60,
                 "title": "Add",

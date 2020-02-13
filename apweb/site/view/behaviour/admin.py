@@ -80,14 +80,17 @@ class AdminBehaviour(object):
     @reify
     def admin_views(self):
         """Dictionary and configuration tabed views on an object"""
-        return {
-            "info": {
-                "sort_key": 0,
-                "title": "Overview",
-                "api": "@@admin-overview",
-                "ui": "resource-tab-overview",
+        if self.admin_summary:
+            return {
+                "info": {
+                    "sort_key": 0,
+                    "title": "Overview",
+                    "api": "@@admin-overview",
+                    "ui": "resource-tab-overview",
+                }
             }
-        }
+        else:
+            return {}
 
     @reify
     def admin_thumbnail_url(self):
@@ -96,10 +99,7 @@ class AdminBehaviour(object):
     @reify
     def admin_summary(self):
         """Return a list of summary information"""
-        summary = []
-        if self.name is not None:
-            summary.append({"title": "URL Name", "value": self.name})
-        return summary
+        return []
 
     @reify
     def admin_tile(self):

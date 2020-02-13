@@ -52,7 +52,7 @@ def yesish(value, default=None):
         return bool(value)
     if isinstance(value, str):
         value = value.strip().lower()
-        if value == "":
+        if value in ("", "null", "none"):
             return default
         if value in ("y", "yes", "t", "true", "1"):
             return True

@@ -12,7 +12,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text @click="clear">Clear Form</v-btn>
-                    <v-btn :loading="inProgress" color="primary" @click="search">Search</v-btn>
+                    <v-btn color="primary" @click="search">Search</v-btn>
                     <v-btn class="btn-add-new" v-if="schema_add" color="secondary" @click="addNew">Add New Item</v-btn>
                 </v-card-actions>
             </v-card>
@@ -41,7 +41,7 @@ export default {
         data: {type: Object, default: null},
         options: {type: Object, default: null},
         resourceURL: {type: String, default: null},
-        resourceApi: {type: Object, default: null},
+        resourceApi: {type: Function, default: null},
     },
 
     data() {

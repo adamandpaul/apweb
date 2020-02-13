@@ -5,8 +5,12 @@
             <slot name="start" v-bind:resource="tile"></slot>
 
             <v-list-item three-line>
-                
-                <slot name="left" v-bind:resource="tile"></slot>
+
+                <slot name="left" v-bind:resource="tile">
+                    <v-list-item-action v-if="!newTab" class="left-action">
+                        <v-btn text class="open primary right-action-btn" :to="routeTo"><v-icon>mdi-arrow-right</v-icon></v-btn>
+                    </v-list-item-action> 
+                </slot>
 
                 <v-list-item-avatar v-if="tile.thumbnail_url" tile height="128" width="128">
                     <v-img :src="tile.thumbnail_url" />
@@ -17,9 +21,7 @@
                     <v-list-item-subtitle>{{ tile.description }}</v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-list-item-action v-if="!newTab" class="right-action">
-                    <v-btn text class="open primary right-action-btn" :to="routeTo"><v-icon>mdi-arrow-right</v-icon></v-btn>
-                </v-list-item-action>
+
 
                 <v-list-item-action v-if="newTab" class="right-action">
                     <v-btn text class="open right-action-btn" target="_blank" :to="routeTo"><v-icon>open_in_new</v-icon></v-btn>
@@ -55,7 +57,8 @@ export default {
 
 <style lang="sass" scoped>
 
-.right-action
+.right-action,
+.left-action
     align-self: stretch
     .right-action-btn
         height: auto

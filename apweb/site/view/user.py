@@ -14,13 +14,14 @@ from venusian import lift
 @lift()
 @map_context_reify(
     "assigned_roles",
+    "user_email",
+    "user_uuid",
 )
 class UserView(ResourceView):
 
     @reify
     def manage(self):
-        u = self.context
-        return {"user_email": u.user_email, "user_uuid": u.user_uuid}
+        return {"user_email": self.user_email, "user_uuid": self.user_uuid}
 
     @reify
     def admin_views(self):

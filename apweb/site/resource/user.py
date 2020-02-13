@@ -27,7 +27,7 @@ class User(SQLAlchemyItem, WorkflowBehaviour):
 
     def __acl__(self):
         return [
-            (Allow, "user:{self.user_uuid}", ["view", "manage"]),
+            (Allow, f"user_uuid:{self.user_uuid}", ["view", "manage"]),
             (Allow, "role:system-owner", ["view", "admin-access", "admin-workflow", "admin-edit", "debug"]),
             DENY_ALL,
         ]

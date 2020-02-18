@@ -3,15 +3,23 @@
 
         <div class="tab-buttons-container">
             <v-btn-toggle class="tab-buttons" :value="selectedView" @change="change" rounded>
+                <v-btn value="default"><v-icon>{{ mdiCubeOutline }}</v-icon></v-btn>
                 <v-btn v-for="(view, idx) in tabViews" :key="idx" :value="view.name">{{ view.title }}</v-btn>
-
-                <v-btn v-if="secondaryViews.length > 0" value="secondaryViews"><v-icon>menu</v-icon></v-btn>
-
+                <v-btn v-if="secondaryViews.length > 0" value="secondaryViews"><v-icon>{{ mdiDotsVertical }}</v-icon></v-btn>
             </v-btn-toggle>
         </div>
 
         <div class="container">
             <v-tabs-items class="tab-container" :value="selectedView">
+                <v-tab-item value="default">
+                    <div v-for="(view, idx) in defaultViews" :key="idx">
+                        <ResourceMenu
+                            :items="namedResources" />
+                        <ResourceLinkMenu
+                            :items="links" />
+                        <AdminView :view="view" />
+                    </div>
+                </v-tab-item>
                 <v-tab-item v-for="(view, idx) in tabViews" :key="idx" :value="view.name">
                     <AdminView :view="view" />
                 </v-tab-item>
@@ -31,23 +39,48 @@
 
 import AdminView from './View.vue'
 import {mapGetters} from 'vuex'
+import { mdiCubeOutline } from '@mdi/js';
+import { mdiDotsVertical } from '@mdi/js';
+import ResourceMenu from './ResourceMenu.vue'
+import ResourceLinkMenu from './ResourceLinkMenu.vue'
 
 export default {
 
+    data() {
+      return {
+          mdiCubeOutline,
+          mdiDotsVertical,
+      }  
+    },
+
     components: {
         AdminView,
+        ResourceMenu,
+        ResourceLinkMenu,
     },
 
     computed: {
         ...mapGetters([
             'selectedView',
             'viewsList',
+            'namedResources',
+            'links',
         ]),
+
+        defaultViews() {
+            const views = []
+            for (const v of this.viewsList) {
+                if (v.default) {
+                    views.push(v)
+                }
+            }
+            return views
+        },
 
         tabViews() {
             const views = []
             for (const v of this.viewsList) {
-                if (!v.secondary) {
+                if (!v.secondary && !v.default) {
                     views.push(v)
                 }
             }

@@ -86,6 +86,7 @@ class AdminBehaviour(object):
                     "sort_key": 0,
                     "title": "Overview",
                     "api": "@@admin-overview",
+                    "default": True,
                     "ui": "resource-tab-overview",
                 }
             }

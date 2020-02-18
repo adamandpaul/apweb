@@ -117,6 +117,7 @@ class CollectionView(ResourceView):
                     "sort_key": 30,
                     "title": "Search",
                     "api": "@@schema-search",
+                    "default": True,
                     "ui": "resource-tab-search",
                 }
             else:
@@ -124,6 +125,7 @@ class CollectionView(ResourceView):
                     "sort_key": 25,
                     "title": "Contents",
                     "api": None,
+                    "default": True,
                     "ui": "resource-tab-contents",
                 }
         return views

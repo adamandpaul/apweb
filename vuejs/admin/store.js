@@ -80,7 +80,7 @@ export default {
             views.sort((a, b) => (a.sort_key - b.sort_key))
             state.views = views
             if (views.length > 0 && state.view == null) {
-                state.view = views[0].name
+                state.view = "default"
             }
 
             // Save root navigation node

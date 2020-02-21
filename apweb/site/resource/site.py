@@ -77,6 +77,7 @@ class Site(contextplus.Site):
 
     application_url = settings_property("application_url")
     application_deployment = settings_property("application_deployment")
+    application_source_commit = settings_property("source_commit")
 
     @resource("users")
     def get_user_collection(self):

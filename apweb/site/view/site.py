@@ -12,6 +12,7 @@ from venusian import lift
 @map_context_reify(
     "application_url",
     "application_deployment",
+    "application_source_commit",
 )
 class SiteView(ResourceView):
 
@@ -21,4 +22,5 @@ class SiteView(ResourceView):
             *super().admin_summary,
             {"title": "Application URL", "value": self.application_url},
             {"title": "Deployment", "value": self.application_deployment},
+            {"title": "Source Commit", "value": self.application_source_commit},
         ]

@@ -12,10 +12,14 @@
         <div class="container">
             <v-tabs-items class="tab-container" :value="selectedView">
                 <v-tab-item value="default">
-                    <ResourceMenu
-                        :items="namedResources" />
-                    <ResourceLinkMenu
-                        :items="links" />
+                    <v-card class="resource-links" flat v-if="links.length > 0 || namedResources.length > 0">
+                        <v-card-text>
+                            <ResourceMenu
+                                :items="namedResources" />
+                            <ResourceLinkMenu
+                                :items="links" />
+                        </v-card-text>
+                    </v-card>
                     <div v-for="(view, idx) in defaultViews" :key="idx">
                         <AdminView :view="view" />
                     </div>
@@ -130,6 +134,10 @@ export default {
 
     background: #f5f5f5
     background-image: linear-gradient(#f5f5f5 50%, white 50%)
+
+
+.resource-links
+    margin-top: 25px
 
 
 .shrug 

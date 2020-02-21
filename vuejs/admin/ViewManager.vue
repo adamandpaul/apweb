@@ -12,13 +12,21 @@
         <div class="container">
             <v-tabs-items class="tab-container" :value="selectedView">
                 <v-tab-item value="default">
+                    <ResourceMenu
+                        :items="namedResources" />
+                    <ResourceLinkMenu
+                        :items="links" />
                     <div v-for="(view, idx) in defaultViews" :key="idx">
-                        <ResourceMenu
-                            :items="namedResources" />
-                        <ResourceLinkMenu
-                            :items="links" />
                         <AdminView :view="view" />
                     </div>
+                    <v-card v-if="defaultViews.length == 0">
+                        <v-card-title class="grey lighten-2 text-center">
+                            <span class="shrug">¯\_(ツ)_/¯</span>
+                        </v-card-title>
+                        <v-card-title class="grey--text">
+                            No default view defined for this resource
+                        </v-card-title>
+                    </v-card>
                 </v-tab-item>
                 <v-tab-item v-for="(view, idx) in tabViews" :key="idx" :value="view.name">
                     <AdminView :view="view" />
@@ -122,4 +130,11 @@ export default {
 
     background: #f5f5f5
     background-image: linear-gradient(#f5f5f5 50%, white 50%)
+
+
+.shrug 
+    display: block
+    margin: 0 auto
+    text-align: center
+    font-size: 25px
 </style>

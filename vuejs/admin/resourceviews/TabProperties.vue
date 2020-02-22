@@ -1,13 +1,14 @@
 <template>
-    <div>
+    <v-card outlined>
         <v-data-table
             class="data-table"
-            :headers="summaryHeaders"
+            :headers="tableHeaders"
             :hide-default-header="true"
-            :items="summary"
-            :items-per-page="10"
-          ></v-data-table>
-    </div>
+            :hide-default-footer="hideFooter"
+            :items="properties"
+            :items-per-page="itemsPerPage"
+        ></v-data-table>
+    </v-card>
 </template>
 <script>
 
@@ -21,9 +22,9 @@ export default {
 
     data() {
         return {
-            summaryHeaders: [
+            tableHeaders: [
                 {
-                    text: "Summary Information",
+                    text: "Key",
                     align: "left",
                     sortable: false,
                     value: "title",
@@ -39,22 +40,18 @@ export default {
     },
 
     computed: {
-        ...mapGetters([
-            'description',
-        ]),
-        summary() {
-            return this.data.summary
+        properties() {
+            return this.data.properties
+        },
+        itemsPerPage() {
+            return 10
+        },
+        hideFooter() {
+            return this.properties.length <= this.itemsPerPage
         },
     },
 
 }
 </script>
 <style lang="sass" scoped>
-
-.description
-    font-weight: bold
-
-.data-table
-    margin-top: 32px
-
 </style>

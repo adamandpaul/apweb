@@ -80,7 +80,7 @@ export default {
 <style lang="sass" scoped>
 
 .view
-    padding: 32px 0
+    margin: 32px 0
 
 
 </style>

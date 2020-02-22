@@ -23,7 +23,7 @@
                     <div v-for="(view, idx) in defaultViews" :key="idx">
                         <AdminView :view="view" />
                     </div>
-                    <v-card v-if="defaultViews.length == 0">
+                    <v-card outlined class="my-6" v-if="defaultViews.length == 0">
                         <v-card-title class="grey lighten-2 text-center">
                             <span class="shrug">¯\_(ツ)_/¯</span>
                         </v-card-title>

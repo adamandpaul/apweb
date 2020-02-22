@@ -1,5 +1,6 @@
 
-import TabOverview from './TabOverview.vue'
+import TabProperties from './TabProperties.vue'
+import TabSimpleContent from './TabSimpleContent.vue'
 import TabSearch from './TabSearch.vue'
 import TabContents from './TabContents.vue'
 import TabAdd from './TabAdd.vue'
@@ -13,7 +14,8 @@ import TabUserRoles from './TabUserRoles.vue'
 
 export default {
     install(Vue) {
-        Vue.component('resource-tab-overview', TabOverview)
+        Vue.component('resource-tab-properties', TabProperties)
+        Vue.component('resource-tab-simple-content', TabSimpleContent)
         Vue.component('resource-tab-search', TabSearch)
         Vue.component('resource-tab-contents', TabContents)
         Vue.component('resource-tab-add', TabAdd)

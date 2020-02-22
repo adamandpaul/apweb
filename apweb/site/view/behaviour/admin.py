@@ -27,7 +27,13 @@ class AdminBehaviour(object):
     def view_admin_summary(self):
         """Information for this resource. For use in the admin default page"""
         return {
-            "summary": self.admin_summary,
+            "properties": self.admin_summary,
+        }
+
+    @view_config(route_name="api", renderer="jsend", name="admin-debug-info", permission="debug", request_method="GET")
+    def view_admin_debug_info(self):
+        return {
+            "properties": self.admin_debug_info,
         }
 
     @view_config(route_name="api", renderer="jsend", name="workflow-action", permission="workflow", request_method="POST")
@@ -89,11 +95,24 @@ class AdminBehaviour(object):
                 "default": True,
                 "ui": "resource-tab-properties",
             }
+        if self.admin_debug_info:
+            views["debug-info"] = {
+                "sort_key": 100,
+                "secondary": True,
+                "title": "Debug",
+                "api": "@@admin-debug-info",
+                "ui": "resource-tab-properties",
+            }
         return views
 
     @reify
     def admin_thumbnail_url(self):
         return None
+
+
+    @reify
+    def admin_debug_info(self):
+        return {}
 
     @reify
     def admin_summary(self):

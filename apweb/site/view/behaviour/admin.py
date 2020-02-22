@@ -23,8 +23,8 @@ class AdminBehaviour(object):
             "workflow_actions": self.workflow_actions,
         }
 
-    @view_config(route_name="api", renderer="jsend", name="admin-overview", permission="admin-access", request_method="GET")
-    def view_admin_overview(self):
+    @view_config(route_name="api", renderer="jsend", name="admin-summary", permission="admin-access", request_method="GET")
+    def view_admin_summary(self):
         """Information for this resource. For use in the admin default page"""
         return {
             "summary": self.admin_summary,
@@ -80,18 +80,16 @@ class AdminBehaviour(object):
     @reify
     def admin_views(self):
         """Dictionary and configuration tabed views on an object"""
+        views = {}
         if self.admin_summary:
-            return {
-                "info": {
-                    "sort_key": 0,
-                    "title": "Overview",
-                    "api": "@@admin-overview",
-                    "default": True,
-                    "ui": "resource-tab-overview",
-                }
+            views["summary"] = {
+                "sort_key": 0,
+                "title": "Summary",
+                "api": "@@admin-summary",
+                "default": True,
+                "ui": "resource-tab-properties",
             }
-        else:
-            return {}
+        return views
 
     @reify
     def admin_thumbnail_url(self):

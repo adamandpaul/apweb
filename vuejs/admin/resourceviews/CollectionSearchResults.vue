@@ -31,7 +31,7 @@ export default {
     props: {
         query: {type: Object, default: null},
         resourceURL: {type: String, default: null},
-        tileNewTab: {},
+        tileNewTab: {default: false},
     },
 
     data() {

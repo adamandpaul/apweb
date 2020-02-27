@@ -1,18 +1,12 @@
 <template>
-    <div>
-        <SearchResults :query="{}" api="@@admin-search" />
-    </div>
+    <collection-search-results :query="{}" :resourceURL="resourceURL" />
 </template>
 <script>
 
-import SearchResults from './SearchResults.vue'
-
 export default {
-
-    components: {
-        SearchResults,
+    props: {
+        resourceURL: {type: String, default: null},
     },
-
 }
 
 </script>

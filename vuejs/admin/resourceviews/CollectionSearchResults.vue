@@ -62,8 +62,8 @@ export default {
 
     watch: {
         query(to) {
+            this.clear()
             if (to !== null) {
-                this.clear()
                 this.nextPage(to)
             }
         },

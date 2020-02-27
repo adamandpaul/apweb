@@ -11,12 +11,12 @@
         </v-card-text>
 
         <v-card-text>
-            <v-jsonschema-form v-if="schema_search" :schema="schema_search" :model="searchQuery" :options="searchOptions"/>
+            <v-jsonschema-form ref="form" v-if="schema_search" :schema="schema_search" :model="searchQuery" :options="searchOptions"/>
         </v-card-text>
 
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text @click="clear">Clear Form</v-btn>
+            <v-btn text @click="clear">Clear</v-btn>
             <v-btn :loading="inProgress" color="primary" @click="search">Search</v-btn>
             <v-btn class="btn-add-new" v-if="schema_add" color="secondary" @click="addNew">Add New Item</v-btn>
         </v-card-actions>
@@ -137,7 +137,8 @@ export default {
                 this.query[key] = null
             }
             this.error = null
-            this.$refs.form.reset()
+            this.searchCurrentQuery = null
+            this.showAdd = false
         },
         addNew() {
             this.showAdd = true

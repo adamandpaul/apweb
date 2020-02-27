@@ -40,8 +40,16 @@ export default {
     },
 
     data() {
+        const value = {}
+        // Boolean fields cannot be null in schema, so set them to false if null
+        // Otherwise attempting to add a new object will raise an error
+        for (let key in this.data.properties){
+            if (this.data.properties[key].type === 'boolean'){
+                value[key] = false
+            }
+        }
         return {
-            value: {},
+            value: value,
             updateKey: 0,
             valid: false,
             error: null,

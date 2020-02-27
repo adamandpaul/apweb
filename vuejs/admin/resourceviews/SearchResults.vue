@@ -1,6 +1,6 @@
 <template>
     <div class="search-results">
-        <p class="total" v-if="total">
+        <p class="total" v-if="total !== null">
             Total: {{ total }} item(s)
         </p>
         <div v-for="(page, pageIdx) in pages" :key="pageIdx">

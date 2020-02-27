@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div>        
         <v-form ref="form" v-model="valid" @submit.prevent="search">
             <v-card flat>
                 <v-card-title>Search</v-card-title>
@@ -30,6 +30,8 @@
 <script>
 
 import SearchResults from './SearchResults.vue'
+import {mapGetters} from 'vuex'
+
 
 export default {
 

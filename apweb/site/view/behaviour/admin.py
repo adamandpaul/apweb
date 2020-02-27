@@ -23,11 +23,17 @@ class AdminBehaviour(object):
             "workflow_actions": self.workflow_actions,
         }
 
-    @view_config(route_name="api", renderer="jsend", name="admin-overview", permission="admin-access", request_method="GET")
-    def view_admin_overview(self):
+    @view_config(route_name="api", renderer="jsend", name="admin-summary", permission="admin-access", request_method="GET")
+    def view_admin_summary(self):
         """Information for this resource. For use in the admin default page"""
         return {
-            "summary": self.admin_summary,
+            "properties": self.admin_summary,
+        }
+
+    @view_config(route_name="api", renderer="jsend", name="admin-debug-info", permission="debug", request_method="GET")
+    def view_admin_debug_info(self):
+        return {
+            "properties": self.admin_debug_info,
         }
 
     @view_config(route_name="api", renderer="jsend", name="workflow-action", permission="workflow", request_method="POST")
@@ -80,26 +86,38 @@ class AdminBehaviour(object):
     @reify
     def admin_views(self):
         """Dictionary and configuration tabed views on an object"""
-        return {
-            "info": {
+        views = {}
+        if self.admin_summary:
+            views["summary"] = {
                 "sort_key": 0,
-                "title": "Overview",
-                "api": "@@admin-overview",
-                "ui": "resource-tab-overview",
+                "title": "Summary",
+                "api": "@@admin-summary",
+                "default": True,
+                "ui": "resource-tab-properties",
             }
-        }
+        if self.admin_debug_info:
+            views["debug-info"] = {
+                "sort_key": 100,
+                "secondary": True,
+                "title": "Debug",
+                "api": "@@admin-debug-info",
+                "ui": "resource-tab-properties",
+            }
+        return views
 
     @reify
     def admin_thumbnail_url(self):
         return None
 
+
+    @reify
+    def admin_debug_info(self):
+        return {}
+
     @reify
     def admin_summary(self):
         """Return a list of summary information"""
-        summary = []
-        if self.name is not None:
-            summary.append({"title": "URL Name", "value": self.name})
-        return summary
+        return []
 
     @reify
     def admin_tile(self):

@@ -6,7 +6,7 @@
         <div v-if="reloading">Reloading...</div>
         <div v-if="loading">Loading...</div>
         <div v-else>
-            <component v-show="!reloading" :is="view.ui" :data="data" :options="options" :resourceUrl="_resourceURL" :resourceApi="resourceApi" />
+            <component v-show="!reloading" :is="view.ui" :data="data" :options="options" :resourceURL="_resourceURL" :resourceApi="resourceApi" />
         </div>
     </div>
 </template>

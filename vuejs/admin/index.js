@@ -58,7 +58,6 @@ import AdminRoutes from './router'
 import RequestError from './RequestError'
 import App from './App.vue'
 import ResourceViews from './resourceviews'
-import ResourceTile from './ResourceTile.vue'
 
 // Configure Vue
 Vue.config.productionTip = false
@@ -114,9 +113,6 @@ const vuetify = new Vuetify({})
 
 // Configure request-error component
 Vue.component("request-error", RequestError)
-
-// Configure resource tile
-Vue.component("resource-tile", ResourceTile)
 
 // Configure JSON Schema Form
 Vue.component('v-jsonschema-form', VJsonschemaForm)

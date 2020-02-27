@@ -34,35 +34,6 @@
         </v-card-text>
 
     </v-card>
-    <!--
-    <div>
-        <v-form ref="form" v-model="valid" @submit.prevent="search">
-            <v-card flat>
-                <v-card-title>Search</v-card-title>
-                <v-card-text>
-                    <v-jsonschema-form v-if="schema_search" :schema="schema_search" :model="query" :options="formOptions"/>
-                    <v-alert v-if="error" type="error" text>
-                        {{ error }}
-                    </v-alert>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn text @click="clear">Clear Form</v-btn>
-                    <v-btn :loading="inProgress" color="primary" @click="search">Search</v-btn>
-                    <v-btn class="btn-add-new" v-if="schema_add" color="secondary" @click="addNew">Add New Item</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-form>
-        <SearchResults v-if="!showAdd" :query="currentQuery" api="@@admin-search" />
-        <div class="add-new-form" v-if="showAdd">
-            <v-card>
-                <v-card-text>
-                    <resource-tab-add :data="schema_add_" :options_add="options_add" :resourceURL="resourceURL" :resourceApi="resourceApi" />
-                </v-card-text>
-            </v-card>
-        </div>
-    </div>
-    -->
 </template>
 <script>
 

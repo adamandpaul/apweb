@@ -21,7 +21,7 @@ export default {
         Vue.component('resource-tab-add', TabAdd)
         Vue.component('resource-tab-edit', TabEdit)
         Vue.component('resource-tab-api', TabApi)
-        Vue.component('resource-tile-default', Tile)
+        Vue.component('resource-tile', Tile)
         Vue.component('collection-browse', CollectionBrowse)
         Vue.component('collection-search-results', CollectionSearchResults)
         Vue.component('collection-add', CollectionAdd)

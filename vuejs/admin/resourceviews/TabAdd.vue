@@ -41,12 +41,11 @@ export default {
 
     data() {
         const value = {}
-        // Boolean fields cannot be null in schema, so set them to false if null
+        // JSON schema defaults to not accepting null values, so default to false/''
         // Otherwise attempting to add a new object will raise an error
+        // NOTE This could be removed if schemas strictly followed and nullables declared
         for (let key in this.data.properties){
-            if (this.data.properties[key].type === 'boolean'){
-                value[key] = false
-            }
+            value[key] = this.data.properties[key].type === 'boolean' ? false : ''
         }
         return {
             value: value,

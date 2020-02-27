@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Vuetify, {
     VApp,
+    VAlert,
     VProgressLinear,
     VBtnToggle,
     VBtn,
@@ -68,6 +69,7 @@ Vue.use(Vuetify, {
     iconfont: 'md',
     components: {
         VApp,
+        VAlert,
         VProgressLinear,
         VBtnToggle,
         VBtn,

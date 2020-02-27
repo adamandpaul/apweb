@@ -30,7 +30,11 @@
         </v-card-text> 
 
         <v-card-text v-if="showAdd">
-            <collection-add :schema="schema_add_" :resourceURL="resourceURL" />
+            <collection-add :schema="schema_add_" :resourceURL="resourceURL">
+                <template v-slot:tile-start="{resource}"><slot name="tile-start" :resource="resource"></slot></template>
+                <template v-slot:tile-left="{resource}"><slot name="tile-left" :resource="resource"></slot></template>
+                <template v-slot:tile-end="{resource}"><slot name="tile-end" :resource="resource"></slot></template>
+            </collection-add>
         </v-card-text>
 
     </v-card>

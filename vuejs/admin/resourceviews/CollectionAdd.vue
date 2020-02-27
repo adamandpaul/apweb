@@ -21,7 +21,11 @@
            Added {{ itemsAdded.length }} item(s)
         </p>
         <div v-for="(item, idx) in itemsAdded" :key="idx">
-            <resource-tile :tile="item" />
+            <resource-tile :tile="item" :newTab="tileNewTab" >
+                    <template v-slot:start="{resource}"><slot name="tile-start" :resource="resource"></slot></template>
+                    <template v-slot:left="{resource}"><slot name="tile-left" :resource="resource"></slot></template>
+                    <template v-slot:end="{resource}"><slot name="tile-end" :resource="resource"></slot></template>
+            </resource-tile>
         </div>
     </div>
 </template>
@@ -35,6 +39,7 @@ export default {
     props: {
         schema: {type: Object, default: null},
         resourceURL: {type: String, default: null},
+        tileNewTab: {},
     },
 
     data() {

@@ -43,8 +43,15 @@ export default {
     },
 
     data() {
+        const value = {}
+        // JSON schema defaults to not accepting null values, so default to false/''
+        // Otherwise attempting to add a new object will raise an error
+        // NOTE This could be removed if schemas strictly followed and nullables declared
+        for (let key in this.schema.properties){
+            value[key] = this.schema.properties[key].type === 'boolean' ? false : ''
+        }
         return {
-            value: {},
+            value: value,
             updateKey: 0,
             valid: false,
             error: null,

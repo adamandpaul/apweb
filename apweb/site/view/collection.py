@@ -55,6 +55,9 @@ class CollectionView(ResourceView):
                 'offset': self.request.params.get('offset', 0),
             }
 
+        kwargs.setdefault('limit', 100)
+        kwargs.setdefault('offset', 0)
+
         # convert views into tiles
         tiles = []
         results = self.search(**kwargs)

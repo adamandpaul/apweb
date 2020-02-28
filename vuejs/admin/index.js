@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Vuetify, {
     VApp,
+    VAlert,
     VProgressLinear,
     VBtnToggle,
     VBtn,
@@ -30,6 +31,7 @@ import Vuetify, {
     VListItem,
     VListItemGroup,
     VListItemTitle,
+    VListItemSubtitle,
     VListItemContent,
     VListItemAction,
     VListItemAvatar,
@@ -67,6 +69,7 @@ Vue.use(Vuetify, {
     iconfont: 'md',
     components: {
         VApp,
+        VAlert,
         VProgressLinear,
         VBtnToggle,
         VBtn,
@@ -95,6 +98,7 @@ Vue.use(Vuetify, {
         VListItem,
         VListItemGroup,
         VListItemTitle,
+        VListItemSubtitle,
         VListItemContent,
         VListItemAction,
         VListItemAvatar,

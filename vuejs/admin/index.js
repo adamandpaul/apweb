@@ -44,6 +44,7 @@ import Vuetify, {
     VExpansionPanelContent,
     VFileInput,
     VProgressCircular,
+    VInput,
 } from 'vuetify/lib'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
@@ -111,6 +112,7 @@ Vue.use(Vuetify, {
         VExpansionPanelContent,
         VFileInput,
         VProgressCircular,
+        VInput,
     },
 })
 const vuetify = new Vuetify({})
@@ -119,7 +121,8 @@ const vuetify = new Vuetify({})
 Vue.component("request-error", RequestError)
 
 // Configure JSON Schema Form
-Vue.component('v-jsonschema-form', VJsonschemaForm)
+import './vutify-jsonschema-form'
+//Vue.component('v-jsonschema-form', VJsonschemaForm)
 
 // Configure Store
 import Vuex from 'vuex'

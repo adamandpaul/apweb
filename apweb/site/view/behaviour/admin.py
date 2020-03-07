@@ -36,6 +36,10 @@ class AdminBehaviour(object):
             "properties": self.admin_debug_info,
         }
 
+    @view_config(route_name="api", renderer="jsend", name="admin-tile", permission="admin-access", request_method="GET")
+    def view_tile(self):
+        return self.admin_tile   
+
     @view_config(route_name="api", renderer="jsend", name="workflow-action", permission="workflow", request_method="POST")
     @view_config(route_name="api", renderer="jsend", name="admin-workflow-action", permission="admin-workflow", request_method="POST")
     def view_workflow_action(self):

@@ -4,12 +4,14 @@ from . import orm
 from . import user
 from .utils import settings_property
 from apweb.utils import normalize_query_string
+from apweb.utils import yesish
 from contextplus import resource
 
 import contextplus
 import pyramid_mailer
 import redis
 import sqlalchemy
+import sqlalchemy.pool
 import transaction
 import zope.sqlalchemy
 
@@ -17,10 +19,11 @@ import zope.sqlalchemy
 class Site(contextplus.Site):
     """A primitive site"""
 
-    def __init__(self, *args, mailer=None, transaction_manager=None, request=None, **kwargs):
+    def __init__(self, *args, mailer=None, transaction_manager=None, request=None, is_develop=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.mailer = mailer
         self.transaction_manager = transaction_manager
+        self.is_develop = is_develop
         self._request = request
 
     @classmethod
@@ -31,9 +34,13 @@ class Site(contextplus.Site):
         tm = transaction.TransactionManager(explicit=True)
         db_session = None
         redis_instance = None
+        is_develop = yesish(settings.get('is_develop', None))
 
         if settings.get("sqlalchemy.url"):
-            db_engine = sqlalchemy.engine_from_config(settings, "sqlalchemy.")
+            sqlalchemy_url = settings['sqlalchemy.url']
+            # Get SQLAlchemy engine
+            # We need to use the NullPool if the user of this object wants to us os.fork()
+            db_engine = sqlalchemy.create_engine(sqlalchemy_url, poolclass=sqlalchemy.pool.NullPool)
             db_session_factory = sqlalchemy.orm.sessionmaker()
             db_session_factory.configure(bind=db_engine)
             db_session = db_session_factory()
@@ -48,32 +55,37 @@ class Site(contextplus.Site):
             def __init__(self, **kw):
                 super().__init__(transaction_manager=tm, **kw)
 
-        if settings.get("is_develop") == 'true':  # WARN Value is a string, not boolean
+        if is_develop:
             mailer = pyramid_mailer.mailer.DebugMailer('mail')  # Store mail in 'mail' dir in CWD
         else:
             mailer = MailerTmp.from_settings(settings, "mail.")
 
-        return cls(
-            settings=settings,
-            db_session=db_session,
-            redis=redis_instance,
-            mailer=mailer,
-            transaction_manager=tm,
+        # remake kwargs allowing the user to override any values
+        kwargs = {
+            'settings': settings,
+            'db_session': db_session,
+            'redis': redis_instance,
+            'mailer': mailer,
+            'transaction_manager': tm,
+            'is_develop': is_develop,
             **kwargs,
-        )
+        }
+        return cls(**kwargs)
 
     @classmethod
     def from_request(cls, request, **kwargs):
         """Create a site object from a request object"""
-        return cls(
-            settings=request.registry.settings,
-            db_session=request.db_session,
-            redis=request.redis,
-            mailer=request.mailer,
-            transaction_manager=request.tm,
-            request=request,
+        kwargs = {
+            'settings': request.registry.settings,
+            'db_session': request.db_session,
+            'redis': request.redis,
+            'mailer': request.mailer,
+            'transaction_manager': request.tm,
+            'request': request,
+            'is_develop': request.registry["is_develop"],
             **kwargs,
-        )
+        }
+        return cls(**kwargs)
 
     motd = None
     application_url = settings_property("application_url")

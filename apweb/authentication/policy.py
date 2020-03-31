@@ -117,6 +117,7 @@ def includeme(config):
         "secure": registry["cookie_session_secure"],
         "timeout": registry["cookie_session_timeout"],
         "reissue_time": registry["cookie_session_reissue_time"],
+        "max_age": registry["cookie_session_timeout"],
         "hashalg": authtkt_hashalg,
         "http_only": True,
         "wild_domain": False,

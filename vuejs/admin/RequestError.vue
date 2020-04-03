@@ -11,8 +11,8 @@
                 <p>{{ serverTimestamp}}</p>
                 <p>Server responded with an error {{ serverCode }}</p>
                 <p>{{serverMessage}}</p>
-                <pre v-for="(line, idx) in serverException" :key="idx">{{ line }}</pre>
-                <pre v-for="(line, idx) in serverTraceback" :key="idx">{{ line }}</pre>
+                <pre v-for="(line, idx) in serverException" :key="'a' + idx">{{ line }}</pre>
+                <pre v-for="(line, idx) in serverTraceback" :key="'b' + idx">{{ line }}</pre>
             </template>
 
             <template v-else>
@@ -48,7 +48,7 @@ export default {
         serverException() {return this.response.data.exception || []},
         serverTraceback() {return this.response.data.traceback || []},
     },
-    
+
 }
 </script>
 <style lang="sass" scoped>

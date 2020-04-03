@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from .utils import serve_schema
 from .resource import ResourceView
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPNotFound
@@ -33,10 +34,7 @@ class RecordItemView(ResourceView):
 
     @view_config(route_name="api", renderer="jsend", name="schema-edit", permission="edit", request_method="GET")
     def view_schema_edit(self):
-        schema = self.schema_edit
-        if schema is None:
-            raise HTTPNotFound()
-        return schema
+        return serve_schema(self.schema_edit)
 
     def edit(self, **kwargs):
         self.context.edit(**kwargs)

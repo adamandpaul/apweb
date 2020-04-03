@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from .utils import serve_schema
 from .resource import ResourceView
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPNotFound
@@ -36,10 +37,7 @@ class CollectionView(ResourceView):
 
     @view_config(route_name="api", renderer="jsend", name="schema-add", permission="add", request_method="GET")
     def view_schema_add(self):
-        schema = self.schema_add
-        if schema is None:
-            raise HTTPNotFound()
-        return self.schema_add
+        return serve_schema(self.schema_add)
 
     @view_config(name="search", route_name="api", renderer="jsend", permission="view", request_method="GET")
     @view_config(name="admin-search", route_name="api", renderer="jsend", permission="admin-access", request_method="GET")
@@ -79,12 +77,9 @@ class CollectionView(ResourceView):
         request_method="GET",
     )
     def view_schema_search(self):
-        schema_search = self.schema_search
-        if schema_search is None:
-            raise HTTPNotFound()
         return {
-            "schema_search": schema_search,
-            "schema_add": self.schema_add,
+            "schema_search": serve_schema(self.schema_search),
+            "schema_add": serve_schema(self.schema_add, required=False),
         }
 
     @view_config(
@@ -95,12 +90,9 @@ class CollectionView(ResourceView):
         request_method="GET",
     )
     def view_admin_browse(self):
-        schema_search = self.schema_search
-        if schema_search is None:
-            raise HTTPNotFound()
         return {
-            "schema_search": schema_search,
-            "schema_add": self.schema_add,
+            "schema_search": serve_schema(self.schema_search),
+            "schema_add": serve_schema(self.schema_add, required=False),
             "title": self.title,
         }
 

@@ -17,17 +17,17 @@
         <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text @click="clear">Clear</v-btn>
-            <v-btn :loading="inProgress" color="primary" @click="search">Search</v-btn>
+            <v-btn color="primary" @click="search">Search</v-btn>
             <v-btn class="btn-add-new" v-if="schema_add" color="secondary" @click="addNew">Add New Item</v-btn>
         </v-card-actions>
-        
+
         <v-card-text v-if="!showAdd">
             <collection-search-results :query="searchCurrentQuery" :resourceURL="resourceURL" :tileNewTab="tileNewTab">
                 <template v-slot:tile-start="{resource}"><slot name="tile-start" :resource="resource"></slot></template>
                 <template v-slot:tile-left="{resource}"><slot name="tile-left" :resource="resource"></slot></template>
                 <template v-slot:tile-end="{resource}"><slot name="tile-end" :resource="resource"></slot></template>
             </collection-search-results>
-        </v-card-text> 
+        </v-card-text>
 
         <v-card-text v-if="showAdd">
             <collection-add :schema="schema_add_" :resourceURL="resourceURL">
@@ -70,7 +70,7 @@ export default {
     },
 
     computed: {
-        
+
         resourceApi() {
             return this.$store.getters.resourceApiForResourceURL(this.resourceURL)
         },

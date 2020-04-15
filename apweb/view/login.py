@@ -81,10 +81,11 @@ class LoginView(object):
     )
     def login(self):
 
-        # Check request paramitors
+        # Only POST requests are supported
         if self.request.method.lower() != "post":
             raise HTTPForbidden("Request method not allowed")
 
+        # If no userid then have failed to login
         if not self.userid:
             logger.warning(
                 f"Failed login attempt.\n"
@@ -94,35 +95,19 @@ class LoginView(object):
             )
             raise HTTPForbidden("Was not able to login")
 
-        # Try to create a browser session
-        try:
-            browser_headers = pyramid.security.remember(
-                self.request, self.userid, tokens=[f"device_id-{self.device_id}"]
-            )
-        except NotImplementedError:
-            browser_headers = []
+        # Get AuthTKT cookie headers
+        browser_headers = pyramid.security.remember(
+            self.request, self.userid, tokens=[f"device_id-{self.device_id}"]
+        )
+
+        # Add AuthTKT cookies to response's headers
         self.request.response.headers.update(browser_headers)
-        browser_session = len(browser_headers) > 0
 
-        # Create a JWT token
-        try:
-            jwt_access_token = self.jwt_access_token
-            jwt_refresh_token = self.jwt_refresh_token
-        except JWTNotConfiguredError as e:
-            jwt_access_token = None
-            jwt_refresh_token = None
-            if browser_session == 0:
-                logger.warning(f"Do you need to configure JSON Web Token? {e}")
-
-        if (
-            jwt_access_token is None or jwt_refresh_token is None
-        ) and browser_session == 0:
-            raise NotAbleToCreateLogin("Unable to create jwt or login session")
-
+        # Return both JWT and AuthTKT headers so client can easily make use of either
         return {
-            "browser_session": browser_session,
-            "jwt": jwt_access_token,
-            "jwt_refresh": jwt_refresh_token,
+            "jwt": self.jwt_access_token,
+            "jwt_refresh": self.jwt_refresh_token,
+            "browser_headers": browser_headers,
         }
 
     @view_config(

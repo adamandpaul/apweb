@@ -73,8 +73,12 @@ class AuthenticationPolicy(object):
         return self.policy(request).unauthenticated_userid(request)
 
     def remember(self, request, userid, **kw):
-        """Proxy remember method to the auth policy for this request"""
-        return self.policy(request).remember(request, userid, **kw)
+        """Proxy remember method to authtkt_policy
+
+        Regardless of the policy being used, this method will always apply authtkt_policy
+
+        """
+        return self.authtkt_policy.remember(request, userid, **kw)
 
     def forget(self, request):
         """Proxy forget method to the auth policy for this request"""

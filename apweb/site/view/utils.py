@@ -8,8 +8,10 @@ def serve_schema(schema, required=True):
     """Prepare a schema to be served by a view"""
 
     # Raise NotFound if schema is required and not available
-    if schema is None and required:
+    if schema is None:
+        if required:
             raise HTTPNotFound()
+        return None
 
     # Don't modify the original schema
     schema = deepcopy(schema)

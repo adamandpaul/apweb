@@ -15,7 +15,22 @@ DEFAULT_CORS_HEADERS = {
 
 def add_headers(request, response):
     """Add CORS headers to a response object"""
-    response.headers.update(DEFAULT_CORS_HEADERS)
+
+    headers = {**DEFAULT_CORS_HEADERS}
+
+    # Get
+    origin = request.headers.get("origin", "*")
+    headers["Access-Control-Allow-Origin"] = origin
+
+    # Set vary header
+    vary = response.headers.get("vary", '')
+    if vary:
+        vary = vary + ', Origin'
+    else:
+        vary = 'Origin'
+    headers['Vary'] = vary
+    
+    response.headers.update(headers)
 
 
 def new_request_handler(event):

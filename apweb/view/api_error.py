@@ -73,8 +73,6 @@ class HandleException(object):
             "message": self.message or self.default_message,
             "code": self.code,
         }
-        if isinstance(self.context, HTTPClientError):
-            jsend["exception"] = self.exception
         if "role:system-owner" in self.request.effective_principals:
             jsend["exception"] = self.exception
             jsend["traceback"] = self.traceback

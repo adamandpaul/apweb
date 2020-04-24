@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from uuid import uuid4
 from zope.interface import Interface
 
 
@@ -11,7 +12,7 @@ class ILoginProvider(Interface):
 
 
 def register_login_provider(config, provider):
-    config.registry.registerUtility(provider, ILoginProvider)
+    config.registry.registerUtility(provider, ILoginProvider, name=str(uuid4()))
 
 
 def includeme(config):

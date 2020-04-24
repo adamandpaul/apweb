@@ -34,7 +34,7 @@ class HandleException(object):
         elif self.code == 403:
             message = "Forbidden"
         else:
-            message = self.default_message
+            message = None
         return message
 
     @reify
@@ -70,7 +70,7 @@ class HandleException(object):
             "timestamp": self.timestamp,
             "status": self.status,
             "data": self.data,
-            "message": self.message,
+            "message": self.message or self.default_message,
             "code": self.code,
         }
         if "role:system-owner" in self.request.effective_principals:
@@ -85,4 +85,8 @@ class HandleClientError(HandleException):
     """Handle a client error and return a json object in the jsend message spec format"""
 
     status = "fail"
-    default_message = "Client Error"
+    default_message = "Client error"
+    
+    def message(self):
+        """Allow backing down to the execption message passing through"""
+        return self.message or getattr(self.exception, 'message', None)

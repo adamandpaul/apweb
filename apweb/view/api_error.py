@@ -73,6 +73,8 @@ class HandleException(object):
             "message": self.message or self.default_message,
             "code": self.code,
         }
+        if isinstance(self.context, HTTPClientError):
+            jsend["exception"] = self.exception
         if "role:system-owner" in self.request.effective_principals:
             jsend["exception"] = self.exception
             jsend["traceback"] = self.traceback
@@ -87,6 +89,22 @@ class HandleClientError(HandleException):
     status = "fail"
     default_message = "Client error"
     
+    @reify
     def message(self):
         """Allow backing down to the execption message passing through"""
-        return self.message or getattr(self.exception, 'message', None)
+        super_message = super().message
+        if super_message:
+            return super_message
+        
+        # Construct message
+        parts = []
+        title = getattr(self.context, 'title', None)
+        if title:
+            parts.append(title)
+        message = getattr(self.context, 'message', None)
+        if message:
+            parts.append(message)
+        if len(parts) > 0:
+            return ': '.join(parts)
+
+        return None

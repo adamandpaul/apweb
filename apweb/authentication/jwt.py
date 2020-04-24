@@ -3,8 +3,14 @@
 from ..login import ILoginProvider
 from datetime import timedelta
 from zope.interface import implementer
+from jwt.exceptions import ExpiredSignatureError
+from jwt.exceptions import InvalidTokenError
 
 import jwt
+import logging
+
+
+logger = logging.getLogger("apweb")
 
 
 class JWTNotConfiguredError(Exception):
@@ -41,13 +47,20 @@ def get_jwt_claims(request):
     if token is None:
         return None
 
-    claims = jwt.decode(
-        token,
-        key=public_key,
-        algorithms=[algorithm],
-        leeway=leeway,
-        options={"verify_aud": False},
-    )  # we verify the aud claim in the authentication policy
+    try:
+        claims = jwt.decode(
+            token,
+            key=public_key,
+            algorithms=[algorithm],
+            leeway=leeway,
+            options={"verify_aud": False},
+        )  # we verify the aud claim in the authentication policy
+    except ExpiredSignatureError:
+        logger.info('Client presented an expired jwt')
+        claims = None
+    except InvalidTokenError as e:
+        logger.warning(f'Client presented an invalid jwt token: {e}')
+        claims = None
 
     return claims
 

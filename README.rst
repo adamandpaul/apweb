@@ -7,8 +7,8 @@ Package to keep all the best resuable parts of our Pyramid applications.
 Settings Configuration
 ======================
 
-``is_develop`` (default: False)
-    Indicates that the application is to be run in development mode.
+``is_debug`` (default: False)
+    Indicates that the application is to be run in debug mode.
 
 ``frontend_static_location`` (required)
     The compiled frontend files which will be served under ``/++frontend++``
@@ -52,7 +52,7 @@ Settings Configuration
 ``cookie_session_reissue_time`` (default: ``cookie_session_timeout`` / 10)
     The reissue time for authtkt and nacl sessions
 
-``cookie_session_secret`` (default: ``not is_develop``)
+``cookie_session_secret`` (default: ``not is_debug``)
     Cookie policy as to wehter or not to send cookies over non secure connections
 
 ``authtkt_secret`` (default: Random)
@@ -145,7 +145,7 @@ Provides
 - Default root factory to return ``request.site`` which is undefined in
   this package
 
-- ``config.include("pyramid_debugtoolbar")`` if ``is_develop``. Addionally
+- ``config.include("pyramid_debugtoolbar")`` if ``is_debug``. Addionally
   the side widget is monkey patched to include a button/link to ``/++docs++/``
 
 - Setup of database engine and session factory from ``sqlalchemy.*`` config vars.

@@ -18,8 +18,8 @@ def error_notfound(context, request):
 
     assert isinstance(context, HTTPException)
 
-    if request.registry.settings['is_develop']:
-        # in develop mode we want to return the HTTPException
+    if request.registry.settings['is_debug']:
+        # in debug mode we want to return the HTTPException
         # which is also a valid response object because it displays
         # some useful information regarding the 404
         return context

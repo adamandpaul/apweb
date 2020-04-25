@@ -21,7 +21,7 @@ def includeme(config):
     config.register_template_layer("apweb.view:templates")
 
     # error handeling
-    if config.registry["is_develop"]:
-        config.scan(ignore="apweb.view.error_production")
+    if config.registry["is_debug"]:
+        config.scan(ignore="apweb.view.error_non_debug")
     else:
-        config.scan(ignore="apweb.view.error_develop")
+        config.scan(ignore="apweb.view.error_debug")

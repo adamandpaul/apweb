@@ -58,7 +58,7 @@ def includeme(config):
         logger.info(
             f'Serving {settings["docs_static_location"]} documentation folder from /++docs++/'
         )
-        if registry["is_develop"]:
+        if registry["is_debug"]:
             config.add_static_view("++docs++", docs_static_location, cache_max_age=5)
         else:
             config.add_static_view(

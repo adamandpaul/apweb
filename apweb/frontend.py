@@ -17,7 +17,7 @@ def includeme(config):
     logger.info(
         f'Serving {settings["frontend_static_location"]} as static frontend location from /++static++/'
     )
-    if registry["is_develop"]:
+    if registry["is_debug"]:
         config.add_static_view(
             "++frontend++", settings["frontend_static_location"], cache_max_age=5
         )

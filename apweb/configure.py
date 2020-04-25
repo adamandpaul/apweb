@@ -37,10 +37,13 @@ def includeme(config):
     # Extra settings
     config.add_settings({"tm.manager_hook": "pyramid_tm.explicit_manager"})
 
-    # is_develop
-    registry["is_develop"] = yesish(settings["is_develop"]) or False
-    if registry["is_develop"]:
-        logger.info("Running application in develop mode")
+    # is_debug
+    is_debug = settings.get('is_debug', settings.get('is_develop', False))
+    is_debug = yesish(is_debug) or False
+    registry["is_debug"] = is_debug
+    registry["is_develop"] = is_debug
+    if registry["is_debug"]:
+        logger.info("Running application in debug mode")
 
     # site factory
     config.add_request_method(site_factory, "site", reify=True)
@@ -61,14 +64,14 @@ def includeme(config):
         )
     )
     registry["cookie_session_secure"] = yesish(
-        settings.get("cookie_session_secure") or not registry["is_develop"]
+        settings.get("cookie_session_secure") or not registry["is_debug"]
     )
 
     # configure dependent packages
     config.include("pyramid_exclog")
     config.include("pyramid_tm")
 
-    if registry["is_develop"]:
+    if registry["is_debug"]:
         # Development specific configuration
         config.include('pyramid_mailer.debug')
         config.include("pyramid_debugtoolbar")

@@ -19,11 +19,12 @@ import zope.sqlalchemy
 class Site(contextplus.Site):
     """A primitive site"""
 
-    def __init__(self, *args, mailer=None, transaction_manager=None, request=None, is_develop=None, **kwargs):
+    def __init__(self, *args, mailer=None, transaction_manager=None, request=None, is_debug=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.mailer = mailer
         self.transaction_manager = transaction_manager
-        self.is_develop = is_develop
+        self.is_debug = is_debug
+        self.is_develop = is_debug  # legacy key to be removed
         self._request = request
 
     @classmethod
@@ -34,7 +35,7 @@ class Site(contextplus.Site):
         tm = transaction.TransactionManager(explicit=True)
         db_session = None
         redis_instance = None
-        is_develop = yesish(settings.get('is_develop', None))
+        is_debug = yesish(settings.get('is_debug', settings.get('is_develop', False)))
 
         if settings.get("sqlalchemy.url"):
             sqlalchemy_url = settings['sqlalchemy.url']
@@ -55,7 +56,7 @@ class Site(contextplus.Site):
             def __init__(self, **kw):
                 super().__init__(transaction_manager=tm, **kw)
 
-        if is_develop:
+        if is_debug:
             mailer = pyramid_mailer.mailer.DebugMailer('mail')  # Store mail in 'mail' dir in CWD
         else:
             mailer = MailerTmp.from_settings(settings, "mail.")
@@ -67,7 +68,7 @@ class Site(contextplus.Site):
             'redis': redis_instance,
             'mailer': mailer,
             'transaction_manager': tm,
-            'is_develop': is_develop,
+            'is_debug': is_debug,
             **kwargs,
         }
         return cls(**kwargs)
@@ -82,7 +83,7 @@ class Site(contextplus.Site):
             'mailer': request.mailer,
             'transaction_manager': request.tm,
             'request': request,
-            'is_develop': request.registry["is_develop"],
+            'is_debug': request.registry["is_debug"],
             **kwargs,
         }
         return cls(**kwargs)

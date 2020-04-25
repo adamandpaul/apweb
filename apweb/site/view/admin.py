@@ -12,17 +12,28 @@ def includeme(config):
     registry = config.registry
 
     # get the file path of admin.html
-    admin_app_path = os.path.join(settings["frontend_static_location"], "admin.html")
+    admin_location = settings.get("admin_static_location", settings.get("frontend_static_location", None))
+    admin_app_path = os.path.join(admin_location, "admin.html")
     registry["admin_app_path"] = admin_app_path
 
     # if we are in production cache the html on the registry
-    if not registry["is_develop"]:
+    if not registry["is_debug"]:
         registry["admin_app_html"] = get_admin_html(registry)
     else:
         registry["admin_app_html"] = None
 
     # add view
     config.add_route("admin", "/admin*traverse")
+
+    # add static resource for admin
+    if registry["is_debug"]:
+        config.add_static_view(
+            "++admin++", admin_location, cache_max_age=5, permission="admin-access",
+        )
+    else:
+        config.add_static_view(
+            "++admin++", admin_location, cache_max_age=600, permission="admin-access",
+        )
 
 
 @view_config(route_name="admin", physical_path=("",), request_method="GET")

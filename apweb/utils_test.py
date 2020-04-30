@@ -72,3 +72,13 @@ class TestNormalizeQueryString(TestCase):
                 result,
                 f"Expected {expected_result} from normalize_querey_string from args {args}",
             )
+
+class TestNormalizeEmail(TestCase):
+    def test_normalize_email(self):
+        data = [
+            (' aa@abc.com  ', 'aa@abc.com'),
+            ('AAA@abc.com', 'aaa@abc.com'),
+        ]
+        for value, expected in data:
+            result = utils.normalize_email(value)
+            self.assertEqual(result, expected)

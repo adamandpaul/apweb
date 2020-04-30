@@ -42,6 +42,13 @@ def normalize_query_string(query_string, ignore_prefixes=[]):
     return query_string
 
 
+def normalize_email(email):
+    """Return an eamil addres that has been normalized"""
+    email = email.strip()
+    email = email.lower()
+    return email
+
+
 def yesish(value, default=None):
     """Determins if a value is yes"""
     if value is None:

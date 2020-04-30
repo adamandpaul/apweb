@@ -4,6 +4,7 @@ from . import exc
 from . import orm
 from .log_entry import ComponentLogger
 from .utils import is_valid_email
+from apweb.utils import normalize_email
 from contextplus import id_property
 from contextplus import record_property
 from contextplus import resource
@@ -156,6 +157,7 @@ class UserCollection(SQLAlchemyCollection):
         return {"user_uuid": user_uuid}
 
     def add(self, user_email):
+        user_email = normalize_email(user_email)
         if not is_valid_email(user_email):
             raise exc.CreateUserErrorInvalidUserEmail()
         db_session = self.acquire.db_session
@@ -174,6 +176,9 @@ class UserCollection(SQLAlchemyCollection):
 
     def get_user_by_email(self, user_email: str):
         """Return a user from a given email address"""
+        if not user_email:
+            return None
+            
         user_uuid = (
             self.acquire.db_session.query(orm.User.user_uuid)
             .filter_by(user_email=user_email)
@@ -181,6 +186,17 @@ class UserCollection(SQLAlchemyCollection):
         )
         if user_uuid is not None:
             return self[str(user_uuid)]
+
+        # Try again with the normalized email
+        user_email = normalize_email(user_email)
+        user_uuid = (
+            self.acquire.db_session.query(orm.User.user_uuid)
+            .filter_by(user_email=user_email)
+            .scalar()
+        )
+        if user_uuid is not None:
+            return self[str(user_uuid)]
+
         return None
 
     @resource("me")

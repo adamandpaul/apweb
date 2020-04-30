@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from . import error_production
+from . import error_non_debug
 from pyramid.view import exception_view_config
 from pyramid.view import forbidden_view_config
 from pyramid.view import notfound_view_config
@@ -11,4 +11,4 @@ from pyramid.view import notfound_view_config
 @forbidden_view_config(renderer="templates/error.pt", route_name="test")
 def error(context, request):
     """Allow for rendering the errors on develop but just in the test route"""
-    return error_production.error(context, request)
+    return error_non_debug.error(context, request)

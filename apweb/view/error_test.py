@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
-from . import error_develop
-from . import error_production
+from . import error_debug
+from . import error_non_debug
 from pyramid.httpexceptions import HTTPNotFound
 from unittest import TestCase
 from unittest.mock import MagicMock
@@ -22,9 +22,9 @@ class TestErrorView(object):
         self.assertEqual(request.response.status_code, 404)
 
 
-class TestErrorProduction(TestErrorView, TestCase):
-    module = error_production
+class TestErrorNonDebug(TestErrorView, TestCase):
+    module = error_non_debug
 
 
-class TestErrorDevelop(TestErrorView, TestCase):
-    module = error_develop
+class TestErrorDebug(TestErrorView, TestCase):
+    module = error_debug

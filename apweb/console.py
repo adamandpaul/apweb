@@ -18,7 +18,7 @@ class Main(object):
     def arg_parser(self):
         parser = argparse.ArgumentParser(description="console tools")
         parser.add_argument(
-            "config_file", help="configuration file to use (e.g. develop.ini)"
+            "--config-file", help="configuration file to use (e.g. config.ini)", default="config.ini",
         )
         sub_commands = parser.add_subparsers(help="command")
         self.cmd_configure(sub_commands)

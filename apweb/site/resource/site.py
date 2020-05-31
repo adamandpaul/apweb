@@ -49,7 +49,7 @@ class Site(contextplus.Site):
 
         if settings.get("redis_url"):
             redis_instance = redis.StrictRedis.from_url(
-                settings["redis_url"], decode_responses=True
+                settings["redis_url"], decode_responses=False
             )
 
         class MailerTmp(pyramid_mailer.Mailer):

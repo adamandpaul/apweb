@@ -79,7 +79,7 @@ export default {
             }
             views.sort((a, b) => (a.sort_key - b.sort_key))
             state.views = views
-            if (views.length > 0 && state.view == null) {
+            if (state.view == null) {
                 state.view = "default"
             }
 

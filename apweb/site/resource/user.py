@@ -157,7 +157,7 @@ class UserCollection(SQLAlchemyCollection):
         return {"user_uuid": user_uuid}
 
     def add(self, user_email):
-        user_email = normalize_email(user_email)
+        user_email = normalize_email(user_email, self.acquire.user_email_store_lower_case)
         if not is_valid_email(user_email):
             raise exc.CreateUserErrorInvalidUserEmail()
         db_session = self.acquire.db_session

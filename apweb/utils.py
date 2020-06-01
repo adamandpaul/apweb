@@ -42,10 +42,11 @@ def normalize_query_string(query_string, ignore_prefixes=[]):
     return query_string
 
 
-def normalize_email(email):
+def normalize_email(email, lower_case=True):
     """Return an eamil addres that has been normalized"""
     email = email.strip()
-    email = email.lower()
+    if lower_case:
+        email = email.lower()
     return email
 
 

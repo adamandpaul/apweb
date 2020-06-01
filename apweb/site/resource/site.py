@@ -18,6 +18,8 @@ import zope.sqlalchemy
 
 class Site(contextplus.Site):
     """A primitive site"""
+    
+    user_email_store_lower_case = True
 
     def __init__(self, *args, mailer=None, transaction_manager=None, request=None, is_debug=None, **kwargs):
         super().__init__(*args, **kwargs)

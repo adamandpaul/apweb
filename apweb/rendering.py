@@ -12,6 +12,7 @@ import pkg_resources
 import pyramid.events
 import pyramid.renderers
 import pyramid.security
+import json
 
 
 # Template layers
@@ -55,6 +56,7 @@ def inject_template_vars(renderer_globals):
 
 def inject_tools(render_globals):
     render_globals["has_permission"] = pyramid.security.has_permission
+    render_globals["json"] = json
 
 
 def configure_template_layers(config):

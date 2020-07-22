@@ -28,7 +28,7 @@ setup(
         'pyramid_exclog',
         'pyramid_tm',
         'pyramid_mailer',
-        'pyramid_nacl_session',
+        'pyramid_redis_sessions',
 
         'sqlalchemy',
         'sqlalchemy-utils',

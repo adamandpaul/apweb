@@ -1,24 +1,23 @@
 # -*- coding:utf-8 -*-
 
 import binascii
-import pyramid_nacl_session
-
+import pyramid_redis_sessions
 
 def includeme(config):
     registry = config.registry
     settings = config.get_settings()
-    secret_hex = settings.get("nacl_session_secret", None)
-    if not secret_hex:
-        secret = pyramid_nacl_session.generate_secret()
-    else:
-        secret = binascii.unhexlify(secret_hex)
+    secret = (
+        settings.get("session_secret", None) or
+        settings["nacl_session_secret"]  # in order to be backwards compatible
+    )
     secret = secret[:32]
-    session_factory = pyramid_nacl_session.EncryptedCookieSessionFactory(
+    session_factory = pyramid_redis_sessions.RedisSessionFactory(
         secret,
-        secure=registry["cookie_session_secure"],
-        httponly=True,
-        max_age=registry["cookie_session_timeout"],
-        timeout=registry["cookie_session_timeout"],
-        reissue_time=registry["cookie_session_reissue_time"],
+        timeout=registry['cookie_session_timeout'],
+        cookie_name="rsession",
+        cookie_max_age=registry['cookie_session_timeout'],
+        cookie_secure=registry["cookie_session_secure"],
+        cookie_httponly=True,
+        client_callable=lambda request, **kwargs: request.redis,
     )
     config.set_session_factory(session_factory)

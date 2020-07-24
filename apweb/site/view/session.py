@@ -12,6 +12,8 @@ class SessionView(apweb.view.session.SessionView):
     @reify
     def user(self):
         view = render_view_to_response(self.request.user, self.request, "internal-view", secure=False)
+        if view is None:
+            return None
         return view.manage
 
     @reify

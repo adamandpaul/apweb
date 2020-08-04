@@ -46,11 +46,11 @@ class LogEntry(SQLAlchemyItem):
 
     @property
     def title(self):
-        return f"{self.timestamp}: {self.component}"
+        return f"{self.readable_level}: {self.message}"
 
     @property
     def description(self):
-        return f"{self.readable_level}: {self.message}"
+        return f"{self.timestamp}: {self.component}"
 
 
 class LogEntryCollection(SQLAlchemyCollection):

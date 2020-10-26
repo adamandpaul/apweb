@@ -28,6 +28,16 @@ class CollectionView(ResourceView):
         if self.schema_add is None:
             raise HTTPNotFound()
         kwargs = self.request.json
+
+        # Change empty string for numeric field to None
+        for field, schema in self.schema_add["properties"].items():
+            if type(schema["type"]) == list:
+                numeric_type = "integer" in schema["type"] or "numeric" in schema["type"]
+            else:
+                numeric_type = schema["type"] in ("numeric", "integer")
+            if field in kwargs and numeric_type and kwargs[field] == "":
+                kwargs[field] = None
+
         jsonschema.validate(instance=kwargs, schema=self.schema_add)
         child_view = self.add(**kwargs)
         if is_admin:

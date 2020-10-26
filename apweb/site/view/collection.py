@@ -31,10 +31,11 @@ class CollectionView(ResourceView):
 
         # Change empty string for numeric field to None
         for field, schema in self.schema_add["properties"].items():
-            if type(schema["type"]) == list:
-                numeric_type = "integer" in schema["type"] or "numeric" in schema["type"]
-            else:
-                numeric_type = schema["type"] in ("numeric", "integer")
+            numeric_type = (
+                type(schema["type"]) == list and
+                "null" in schema["type"] and
+                "integer" in schema["type"] or "numeric" in schema["type"]
+            )
             if field in kwargs and numeric_type and kwargs[field] == "":
                 kwargs[field] = None
 

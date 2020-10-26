@@ -28,6 +28,17 @@ class RecordItemView(ResourceView):
         if self.schema_edit is None:
             raise HTTPNotFound()
         kwargs = self.request.json
+
+        # Change empty string for numeric field to None
+        for field, schema in self.schema_add["properties"].items():
+            numeric_type = (
+                type(schema["type"]) == list and
+                "null" in schema["type"] and
+                "integer" in schema["type"] or "numeric" in schema["type"]
+            )
+            if field in kwargs and numeric_type and kwargs[field] == "":
+                kwargs[field] = None
+
         jsonschema.validate(instance=kwargs, schema=self.schema_edit)
         child_view = self.edit(**kwargs)
         return {}

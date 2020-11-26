@@ -50,8 +50,6 @@ import Vuetify, {
 } from 'vuetify/lib'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
-import { Ripple } from 'vuetify/lib/directives'
-import VJsonschemaForm from '@koumoul/vuetify-jsonschema-form'
 
 // AP Web imports
 import APWebStore from '../store'
@@ -126,7 +124,6 @@ Vue.component("request-error", RequestError)
 
 // Configure JSON Schema Form
 import './vutify-jsonschema-form'
-//Vue.component('v-jsonschema-form', VJsonschemaForm)
 
 // Configure Store
 import Vuex from 'vuex'

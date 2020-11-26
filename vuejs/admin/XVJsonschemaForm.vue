@@ -1,5 +1,5 @@
 <template>
-    <VJsf :schema="schema" :model="model" :options="options" @input="input" @error="error" @change="change" >
+    <VJsf :schema="schema" :value="model" :options="options" @input="input" @error="error" @change="change" >
         <template v-slot:custom-select-from-collection="{modelWrapper, fullKey, fullSchema}">
             <select-from-collection
                 :label="fullSchema.title"

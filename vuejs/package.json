@@ -9,7 +9,7 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "@koumoul/vuetify-jsonschema-form": "^0.36.0",
+    "@koumoul/vjsf": "^1.17.1",
     "@mdi/font": "*",
     "@mdi/js": "^4.7.95",
     "axios": "^0.18.0",

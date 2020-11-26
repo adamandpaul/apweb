@@ -11,7 +11,7 @@
 </template>
 <script>
 
-import VJsonschemaForm from '@koumoul/vuetify-jsonschema-form'
+import VJsonschemaForm from '@koumoul/vjsf'
 
 export default {
 

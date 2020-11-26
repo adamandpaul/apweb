@@ -1,5 +1,5 @@
 <template>
-    <VJsonschemaForm :schema="schema" :model="model" :options="options" @input="input" @error="error" @change="change" >
+    <VJsf :schema="schema" :model="model" :options="options" @input="input" @error="error" @change="change" >
         <template v-slot:custom-select-from-collection="{modelWrapper, fullKey, fullSchema}">
             <select-from-collection
                 :label="fullSchema.title"
@@ -7,18 +7,18 @@
                 :collectionURL="fullSchema['x-collection-url']"
                 @input="modelWrapper[fullKey] = $event" />
         </template>
-    </VJsonschemaForm>
+    </VJsf>
 </template>
 <script>
 
-import VJsonschemaForm from '@koumoul/vjsf'
+import VJsf from '@koumoul/vjsf'
 
 export default {
 
     name: 'XVJsonschemaForm',
 
     components: {
-        VJsonschemaForm,
+        VJsf,
     },
 
     props: ["model", "schema", "options"],

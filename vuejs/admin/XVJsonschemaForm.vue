@@ -1,6 +1,6 @@
 <template>
     <v-form v-model='valid'>
-        <VJsf :schema="schema" :value="model" :options="options" @input="input" @error="error" @change="change" >
+        <VJsf :schema="schema" :value="model" :options="options" @input="input" @error="error" @change="change">
             <template v-slot:custom-select-from-collection="{modelWrapper, fullKey, fullSchema}">
                 <select-from-collection
                     :label="fullSchema.title"
@@ -29,6 +29,10 @@ export default {
         return {
             valid: false,
         }
+    },
+
+    created(){
+        this.options.locale = 'en-au'
     },
 
     methods: {

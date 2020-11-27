@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuetify, {
     VApp,
     VAlert,
+    VAutocomplete,
     VProgressLinear,
     VBtnToggle,
     VBtn,
@@ -73,6 +74,7 @@ Vue.use(Vuetify, {
     components: {
         VApp,
         VAlert,
+        VAutocomplete,
         VProgressLinear,
         VBtnToggle,
         VBtn,

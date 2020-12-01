@@ -1,15 +1,13 @@
 <template>
-    <v-form v-model='valid'>
-        <VJsf :schema="schema" :value="model" :options="options" @input="input" @error="error" @change="change">
-            <template v-slot:custom-select-from-collection="{modelWrapper, fullKey, fullSchema}">
-                <select-from-collection
-                    :label="fullSchema.title"
-                    :value="modelWrapper[fullKey]"
-                    :collectionURL="fullSchema['x-collection-url']"
-                    @input="modelWrapper[fullKey] = $event" />
-            </template>
-        </VJsf>
-    </v-form>
+    <VJsf :schema="schema" :value="model" :options="options" @input="input" @error="error" @change="change">
+        <template v-slot:custom-select-from-collection="{modelWrapper, fullKey, fullSchema}">
+            <select-from-collection
+                :label="fullSchema.title"
+                :value="modelWrapper[fullKey]"
+                :collectionURL="fullSchema['x-collection-url']"
+                @input="modelWrapper[fullKey] = $event" />
+        </template>
+    </VJsf>
 </template>
 <script>
 
@@ -24,12 +22,6 @@ export default {
     },
 
     props: ["model", "schema", "options"],
-
-    data: () => {
-        return {
-            valid: false,
-        }
-    },
 
     created(){
         this.options.locale = 'en-au'

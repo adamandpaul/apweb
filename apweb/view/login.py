@@ -103,10 +103,18 @@ class LoginView(object):
         # Add AuthTKT cookies to response's headers
         self.request.response.headers.update(browser_headers)
 
+        # JWT creation may fail if algorithm not set
+        try:
+            jwt = self.jwt_access_token
+            jwt_refresh = self.jwt_refresh_token
+        except NotImplementedError:
+            jwt = None
+            jwt_refresh = None
+
         # Return both JWT and AuthTKT headers so client can easily make use of either
         return {
-            "jwt": self.jwt_access_token,
-            "jwt_refresh": self.jwt_refresh_token,
+            "jwt": jwt,
+            "jwt_refresh": jwt_refresh,
             "browser_headers": browser_headers,
         }
 

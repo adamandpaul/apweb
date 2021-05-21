@@ -66,6 +66,11 @@ def includeme(config):
     registry["cookie_session_secure"] = yesish(
         settings.get("cookie_session_secure") or not registry["is_debug"]
     )
+    registry["cookie_session_domain"] = settings.get("cookie_domain", None)
+    default_redis_cookie = "_s_" + settings.get('buildout_id', 'app')
+    registry["cookie_session_name"] = settings.get("cookie_session_name", default_redis_cookie)
+    default_authtkt_cookie = "_a_" + settings.get("buildout_id", "app")
+    registry["cookie_authtkt_name"] = settings.get("cookie_authtkt_name", default_authtkt_cookie)
 
     # configure dependent packages
     config.include("pyramid_exclog")

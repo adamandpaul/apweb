@@ -14,7 +14,8 @@ def includeme(config):
     session_factory = pyramid_redis_sessions.RedisSessionFactory(
         secret,
         timeout=registry['cookie_session_timeout'],
-        cookie_name="rsession",
+        cookie_name=registry["cookie_session_name"],
+        cookie_domain=registry["cookie_session_domain"],
         cookie_max_age=registry['cookie_session_timeout'],
         cookie_secure=registry["cookie_session_secure"],
         cookie_httponly=True,

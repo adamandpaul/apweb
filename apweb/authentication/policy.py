@@ -119,6 +119,8 @@ def includeme(config):
     authtkt_policy_kwargs = {
         "secret": authtkt_secret,
         "secure": registry["cookie_session_secure"],
+        "domain": registry["cookie_session_domain"],
+        "cookie_name": registry["cookie_authtkt_name"],
         "timeout": registry["cookie_session_timeout"],
         "reissue_time": registry["cookie_session_reissue_time"],
         "max_age": registry["cookie_session_timeout"],

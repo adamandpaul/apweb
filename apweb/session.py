@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import binascii
-import pyramid_redis_sessions
+import pyramid_session_redis
 
 def includeme(config):
     registry = config.registry
@@ -11,7 +11,7 @@ def includeme(config):
         settings["nacl_session_secret"]  # in order to be backwards compatible
     )
     secret = secret[:32]
-    session_factory = pyramid_redis_sessions.RedisSessionFactory(
+    session_factory = pyramid_session_redis.RedisSessionFactory(
         secret,
         timeout=registry['cookie_session_timeout'],
         cookie_name=registry["cookie_session_name"],

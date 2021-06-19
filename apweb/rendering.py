@@ -55,7 +55,6 @@ def inject_template_vars(renderer_globals):
 
 
 def inject_tools(render_globals):
-    render_globals["has_permission"] = pyramid.security.has_permission
     render_globals["json"] = json
 
 

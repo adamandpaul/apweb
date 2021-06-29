@@ -19,11 +19,11 @@ def includeme(config):
     )
     if registry["is_debug"]:
         config.add_static_view(
-            "++frontend++", settings["frontend_static_location"], cache_max_age=5
+            "++theme++", settings["frontend_static_location"], cache_max_age=5
         )
     else:
         config.add_static_view(
-            "++frontend++", settings["frontend_static_location"], cache_max_age=600
+            "++theme++", settings["frontend_static_location"], cache_max_age=600
         )
 
     # If there is a theme.pt file in the frontend static lcoation then use that as the

@@ -13,8 +13,8 @@ from contextplus import SQLAlchemyItem
 from contextplus import WorkflowBehaviour
 from datetime import datetime
 from datetime import timedelta
-from pyramid.security import Allow
-from pyramid.security import DENY_ALL
+from pyramid.authorization import Allow
+from pyramid.authorization import DENY_ALL
 from uuid import UUID
 from uuid import uuid4
 

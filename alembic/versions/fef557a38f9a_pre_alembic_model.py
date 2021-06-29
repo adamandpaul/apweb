@@ -107,7 +107,6 @@ class User(Base):
 
 def upgrade():
     bind = op.get_bind()
-    assert 'user' not in bind.engine.table_names()
     Base.metadata.create_all(bind)
 
 

@@ -111,5 +111,6 @@ def upgrade():
 
 
 def downgrade():
-    Base.drop_all()
+    bind = op.get_bind()
+    Base.metadata.drop_all(bind)
     pass

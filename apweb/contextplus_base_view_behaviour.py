@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from apweb.utils import context_reify
+from ctq import resource_path_names
 from pyramid.decorator import reify
 from pyramid.renderers import null_renderer
 from pyramid.view import view_defaults
@@ -16,6 +17,32 @@ class ContextPlusBaseViewBehaviour(object):
     name = context_reify("name")
     title = context_reify("title")
     description = context_reify("description")
+
+    @reify
+    def name(self):
+        if (name := getattr(self.context, "__name__", None)) is not None:
+            return name
+        return self.context.name
+
+    @reify
+    def title(self):
+        if (title := getattr(self.context, "__display_name__", None)) is not None:
+            return title
+        if (title := getattr(self.context, "name", None)) is not None:
+            return title
+        return self.name
+
+    @reify
+    def description(self):
+        if (description := getattr(self.context, "__description__", None)) is not None:
+            return description
+        if (description := getattr(self.context, "description", None)) is not None:
+            return description
+        return self.title
+
+    @reify
+    def path_names(self):
+        return resource_path_names(self.context)
 
     @reify
     def meta_title(self):

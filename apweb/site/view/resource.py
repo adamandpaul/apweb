@@ -7,7 +7,7 @@ from pyramid.view import view_defaults
 from venusian import lift
 
 
-@view_defaults(context="contextplus.Base")
+@view_defaults(context=object)
 @lift()
 class ResourceView(AdminBehaviour, ContextPlusBaseViewBehaviour, WorkflowBehaviour):
     """The base view for all resource objects from contextplus.Base"""

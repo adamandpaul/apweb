@@ -1,11 +1,13 @@
 # -*- coding:utf-8 -*-
 """Behaviour for admin objects"""
 
+from ctq import traverse_up
 from pyramid.decorator import reify
 from pyramid.view import render_view_to_response
 from pyramid.view import view_defaults
 from pyramid.view import view_config
 
+import ctq
 
 class AdminBehaviour(object):
     """Behaviour for objects in the administration interface"""
@@ -57,11 +59,18 @@ class AdminBehaviour(object):
 
     @reify
     def admin_named_resources(self):
+        resources = []
+        if hasattr(self.context, "iter_named_resources"):
+            resources = resources + list(self.context.iter_named_resources())
+        if isinstance(self.context, ctq.Resourceful):
+            resources = resources + list(ctq.iter_named_resources(self.context))
         named_resources = []
-        for named_resource in self.context.iter_named_resources():
+        for resource in resources:
+            named_resource_view = render_view_to_response(resource, self.request, "internal-view", secure=False)
             named_resources.append(
-                {"title": named_resource.title, "path": named_resource.path_names}
+                {"title": named_resource_view.title, "path": named_resource_view.path_names}
             )
+
         return named_resources
 
     @reify
@@ -73,14 +82,14 @@ class AdminBehaviour(object):
     def admin_breadcrumbs(self):
         """Breadcrumbs which include named resources of each ancestor"""
         breadcrumbs = []
-        resources = [self.context, *self.context.iter_ancestors()]
+        resources = list(traverse_up(self.context))
         resources.reverse()
         for resource in resources:
             resource_view = render_view_to_response(resource, self.request, "internal-view", secure=False)
             breadcrumbs.append(
                 {
-                    "title": resource.title,
-                    "path": resource.path_names,
+                    "title": resource_view.title,
+                    "path": resource_view.path_names,
                     "named_resources": resource_view.admin_named_resources,
                     "links": resource_view.admin_links,
                 }

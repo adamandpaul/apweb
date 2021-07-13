@@ -28,7 +28,7 @@ class ContextPlusBaseViewBehaviour(object):
     def title(self):
         if (title := getattr(self.context, "__display_name__", None)) is not None:
             return title
-        if (title := getattr(self.context, "name", None)) is not None:
+        if (title := getattr(self.context, "title", None)) is not None:
             return title
         return self.name
 

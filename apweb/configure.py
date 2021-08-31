@@ -73,7 +73,6 @@ def includeme(config):
     registry["cookie_authtkt_name"] = settings.get("cookie_authtkt_name", default_authtkt_cookie)
 
     # configure dependent packages
-    config.include("pyramid_exclog")
     config.include("pyramid_tm")
 
     if registry["is_debug"]:

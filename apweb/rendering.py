@@ -3,6 +3,7 @@
 from datetime import date
 from datetime import datetime
 from decimal import Decimal
+from pprint import pprint
 from pyramid.renderers import get_renderer
 from pyramid.view import render_view_to_response
 from uuid import UUID
@@ -52,6 +53,7 @@ def inject_template_vars(renderer_globals):
             renderer_globals["request"].registry
         )
     renderer_globals["render_view_to_response"] = render_view_to_response
+    renderer_globals["pprint"] = pprint
 
 
 def inject_tools(render_globals):
